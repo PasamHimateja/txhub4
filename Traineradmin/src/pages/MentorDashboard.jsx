@@ -89,7 +89,7 @@ const INITIAL_ASSIGNMENTS = [];
 
 const ALL_COURSES_LIST = [
   'All Courses',
-  'React Full Stack Development',
+  'React ',
   'Java Full Stack Development',
   'Python Full Stack',
   'MERN Stack',

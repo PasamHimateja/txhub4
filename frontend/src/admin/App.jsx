@@ -11,6 +11,8 @@ import RegisterUser from "./pages/RegisterUser";
 import Settings from "./pages/Settings";
 import ClassManagement from "./pages/ClassManagement";
 import PaymentPage from "./pages/payment";
+import Batches from "./pages/Batches";
+import Mentors from "./pages/Mentors";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -84,9 +86,9 @@ function App() {
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
-          <Route path="registerUser" element={<RegisterUser />} />
+          <Route path="batches" element={<Batches />} />
+          <Route path="mentors" element={<Mentors />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="broadcast" element={<ClassManagement />} />
           <Route path="payment" element={<PaymentPage />} />
         </Route>
       </Routes>

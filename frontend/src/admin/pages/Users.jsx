@@ -8,6 +8,8 @@ import { useAdmin } from '../context/AdminContext';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [batches, setBatches] = useState([]);
+  const [mentors, setMentors] = useState([]);
   const [loading, setLoading] = useState(true);
   const { markAsSeen } = useAdmin();
 
@@ -48,6 +50,8 @@ const Users = () => {
             mode: u.mode || "Offline",
             totalFee,
             paidAmount,
+            assigned_batch: u.assigned_batch || "",
+            assigned_mentor: u.assigned_mentor || "",
           };
         });
 
@@ -59,8 +63,47 @@ const Users = () => {
       }
     };
 
+    const fetchBatchesAndMentors = async () => {
+      try {
+        const [batchesRes, mentorsRes] = await Promise.all([
+          fetch('http://127.0.0.1:8000/api/batches/'),
+          fetch('http://127.0.0.1:8000/api/mentors/')
+        ]);
+        if (batchesRes.ok) setBatches(await batchesRes.json());
+        if (mentorsRes.ok) setMentors(await mentorsRes.json());
+      } catch (err) {
+        console.error("Fetch Error for batches/mentors:", err);
+      }
+    };
+
     fetchUsers();
+    fetchBatchesAndMentors();
   }, []);
+
+  const handleAssign = async (userId, batchId, mentorId) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/enrollments/${userId}/assign/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ batch_id: batchId, mentor_id: mentorId }),
+      });
+      if (response.ok) {
+        setUsers(prev => prev.map(u => {
+          if (u.id === userId) {
+            return { ...u, assigned_batch: batchId, assigned_mentor: mentorId };
+          }
+          return u;
+        }));
+      } else {
+        alert("Failed to assign batch/mentor.");
+      }
+    } catch (err) {
+      console.error("Error assigning:", err);
+      alert("Failed to assign batch/mentor.");
+    }
+  };
 
   const totalReceived = users.reduce((a, b) => a + b.paidAmount, 0);
   const totalPending = users.reduce((a, b) => a + (b.totalFee - b.paidAmount), 0);
@@ -139,7 +182,7 @@ const Users = () => {
               <tr className="bg-slate-50/50 border-b border-blue-50">
                 <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Student Profile</th>
                 <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Course / Specialization</th>
-                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Mode</th>
+                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Mentor&Batches</th>
                 <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Payment Progress</th>
                 <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Financials</th>
               </tr>
@@ -175,8 +218,28 @@ const Users = () => {
                       </div>
                     </td>
                     <td className="px-6 py-6">
-                      <div className="flex items-center gap-2 text-[10px] font-black text-slate-600 uppercase tracking-tight">
-                        <Globe size={14} className="text-indigo-400" /> {u.mode}
+                      <div className="flex flex-col gap-2">
+                        <select
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500"
+                          value={u.assigned_batch}
+                          onChange={(e) => handleAssign(u.id, e.target.value, u.assigned_mentor)}
+                        >
+                          <option value="">Select Batch...</option>
+                          {batches.map(b => (
+                            <option key={b.id} value={b.id}>{b.name}</option>
+                          ))}
+                        </select>
+                        
+                        <select
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500"
+                          value={u.assigned_mentor}
+                          onChange={(e) => handleAssign(u.id, u.assigned_batch, e.target.value)}
+                        >
+                          <option value="">Select Mentor...</option>
+                          {mentors.map(m => (
+                            <option key={m.id} value={m.id}>{m.name}</option>
+                          ))}
+                        </select>
                       </div>
                     </td>
                     <td className="px-6 py-6">
@@ -246,10 +309,29 @@ const Users = () => {
                     </div>
                   </div>
                   <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-100/50">
-                    <p className="text-[9px] font-black text-slate-400 uppercase mb-2">Mode</p>
-                    <div className="flex items-center gap-2 text-[11px] font-bold text-slate-700">
-                      <Globe size={14} className="text-indigo-400 shrink-0" />
-                      <span className="truncate">{u.mode}</span>
+                    <p className="text-[9px] font-black text-slate-400 uppercase mb-2">Assignment</p>
+                    <div className="flex flex-col gap-2">
+                      <select
+                        className="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500"
+                        value={u.assigned_batch}
+                        onChange={(e) => handleAssign(u.id, e.target.value, u.assigned_mentor)}
+                      >
+                        <option value="">Select Batch...</option>
+                        {batches.map(b => (
+                          <option key={b.id} value={b.id}>{b.name}</option>
+                        ))}
+                      </select>
+                      
+                      <select
+                        className="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500"
+                        value={u.assigned_mentor}
+                        onChange={(e) => handleAssign(u.id, u.assigned_batch, e.target.value)}
+                      >
+                        <option value="">Select Mentor...</option>
+                        {mentors.map(m => (
+                          <option key={m.id} value={m.id}>{m.name}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>

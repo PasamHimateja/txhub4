@@ -138,6 +138,21 @@ class Enrollment(models.Model):
     blank=True       # ✅ allow empty
 )
  
+    assigned_batch = models.ForeignKey(
+        'Batch',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='enrollments'
+    )
+    assigned_mentor = models.ForeignKey(
+        'Trainer',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='assigned_enrollments'
+    )
+ 
     # ------------------------
     # COURSE DATA
     # ------------------------
@@ -337,3 +352,13 @@ class StudentAttendance(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         unique_together = ('student', 'date', 'course')
+
+class Batch(models.Model):
+    name = models.CharField(max_length=100)
+    course = models.CharField(max_length=100, choices=COURSE_CHOICES)
+    startDate = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.course}"
+

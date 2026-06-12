@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserPlus, Settings,
-  LogOut, Menu, X, Bell, ChevronRight, Video // <-- 1. Imported Video icon here
+  LogOut, Menu, X, Bell, ChevronRight, Video, Layers, UserCheck // <-- 1. Imported Video icon here
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { AuthContext } from '../../website/context/AuthContext';
@@ -16,10 +16,9 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={22} /> },
-    { name: 'Register User', path: '/admin/registerUser', icon: <UserPlus size={22} /> },
     { name: 'Users List', path: '/admin/users', icon: <Users size={22} />, badge: newCount > 0 ? newCount : null },
-    // 2. Added the new Broadcast route to your menu list
-    { name: 'Live Classes', path: '/admin/broadcast', icon: <Video size={22} /> },
+    { name: 'Batches', path: '/admin/batches', icon: <Layers size={22} /> },
+    { name: 'Mentors', path: '/admin/mentors', icon: <UserCheck size={22} /> },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);

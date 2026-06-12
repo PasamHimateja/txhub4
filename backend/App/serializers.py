@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from App.models import UserRegister, AdminUser, Student, Enrollment, LiveClass, RecordedClass, Resource, Cart, Assignment, Note, StudentAttendance, Trainer
+from App.models import UserRegister, AdminUser, Student, Enrollment, LiveClass, RecordedClass, Resource, Cart, Assignment, Note, StudentAttendance, Trainer, Batch
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,10 +13,16 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 
 class TrainerSerializer(serializers.ModelSerializer):
+    students = serializers.SerializerMethodField()
+
     class Meta:
         model = Trainer
-        fields = ['id', 'name', 'email', 'assigned_course', 'is_active', 'created_at']
+        fields = ['id', 'name', 'email', 'assigned_course', 'is_active', 'created_at', 'students']
         read_only_fields = ['id', 'created_at']
+
+    def get_students(self, obj):
+        enrollments = obj.assigned_enrollments.all()
+        return [{"id": e.user.id, "name": e.user.full_name, "email": e.user.email} for e in enrollments if e.user]
 
 class TrainerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -31,6 +37,8 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class EnrollmentSerializer(serializers.ModelSerializer):
     full_name = serializers.ReadOnlyField(source='user.full_name')
+    assigned_batch_name = serializers.ReadOnlyField(source='assigned_batch.name')
+    assigned_mentor_name = serializers.ReadOnlyField(source='assigned_mentor.name')
 
     class Meta:
         model = Enrollment
@@ -140,3 +148,14 @@ class StudentAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentAttendance
         fields = '__all__'
+
+class BatchSerializer(serializers.ModelSerializer):
+    students = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Batch
+        fields = '__all__'
+
+    def get_students(self, obj):
+        enrollments = obj.enrollments.all()
+        return [{"id": e.user.id, "name": e.user.full_name, "email": e.user.email} for e in enrollments if e.user]

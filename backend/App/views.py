@@ -18,13 +18,13 @@ import random
 from App.models import (
     UserRegister, AdminUser, Student, Enrollment, 
     LiveClass, RecordedClass, Resource, Cart,
-    Assignment, Note, StudentAttendance,Trainer
+    Assignment, Note, StudentAttendance, Trainer, Batch
 )
 from App.serializers import (
     UserRegisterSerializer, StudentSerializer, EnrollmentSerializer, 
     LiveClassSerializer, RecordedClassSerializer, ResourceSerializer, CartSerializer,
     AssignmentSerializer, NoteSerializer, StudentAttendanceSerializer,
-    TrainerSerializer, TrainerLoginSerializer
+    TrainerSerializer, TrainerLoginSerializer, BatchSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -384,6 +384,7 @@ from rest_framework.decorators import authentication_classes, permission_classes
 
 def _get_students_data(course=None, trainer_id=None):
     target_course = None
+    trainer = None
     if trainer_id:
         try:
             trainer = Trainer.objects.get(id=trainer_id)
@@ -398,11 +399,24 @@ def _get_students_data(course=None, trainer_id=None):
     data = []
     seen_emails = set()
 
+    # Get enrollments explicitly assigned to this trainer
+    explicitly_assigned_emails = set()
+    if trainer:
+        assigned_enrollments = Enrollment.objects.filter(assigned_mentor=trainer).select_related('user')
+        for e in assigned_enrollments:
+            if e.user:
+                explicitly_assigned_emails.add(e.user.email)
+
     # 1. From Student table
     for s in Student.objects.all().order_by('-id'):
         s_course = normalize_course(s.courseSpecialization)
-        # If mentor has a specific assigned course, only show students matching that course
-        if target_course and s_course != target_course:
+        
+        # Determine if this student should be shown to the mentor
+        is_assigned = s.email in explicitly_assigned_emails
+        course_match = (not target_course) or (s_course == target_course)
+        
+        # If mentor is fetching, show if explicitly assigned OR course matches (fallback)
+        if trainer and not (is_assigned or course_match):
             continue
             
         if s.email in seen_emails:
@@ -411,6 +425,8 @@ def _get_students_data(course=None, trainer_id=None):
 
         enrollment = Enrollment.objects.filter(user__email=s.email).order_by('-created_at').first()
         batch_date = enrollment.batch_date if enrollment and enrollment.batch_date else "Not Specified"
+        if enrollment and enrollment.assigned_batch:
+            batch_date = enrollment.assigned_batch.name
         
         data.append({
             'id': s.id,
@@ -423,35 +439,43 @@ def _get_students_data(course=None, trainer_id=None):
             'batch_date': batch_date,
         })
         
-    # 2. From Enrollment table (for users who bought via cart but aren't in Student)
-    for e in Enrollment.objects.select_related('user').all().order_by('-created_at'):
+    # 2. From Enrollment table
+    for e in Enrollment.objects.select_related('user', 'assigned_batch').all().order_by('-created_at'):
         if not e.user or e.user.email in seen_emails:
             continue
             
         has_match = False
         e_course_name = "Not Specified"
+        
+        is_assigned = e.user.email in explicitly_assigned_emails
+        
         if isinstance(e.items, list):
             for item in e.items:
                 title = item.get("title") or item.get("name")
                 norm_title = normalize_course(title)
-                # Ensure we only include students who enrolled in the target course
                 if not target_course or norm_title == target_course:
                     has_match = True
                     e_course_name = title
                     break
                     
-        if has_match:
-            seen_emails.add(e.user.email)
-            data.append({
-                'id': e.user.id, # fallback to user id to avoid string ids
-                'name': e.user.full_name,
-                'email': e.user.email,
-                'phone': e.user.phone,
-                'course': e_course_name,
-                'status': 'Active' if e.payment_status == 'completed' else 'At Risk',
-                'progress': 0,
-                'batch_date': e.batch_date or "Not Specified",
-            })
+        # If mentor is fetching, show if explicitly assigned OR course matches
+        if trainer and not (is_assigned or has_match):
+            continue
+        if not trainer and not has_match:
+            continue
+                    
+        seen_emails.add(e.user.email)
+        batch_val = e.assigned_batch.name if e.assigned_batch else (e.batch_date or "Not Specified")
+        data.append({
+            'id': e.user.id, # fallback to user id
+            'name': e.user.full_name,
+            'email': e.user.email,
+            'phone': e.user.phone,
+            'course': e_course_name,
+            'status': 'Active' if e.payment_status == 'completed' else 'At Risk',
+            'progress': 0,
+            'batch_date': batch_val,
+        })
 
     return data
 
@@ -1259,7 +1283,7 @@ def student_notes(request):
             target_course = normalize_course(student.courseSpecialization)
             
     if not target_course:
-        return Response({"error": "No valid course found in enrollment or student profile"}, status=404)
+        return Response([], status=200)
         
     notes = Note.objects.filter(Q(course=target_course) | Q(course='All Courses'))
     
@@ -1304,7 +1328,7 @@ def student_assignments(request):
             target_course = normalize_course(student.courseSpecialization)
             
     if not target_course:
-        return Response({"error": "No valid course found in enrollment or student profile"}, status=404)
+        return Response([], status=200)
         
     assignments = Assignment.objects.filter(Q(course=target_course) | Q(course='All Courses'))
     
@@ -1321,3 +1345,135 @@ def student_assignments(request):
         
     serializer = AssignmentSerializer(assignments.distinct().order_by('-created_at'), many=True)
     return Response(serializer.data, status=200)
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def student_live_classes(request):
+    email = request.query_params.get('email')
+    if not email:
+        return Response({"error": "Email is required"}, status=400)
+        
+    target_course = None
+    batch_date = None
+    
+    # 1. Try Enrollment
+    enrollment = Enrollment.objects.filter(user__email=email).order_by('-created_at').first()
+    if enrollment:
+        batch_date = enrollment.batch_date
+        if isinstance(enrollment.items, list) and len(enrollment.items) > 0:
+            item = enrollment.items[0]
+            title = item.get("title") or item.get("name")
+            target_course = normalize_course(title)
+            
+    # 2. Try Student Table if target_course still empty
+    if not target_course:
+        student = Student.objects.filter(email=email).order_by('-created_at').first()
+        if student:
+            target_course = normalize_course(student.courseSpecialization)
+            
+    if not target_course:
+        return Response([], status=200)
+        
+    live_classes = LiveClass.objects.filter(Q(targetCourse=target_course) | Q(targetCourse='All Courses'))
+    
+    if batch_date and batch_date != 'All Batches':
+        q_exact = Q(batchMonth=batch_date)
+        q_all = Q(batchMonth='All Batches') | Q(batchMonth='') | Q(batchMonth__isnull=True)
+        
+        parsed_batch = parse_batch_date(batch_date)
+        if parsed_batch:
+            q_all = q_all & Q(created_at__date__gte=parsed_batch)
+            
+        live_classes = live_classes.filter(q_exact | q_all)
+        
+    serializer = LiveClassSerializer(live_classes.distinct().order_by('-id'), many=True)
+    return Response(serializer.data, status=200)
+
+@api_view(['GET', 'POST'])
+@authentication_classes([])
+@permission_classes([])
+def manage_batches(request):
+    if request.method == 'GET':
+        batches = Batch.objects.all().order_by('-id')
+        serializer = BatchSerializer(batches, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = BatchSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+@authentication_classes([])
+@permission_classes([])
+def delete_batch(request, pk):
+    try:
+        batch = Batch.objects.get(pk=pk)
+        batch.delete()
+        return Response({"message": "Batch deleted successfully"}, status=204)
+    except Batch.DoesNotExist:
+        return Response({"error": "Batch not found"}, status=404)
+
+@api_view(['GET', 'POST'])
+@authentication_classes([])
+@permission_classes([])
+def manage_trainers(request):
+    if request.method == 'GET':
+        trainers = Trainer.objects.all().order_by('-id')
+        serializer = TrainerSerializer(trainers, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = request.data.copy()
+        raw_password = data.get('password')
+        if not raw_password:
+            return Response({"error": "Password is required"}, status=400)
+        serializer = TrainerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(password_hash=make_password(raw_password))
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+@authentication_classes([])
+@permission_classes([])
+def delete_trainer(request, pk):
+    try:
+        trainer = Trainer.objects.get(pk=pk)
+        trainer.delete()
+        return Response({"message": "Mentor deleted successfully"}, status=204)
+    except Trainer.DoesNotExist:
+        return Response({"error": "Mentor not found"}, status=404)
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def assign_batch_mentor(request, pk):
+    try:
+        enrollment = Enrollment.objects.get(pk=pk)
+    except Enrollment.DoesNotExist:
+        return Response({"error": "Enrollment not found"}, status=404)
+
+    batch_id = request.data.get('batch_id')
+    mentor_id = request.data.get('mentor_id')
+
+    if batch_id:
+        try:
+            enrollment.assigned_batch = Batch.objects.get(id=batch_id)
+        except Batch.DoesNotExist:
+            return Response({"error": "Batch not found"}, status=404)
+    elif batch_id == "": # allowing unassign
+        enrollment.assigned_batch = None
+        
+    if mentor_id:
+        try:
+            enrollment.assigned_mentor = Trainer.objects.get(id=mentor_id)
+        except Trainer.DoesNotExist:
+            return Response({"error": "Mentor not found"}, status=404)
+    elif mentor_id == "": # allowing unassign
+        enrollment.assigned_mentor = None
+
+    enrollment.save()
+    serializer = EnrollmentSerializer(enrollment)
+    return Response({"message": "Assigned successfully", "data": serializer.data})

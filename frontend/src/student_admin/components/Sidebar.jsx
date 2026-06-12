@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  BookOpen, ClipboardList, Award, User, Notebook,
+  BookOpen, ClipboardList, Award, User, Notebook, Video,
   LogOut, Menu, X, ChevronRight, Settings
 } from 'lucide-react';
 import { AuthContext } from '../../website/context/AuthContext';
@@ -14,6 +14,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: 'My Courses', path: '/student', icon: <BookOpen size={22} /> },
+    { name: 'Live Classes', path: '/student/live-classes', icon: <Video size={22} /> },
     { name: 'Assignments', path: '/student/assignments', icon: <ClipboardList size={22} /> },
     { name: 'Certificates', path: '/student/certificates', icon: <Award size={22} /> },
     { name: 'My Notes', path: '/student/notes', icon: <Notebook size={22} /> },

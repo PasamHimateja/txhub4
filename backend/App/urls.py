@@ -11,6 +11,7 @@ urlpatterns = [
     path('students/', views.get_students),
     path('student/notes/', views.student_notes),
     path('student/assignments/', views.student_assignments),
+    path('student/live-classes/', views.student_live_classes),
     path('enroll/', views.create_enrollment),
     path('auth/google/', views.google_login),
     path('enrollments/', views.get_enrollments, name='get_enrollments'), 
@@ -39,5 +40,10 @@ urlpatterns = [
     path('attendance/', views.manage_attendance),
     path('mentor-overview/', views.mentor_overview),
     path('debug/', views.debug_db),
+    path('batches/', views.manage_batches),
+    path('batches/<int:pk>/', views.delete_batch),
+    path('mentors/', views.manage_trainers),
+    path('mentors/<int:pk>/', views.delete_trainer),
+    path('enrollments/<int:pk>/assign/', views.assign_batch_mentor),
 ]
 

@@ -22,7 +22,7 @@ import { SlidersHorizontal } from "lucide-react";
 const allCourses = [
   {
     id: 99,
-    title: "Manual Testing Complete Course",
+    title: "Manual Testing",
     category: "Testing",
     level: "Online",
     rating: "4.8",
@@ -32,7 +32,7 @@ const allCourses = [
   },
   {
     id: 0,
-    title: "React Full Stack Development",
+    title: "React ",
     category: "Software Development",
     level: "Online",
     rating: "4.9",
