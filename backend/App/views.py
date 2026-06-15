@@ -18,13 +18,13 @@ import random
 from App.models import (
     UserRegister, AdminUser, Student, Enrollment, 
     LiveClass, RecordedClass, Resource, Cart,
-    Assignment, Note, StudentAttendance, Trainer, Batch
+    Assignment, Note, StudentAttendance, Trainer, Batch, AssignmentSubmission
 )
 from App.serializers import (
     UserRegisterSerializer, StudentSerializer, EnrollmentSerializer, 
     LiveClassSerializer, RecordedClassSerializer, ResourceSerializer, CartSerializer,
     AssignmentSerializer, NoteSerializer, StudentAttendanceSerializer,
-    TrainerSerializer, TrainerLoginSerializer, BatchSerializer
+    TrainerSerializer, TrainerLoginSerializer, BatchSerializer, AssignmentSubmissionSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -797,6 +797,56 @@ def normalize_course(name):
         return None
  
     name = name.lower().strip()
+
+@api_view(['POST'])
+def submit_assignment(request):
+    try:
+        data = request.data
+        assignment_id = data.get('assignment_id')
+        student_id = data.get('student_id')
+        email = data.get('email') # Need to pass email from frontend! Or lookup UserRegister then Student
+        
+        assignment = Assignment.objects.get(id=assignment_id)
+        student = None
+        if email:
+            student = Student.objects.filter(email=email).first()
+        elif student_id:
+            # Fallback in case student_id is from Student model
+            student = Student.objects.filter(id=student_id).first()
+            if not student:
+                user = UserRegister.objects.filter(id=student_id).first()
+                if user:
+                    student = Student.objects.filter(email=user.email).first()
+
+        if not student:
+            return Response({"error": "Student not found"}, status=404)
+        
+        # Check if already submitted
+        submission = AssignmentSubmission.objects.filter(assignment=assignment, student=student).first()
+        if submission:
+            if 'file' in request.FILES:
+                submission.fileLink = request.FILES['file']
+                submission.save()
+            return Response({"message": "Assignment updated successfully"}, status=200)
+            
+        submission = AssignmentSubmission.objects.create(
+            assignment=assignment,
+            student=student,
+            fileLink=request.FILES.get('file')
+        )
+        return Response({"message": "Assignment submitted successfully"}, status=201)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+
+@api_view(['GET'])
+def get_assignment_submissions(request):
+    assignment_id = request.query_params.get('assignment_id')
+    if not assignment_id:
+        return Response({"error": "assignment_id required"}, status=400)
+        
+    submissions = AssignmentSubmission.objects.filter(assignment_id=assignment_id).order_by('-submitted_at')
+    serializer = AssignmentSubmissionSerializer(submissions, many=True)
+    return Response(serializer.data, status=200)
  
     if "all courses" in name:
         return "All Courses"
@@ -1225,7 +1275,25 @@ def student_assignments(request):
                     continue
             filtered_assignments.append(a)
             
-    return Response(AssignmentSerializer(filtered_assignments, many=True).data)
+    data = AssignmentSerializer(filtered_assignments, many=True).data
+    
+    # Check submissions
+    student = None
+    if email:
+        student = Student.objects.filter(email=email).first()
+    elif student_id:
+        student = Student.objects.filter(id=student_id).first()
+        if not student:
+            user = UserRegister.objects.filter(id=student_id).first()
+            if user:
+                student = Student.objects.filter(email=user.email).first()
+                
+    if student:
+        submitted_assignment_ids = set(AssignmentSubmission.objects.filter(student=student).values_list('assignment_id', flat=True))
+        for item in data:
+            item['is_submitted'] = item['id'] in submitted_assignment_ids
+            
+    return Response(data)
 
 @api_view(['GET'])
 def debug_db(request):

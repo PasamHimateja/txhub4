@@ -362,3 +362,13 @@ class Batch(models.Model):
     def __str__(self):
         return f"{self.name} - {self.course}"
 
+class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='submissions', null=True, blank=True)
+    fileLink = models.FileField(upload_to='submissions/', blank=True, null=True)
+    status = models.CharField(max_length=20, default='submitted')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        student_name = self.student.name if self.student else 'Unknown'
+        return f"{self.assignment.title} - {student_name}"

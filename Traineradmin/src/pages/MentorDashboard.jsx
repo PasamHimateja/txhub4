@@ -297,6 +297,7 @@ export default function MentorDashboard() {
   const [showResourceModal, setShowResourceModal] = useState(false);
   const [showStudentDetail, setShowStudentDetail] = useState(null);
   const [showCourseDetail, setShowCourseDetail] = useState(null);
+  const [showAssignmentSubmissions, setShowAssignmentSubmissions] = useState(null);
 
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
@@ -983,7 +984,7 @@ export default function MentorDashboard() {
                   <span className="text-xs font-bold text-slate-600">{a.submissions}/{a.total}</span>
                 </div>
               </div>
-              <button onClick={() => showToast(`Viewing submissions for "${a.title}"`)} className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center gap-1">
+              <button onClick={() => setShowAssignmentSubmissions(a)} className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center gap-1">
                 <Eye className="w-3 h-3" /> View
               </button>
             </div>
@@ -1028,6 +1029,46 @@ export default function MentorDashboard() {
           Create Course
         </button>
       </form>
+    );
+  };
+
+  // ═══════════════════════════════════════════
+  //  ASSIGNMENT SUBMISSIONS MODAL
+  // ═══════════════════════════════════════════
+  const SubmissionsList = ({ assignment }) => {
+    const [submissions, setSubmissions] = useState([]);
+    const [loadingSubs, setLoadingSubs] = useState(true);
+
+    useEffect(() => {
+      if (!assignment) return;
+      api.get(`/assignments/submissions/?assignment_id=${assignment.id}`)
+        .then(res => setSubmissions(res.data))
+        .catch(err => console.error("Error fetching submissions:", err))
+        .finally(() => setLoadingSubs(false));
+    }, [assignment]);
+
+    if (loadingSubs) return <div className="text-center py-6 text-slate-500">Loading submissions...</div>;
+    
+    if (submissions.length === 0) return <div className="text-center py-6 text-slate-500">No submissions yet.</div>;
+
+    return (
+      <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+        {submissions.map(sub => (
+          <div key={sub.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <div>
+              <div className="font-semibold text-slate-800">{sub.student_name}</div>
+              <div className="text-xs text-slate-500 mt-1">Submitted: {new Date(sub.submitted_at).toLocaleString()}</div>
+            </div>
+            {sub.fileLink ? (
+              <a href={sub.fileLink} target="_blank" rel="noopener noreferrer" className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-semibold hover:bg-indigo-100 transition-colors flex items-center gap-2">
+                <Download className="w-4 h-4" /> Download
+              </a>
+            ) : (
+              <span className="text-xs text-slate-400 italic">No File</span>
+            )}
+          </div>
+        ))}
+      </div>
     );
   };
 
@@ -1330,6 +1371,10 @@ export default function MentorDashboard() {
           </Modal>
         )}
       </AnimatePresence>
+
+      <Modal isOpen={!!showAssignmentSubmissions} onClose={() => setShowAssignmentSubmissions(null)} title={`Submissions: ${showAssignmentSubmissions?.title}`} size="lg">
+        {showAssignmentSubmissions && <SubmissionsList assignment={showAssignmentSubmissions} />}
+      </Modal>
 
       {/* Toast */}
       <AnimatePresence>{toast && <Toast key="toast" message={toast.message} type={toast.type} onClose={() => setToast(null)} />}</AnimatePresence>

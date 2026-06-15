@@ -45,5 +45,7 @@ urlpatterns = [
     path('mentors/', views.manage_trainers),
     path('mentors/<int:pk>/', views.delete_trainer),
     path('enrollments/<int:pk>/assign/', views.assign_batch_mentor),
+    path('student/assignments/submit/', views.submit_assignment),
+    path('assignments/submissions/', views.get_assignment_submissions),
 ]
 

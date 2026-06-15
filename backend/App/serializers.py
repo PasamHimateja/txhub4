@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from App.models import UserRegister, AdminUser, Student, Enrollment, LiveClass, RecordedClass, Resource, Cart, Assignment, Note, StudentAttendance, Trainer, Batch
+from App.models import UserRegister, AdminUser, Student, Enrollment, LiveClass, RecordedClass, Resource, Cart, Assignment, Note, StudentAttendance, Trainer, Batch, AssignmentSubmission
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -158,4 +158,13 @@ class BatchSerializer(serializers.ModelSerializer):
 
     def get_students(self, obj):
         enrollments = obj.enrollments.all()
-        return [{"id": e.user.id, "name": e.user.full_name, "email": e.user.email} for e in enrollments if e.user]
+        return [{"id": e.user.id, "name": e.user.full_name, "email": e.user.email} for e in enrollments if e.user]
+
+class AssignmentSubmissionSerializer(serializers.ModelSerializer):
+    student_name = serializers.ReadOnlyField(source='student.name')
+    assignment_title = serializers.ReadOnlyField(source='assignment.title')
+
+    class Meta:
+        model = AssignmentSubmission
+        fields = '__all__'
+
