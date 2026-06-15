@@ -110,7 +110,7 @@ const EventsPage = () => {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
-            Student <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">Hackathons</span>
+            Student <span className="text-[#8ab4f8]">Hackathons</span>
           </h1>
           <p className="text-indigo-100 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
             Join our intense, expert-led hackathons to solve real-world problems, build amazing projects, and win exciting prizes while connecting with industry leaders.

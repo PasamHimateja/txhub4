@@ -13,6 +13,7 @@ import ClassManagement from "./pages/ClassManagement";
 import PaymentPage from "./pages/payment";
 import Batches from "./pages/Batches";
 import Mentors from "./pages/Mentors";
+import CourseDetails from "./pages/CourseDetails";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -88,6 +89,8 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="batches" element={<Batches />} />
           <Route path="mentors" element={<Mentors />} />
+          <Route path="courses" element={<ClassManagement />} />
+          <Route path="courses/:courseId" element={<CourseDetails />} />
           <Route path="settings" element={<Settings />} />
           <Route path="payment" element={<PaymentPage />} />
         </Route>

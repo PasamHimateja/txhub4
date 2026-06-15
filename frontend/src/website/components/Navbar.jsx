@@ -34,7 +34,6 @@ const categories = [
 ];
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
@@ -49,7 +48,6 @@ const Navbar = () => {
   // Poll for Active Live Sessions linked to user's enrolled courses
 
 
-  const isHome = location.pathname === "/";
 
   // Handle click outside to close menus
   useEffect(() => {
@@ -71,12 +69,6 @@ const Navbar = () => {
     };
   }, [isProfileMenuOpen, isExploreOpen]);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   // Close menus when route changes
   useEffect(() => {
     setIsMenuOpen(false);
@@ -89,10 +81,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 w-full z-[100]">
       <nav
-        className={`h-20 w-full flex items-center justify-between px-6 lg:px-16 transition-all duration-300 ${scrolled || isMenuOpen || !isHome
-          ? "bg-white shadow-lg"
-          : "bg-transparent"
-          }`}
+        className="h-20 w-full flex items-center justify-between px-6 lg:px-16 bg-white border-b border-slate-200 shadow-sm transition-all duration-300"
       >
         {/* LOGO */}
         <Link to="/" onClick={() => { setIsMenuOpen(false); window.scrollTo(0, 0); }}>

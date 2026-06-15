@@ -79,7 +79,7 @@ const Courses = () => {
     activeTab === "trending" ? trendingCourses : popularCourses;
 
   return (
-    <section id="courses" className="bg-slate-50 py-10 sm:py-16 lg:py-20 relative">
+    <section id="courses" className="bg-slate-50 py-8 sm:py-12 lg:py-16 relative">
       
       {/* Toast */}
       {notification && (

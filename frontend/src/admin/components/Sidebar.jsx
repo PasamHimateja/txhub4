@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserPlus, Settings,
-  LogOut, Menu, X, Bell, ChevronRight, Video, Layers, UserCheck // <-- 1. Imported Video icon here
+  LogOut, Menu, X, Bell, ChevronRight, Video, Layers, UserCheck, BookOpen
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { AuthContext } from '../../website/context/AuthContext';
@@ -19,6 +19,7 @@ const Sidebar = () => {
     { name: 'Users List', path: '/admin/users', icon: <Users size={22} />, badge: newCount > 0 ? newCount : null },
     { name: 'Batches', path: '/admin/batches', icon: <Layers size={22} /> },
     { name: 'Mentors', path: '/admin/mentors', icon: <UserCheck size={22} /> },
+    { name: 'Courses', path: '/admin/courses', icon: <BookOpen size={22} /> },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);

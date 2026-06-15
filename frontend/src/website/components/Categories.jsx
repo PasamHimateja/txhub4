@@ -52,7 +52,7 @@ const categories = [
 const Categories = () => {
   const navigate = useNavigate();
   return (
-    <section id="categories" className="bg-slate-50 py-16 md:py-24">
+    <section id="categories" className="bg-slate-50 py-10 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
 
         {/* Title Section */}
