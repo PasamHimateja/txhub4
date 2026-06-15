@@ -225,9 +225,12 @@ const Users = () => {
                           onChange={(e) => handleAssign(u.id, e.target.value, u.assigned_mentor)}
                         >
                           <option value="">Select Batch...</option>
-                          {batches.map(b => (
-                            <option key={b.id} value={b.id}>{b.name}</option>
-                          ))}
+                          {batches
+                            .filter(b => { const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,''); return u.courses.length === 0 || u.courses.some(c => c.title && b.course && (norm(c.title).includes(norm(b.course)) || norm(b.course).includes(norm(c.title)))); })
+                            .map(b => (
+                              <option key={b.id} value={b.id}>{b.name}</option>
+                            ))
+                          }
                         </select>
                         
                         <select
@@ -236,9 +239,12 @@ const Users = () => {
                           onChange={(e) => handleAssign(u.id, u.assigned_batch, e.target.value)}
                         >
                           <option value="">Select Mentor...</option>
-                          {mentors.map(m => (
-                            <option key={m.id} value={m.id}>{m.name}</option>
-                          ))}
+                          {mentors
+                            .filter(m => { const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,''); return m.assigned_course === 'All Courses' || u.courses.length === 0 || u.courses.some(c => c.title && m.assigned_course && (norm(c.title).includes(norm(m.assigned_course)) || norm(m.assigned_course).includes(norm(c.title)))); })
+                            .map(m => (
+                              <option key={m.id} value={m.id}>{m.name}</option>
+                            ))
+                          }
                         </select>
                       </div>
                     </td>
@@ -317,9 +323,12 @@ const Users = () => {
                         onChange={(e) => handleAssign(u.id, e.target.value, u.assigned_mentor)}
                       >
                         <option value="">Select Batch...</option>
-                        {batches.map(b => (
-                          <option key={b.id} value={b.id}>{b.name}</option>
-                        ))}
+                        {batches
+                          .filter(b => { const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,''); return u.courses.length === 0 || u.courses.some(c => c.title && b.course && (norm(c.title).includes(norm(b.course)) || norm(b.course).includes(norm(c.title)))); })
+                          .map(b => (
+                            <option key={b.id} value={b.id}>{b.name}</option>
+                          ))
+                        }
                       </select>
                       
                       <select
@@ -328,9 +337,12 @@ const Users = () => {
                         onChange={(e) => handleAssign(u.id, u.assigned_batch, e.target.value)}
                       >
                         <option value="">Select Mentor...</option>
-                        {mentors.map(m => (
-                          <option key={m.id} value={m.id}>{m.name}</option>
-                        ))}
+                        {mentors
+                          .filter(m => { const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,''); return m.assigned_course === 'All Courses' || u.courses.length === 0 || u.courses.some(c => c.title && m.assigned_course && (norm(c.title).includes(norm(m.assigned_course)) || norm(m.assigned_course).includes(norm(c.title)))); })
+                          .map(m => (
+                            <option key={m.id} value={m.id}>{m.name}</option>
+                          ))
+                        }
                       </select>
                     </div>
                   </div>

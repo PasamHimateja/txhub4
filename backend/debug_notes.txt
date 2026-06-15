@@ -1,0 +1,4 @@
+get_student_info returned course=Python Full Stack, batch=Batch 1
+norm_student_course=Python Development
+comparing batches: batch 1 vs batch 1
+returning 1 notes

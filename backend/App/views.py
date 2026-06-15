@@ -1121,14 +1121,17 @@ def get_student_info(student_id=None, email=None):
         if student_id:
             s = Student.objects.get(id=student_id)
         elif email:
-            s = Student.objects.get(email=email)
+            s = Student.objects.get(email__iexact=email)
         else:
             raise Student.DoesNotExist
             
         student_course = s.courseSpecialization or ""
-        enrollment = Enrollment.objects.filter(user__email=s.email).order_by('-created_at').first()
-        if enrollment and enrollment.batch_date:
-            batch_date = enrollment.batch_date
+        enrollment = Enrollment.objects.filter(user__email__iexact=s.email).order_by('-created_at').first()
+        if enrollment:
+            if enrollment.assigned_batch:
+                batch_date = enrollment.assigned_batch.name
+            elif enrollment.batch_date:
+                batch_date = enrollment.batch_date
         return student_course, batch_date
     except Student.DoesNotExist:
         pass
@@ -1138,13 +1141,15 @@ def get_student_info(student_id=None, email=None):
         if student_id:
             u = UserRegister.objects.get(id=student_id)
         elif email:
-            u = UserRegister.objects.get(email=email)
+            u = UserRegister.objects.get(email__iexact=email)
         else:
             raise UserRegister.DoesNotExist
             
         enrollment = Enrollment.objects.filter(user=u).order_by('-created_at').first()
         if enrollment:
-            if enrollment.batch_date:
+            if enrollment.assigned_batch:
+                batch_date = enrollment.assigned_batch.name
+            elif enrollment.batch_date:
                 batch_date = enrollment.batch_date
             if isinstance(enrollment.items, list) and len(enrollment.items) > 0:
                 student_course = enrollment.items[0].get("title") or enrollment.items[0].get("name") or ""
@@ -1155,22 +1160,26 @@ def get_student_info(student_id=None, email=None):
     return None, None
 
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
 def student_notes(request):
     student_id = request.query_params.get('student_id')
     email = request.query_params.get('email')
     
     if not student_id and not email:
+        with open("debug_notes.txt", "a") as f:
+            f.write(f"student_notes API called with id={student_id}, email={email}\n")
         return Response({"error": "student_id or email is required"}, status=400)
         
     student_course, batch_date = get_student_info(student_id=student_id, email=email)
     if student_course is None:
         return Response({"error": "Student not found"}, status=404)
-        
+
     notes = Note.objects.all().order_by('-created_at')
     filtered_notes = []
-    
+
     norm_student_course = normalize_course(student_course) or student_course.lower()
-    
+
     for n in notes:
         norm_note_course = normalize_course(n.course) or (n.course.lower() if n.course else "")
         # Match course (fallback to exact match if normalize fails)
@@ -1182,10 +1191,12 @@ def student_notes(request):
                 if b1 and b2 and b1 != b2:
                     continue
             filtered_notes.append(n)
-            
+
     return Response(NoteSerializer(filtered_notes, many=True).data)
 
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
 def student_assignments(request):
     student_id = request.query_params.get('student_id')
     email = request.query_params.get('email')
@@ -1255,96 +1266,6 @@ def parse_batch_date(date_str):
     except ValueError:
         pass
     return None
-
-@api_view(['GET'])
-@authentication_classes([])
-@permission_classes([])
-def student_notes(request):
-    email = request.query_params.get('email')
-    if not email:
-        return Response({"error": "Email is required"}, status=400)
-    
-    target_course = None
-    batch_date = None
-    
-    # 1. Try Enrollment
-    enrollment = Enrollment.objects.filter(user__email=email).order_by('-created_at').first()
-    if enrollment:
-        batch_date = enrollment.batch_date
-        if isinstance(enrollment.items, list) and len(enrollment.items) > 0:
-            item = enrollment.items[0]
-            title = item.get("title") or item.get("name")
-            target_course = normalize_course(title)
-            
-    # 2. Try Student Table if target_course still empty
-    if not target_course:
-        student = Student.objects.filter(email=email).order_by('-created_at').first()
-        if student:
-            target_course = normalize_course(student.courseSpecialization)
-            
-    if not target_course:
-        return Response([], status=200)
-        
-    notes = Note.objects.filter(Q(course=target_course) | Q(course='All Courses'))
-    
-    if batch_date and batch_date != 'All Batches':
-        q_exact = Q(batch_month=batch_date)
-        q_all = Q(batch_month='All Batches') | Q(batch_month='') | Q(batch_month__isnull=True)
-        
-        parsed_batch = parse_batch_date(batch_date)
-        if parsed_batch:
-            # Note created_at must be >= student's batch date
-            q_all = q_all & Q(created_at__date__gte=parsed_batch)
-            
-        notes = notes.filter(q_exact | q_all)
-        
-    serializer = NoteSerializer(notes.distinct().order_by('-created_at'), many=True, context={'request': request})
-    return Response(serializer.data, status=200)
-
-@api_view(['GET'])
-@authentication_classes([])
-@permission_classes([])
-def student_assignments(request):
-    email = request.query_params.get('email')
-    if not email:
-        return Response({"error": "Email is required"}, status=400)
-        
-    target_course = None
-    batch_date = None
-    
-    # 1. Try Enrollment
-    enrollment = Enrollment.objects.filter(user__email=email).order_by('-created_at').first()
-    if enrollment:
-        batch_date = enrollment.batch_date
-        if isinstance(enrollment.items, list) and len(enrollment.items) > 0:
-            item = enrollment.items[0]
-            title = item.get("title") or item.get("name")
-            target_course = normalize_course(title)
-            
-    # 2. Try Student Table if target_course still empty
-    if not target_course:
-        student = Student.objects.filter(email=email).order_by('-created_at').first()
-        if student:
-            target_course = normalize_course(student.courseSpecialization)
-            
-    if not target_course:
-        return Response([], status=200)
-        
-    assignments = Assignment.objects.filter(Q(course=target_course) | Q(course='All Courses'))
-    
-    if batch_date and batch_date != 'All Batches':
-        q_exact = Q(batch_month=batch_date)
-        q_all = Q(batch_month='All Batches') | Q(batch_month='') | Q(batch_month__isnull=True)
-        
-        parsed_batch = parse_batch_date(batch_date)
-        if parsed_batch:
-            # Assignment created_at must be >= student's batch date
-            q_all = q_all & Q(created_at__date__gte=parsed_batch)
-            
-        assignments = assignments.filter(q_exact | q_all)
-        
-    serializer = AssignmentSerializer(assignments.distinct().order_by('-created_at'), many=True)
-    return Response(serializer.data, status=200)
 
 @api_view(['GET'])
 @authentication_classes([])

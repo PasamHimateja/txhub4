@@ -5,7 +5,7 @@ import {
   Users, BookOpen, Send, CheckCircle, ClipboardList,
   TrendingUp, Award, Clock, Search, MoreVertical, Plus, FileText, Download,
   GraduationCap, Calendar, Bell, X, Upload, Trash2, Eye, Edit3, Check,
-  ChevronDown, AlertCircle, Star, Paperclip, LogOut
+  ChevronDown, AlertCircle, Star, Paperclip, LogOut, Layers, ChevronLeft
 } from 'lucide-react';
 import api from '../api/client';
 
@@ -112,9 +112,7 @@ const TABS = [
   { id: 'overview', label: 'Overview', icon: TrendingUp },
   { id: 'students', label: 'Students', icon: Users },
   { id: 'courses', label: 'Courses', icon: BookOpen },
-  { id: 'notes', label: 'Notes', icon: Send },
-  { id: 'attendance', label: 'Attendance', icon: CheckCircle },
-  { id: 'assignments', label: 'Assignments', icon: ClipboardList },
+  { id: 'batches', label: 'Batches', icon: Layers },
 ];
 
 const COURSE_IMAGES = {
@@ -137,6 +135,9 @@ export default function MentorDashboard() {
   const [notes, setNotes] = useState(INITIAL_NOTES);
   const [assignments, setAssignments] = useState(INITIAL_ASSIGNMENTS);
   const [attendance, setAttendance] = useState({});
+  const [batches, setBatches] = useState([]);
+  const [selectedBatchId, setSelectedBatchId] = useState(null);
+  const [batchActiveTab, setBatchActiveTab] = useState('notes');
   const [studentSearch, setStudentSearch] = useState('');
   const [overviewData, setOverviewData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -153,11 +154,12 @@ export default function MentorDashboard() {
         const params = trainerData ? { trainer_id: trainerData.id } : {};
         
         // Use allSettled so one failing endpoint doesn't block others
-        const [studentsRes, notesRes, assignmentsRes, overviewRes] = await Promise.allSettled([
+        const [studentsRes, notesRes, assignmentsRes, overviewRes, batchesRes] = await Promise.allSettled([
           api.get('/students/', { params }),
           api.get('/notes/', { params }),
           api.get('/assignments/', { params }),
           api.get('/mentor-overview/', { params }),
+          api.get('/batches/', { params }),
         ]);
         
         // Process students — core data, always show
@@ -184,6 +186,25 @@ export default function MentorDashboard() {
           if (Array.isArray(assignmentsData) && assignmentsData.length > 0) setAssignments(assignmentsData);
         } else {
           console.error('Assignments fetch failed:', assignmentsRes.reason);
+        }
+
+        // Process batches — normalize course names before comparing (handles "Python FullStack" vs "Python Full Stack")
+        if (batchesRes.status === 'fulfilled') {
+          let batchesData = batchesRes.value.data;
+          if (Array.isArray(batchesData) && batchesData.length > 0) {
+            if (trainerData && trainerData.assigned_course && trainerData.assigned_course !== 'All Courses') {
+              const normalize = (s) => s.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+              const mentorCourse = normalize(trainerData.assigned_course);
+              batchesData = batchesData.filter(b => {
+                if (!b.course) return false;
+                const batchCourse = normalize(b.course);
+                return batchCourse.includes(mentorCourse) || mentorCourse.includes(batchCourse);
+              });
+            }
+            setBatches(batchesData);
+          }
+        } else {
+          console.error('Batches fetch failed:', batchesRes.reason);
         }
 
         // Process overview
@@ -488,7 +509,7 @@ export default function MentorDashboard() {
     const fileInputRef = useRef(null);
     const [stagedFiles, setStagedFiles] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(trainerData?.assigned_course || '');
-    const [selectedBatch, setSelectedBatch] = useState('');
+    const [selectedBatch, setSelectedBatch] = useState(selectedBatchId ? batches.find(b => b.id === selectedBatchId)?.name || '' : '');
     const [dragOver, setDragOver] = useState(false);
     const [sending, setSending] = useState(false);
 
@@ -551,7 +572,7 @@ export default function MentorDashboard() {
 
         {/* LEFT – Shared Materials (already sent) */}
         <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-          <h3 className="font-bold text-lg text-slate-800 mb-6">Shared Materials <span className="text-sm font-normal text-slate-400">({notes.length})</span></h3>
+          <h3 className="font-bold text-lg text-slate-800 mb-6">Shared Materials <span className="text-sm font-normal text-slate-400">({notes.filter(n => !selectedBatchId || n.batch_month === batches.find(b => b.id === selectedBatchId)?.name).length})</span></h3>
           {notes.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-slate-400">
               <FileText className="w-12 h-12 mb-3 text-slate-200" />
@@ -560,7 +581,7 @@ export default function MentorDashboard() {
             </div>
           ) : (
             <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-              {notes.map(note => {
+              {notes.filter(n => !selectedBatchId || n.batch_month === batches.find(b => b.id === selectedBatchId)?.name).map(note => {
                 const ext = (note.title || '').split('.').pop().toUpperCase();
                 const s = typeStyle(ext);
                 return (
@@ -605,10 +626,9 @@ export default function MentorDashboard() {
             <select value={selectedBatch} onChange={(e) => setSelectedBatch(e.target.value)}
               className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none">
               <option value="">All Batches</option>
-              <option value="15 May 2026">15 May 2026</option>
-              <option value="01 June 2026">01 June 2026</option>
-              <option value="15 June 2026">15 June 2026</option>
-              <option value="01 July 2026">01 July 2026</option>
+              {batches.map(b => (
+                <option key={b.id} value={b.name}>{b.name}</option>
+              ))}
             </select>
           </div>
 
@@ -685,7 +705,7 @@ export default function MentorDashboard() {
   // ═══════════════════════════════════════════
   const AttendanceTab = () => {
     const presentCount = Object.values(attendance).filter(Boolean).length;
-    const absentCount = students.length - presentCount;
+    const absentCount = (selectedBatchId ? students.filter(s => s.batch_date === batches.find(b => b.id === selectedBatchId)?.name).length : students.length) - presentCount;
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     
     // focusIndex is now at component level — doesn't reset on re-render
@@ -706,10 +726,13 @@ export default function MentorDashboard() {
       showToast(`${currentFocusStudent.name} marked Absent!`, 'info');
     };
 
-    const filteredStudents = students.filter(s =>
-      (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (s.course || s.courseSpecialization || '').toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const batchName = selectedBatchId ? batches.find(b => b.id === selectedBatchId)?.name : null;
+    const filteredStudents = students.filter(s => {
+      const matchSearch = (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (s.course || s.courseSpecialization || '').toLowerCase().includes(searchQuery.toLowerCase());
+      const matchBatch = !batchName || s.batch_date === batchName;
+      return matchSearch && matchBatch;
+    });
 
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
@@ -899,13 +922,13 @@ export default function MentorDashboard() {
   const AssignmentsTab = () => (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="font-bold text-lg text-slate-800">Assignments <span className="text-sm font-normal text-slate-400">({assignments.length})</span></h3>
+        <h3 className="font-bold text-lg text-slate-800">Assignments <span className="text-sm font-normal text-slate-400">({assignments.filter(a => !selectedBatchId || a.batch_month === batches.find(b => b.id === selectedBatchId)?.name).length})</span></h3>
         <button onClick={() => setShowNewAssignment(true)} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 active:scale-95">
           <Plus className="w-4 h-4" /> New Assignment
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {assignments.map(a => (
+        {assignments.filter(a => !selectedBatchId || a.batch_month === batches.find(b => b.id === selectedBatchId)?.name).map(a => (
           <div key={a.id} className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-md transition-all">
             <div className="flex justify-between items-start mb-4">
               <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${
@@ -980,7 +1003,7 @@ export default function MentorDashboard() {
   const NewAssignmentForm = () => {
     const [title, setTitle] = useState('');
     const [course, setCourse] = useState(trainerData?.assigned_course || '');
-    const [batch, setBatch] = useState('');
+    const [batch, setBatch] = useState(selectedBatchId ? batches.find(b => b.id === selectedBatchId)?.name || '' : '');
     const [dueDate, setDueDate] = useState('');
 
     const handleSubmit = async (e) => {
@@ -1031,10 +1054,9 @@ export default function MentorDashboard() {
             <select value={batch} onChange={(e) => setBatch(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none">
               <option value="">All Batches</option>
-              <option value="15 May 2026">15 May 2026</option>
-              <option value="01 June 2026">01 June 2026</option>
-              <option value="15 June 2026">15 June 2026</option>
-              <option value="01 July 2026">01 July 2026</option>
+              {batches.map(b => (
+                <option key={b.id} value={b.name}>{b.name}</option>
+              ))}
             </select>
           </div>
         </div>
@@ -1047,6 +1069,85 @@ export default function MentorDashboard() {
           Create Assignment
         </button>
       </form>
+    );
+  };
+
+  // ═══════════════════════════════════════════
+  //  BATCHES TAB
+  // ═══════════════════════════════════════════
+  const BatchesTab = () => {
+    if (!selectedBatchId) {
+      return (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-lg text-slate-800">My Batches <span className="text-sm font-normal text-slate-400">({batches.length})</span></h3>
+          </div>
+          {batches.length === 0 ? (
+            <div className="p-10 text-center text-slate-400 bg-white rounded-3xl border border-dashed border-slate-200 shadow-sm">
+              <Layers size={32} className="mx-auto mb-3 text-slate-200" />
+              <p className="font-semibold">No batches assigned to you yet.</p>
+              <p className="text-xs mt-1">Batches created by admins will appear here.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {batches.map(b => (
+                <div key={b.id} onClick={() => { setSelectedBatchId(b.id); setBatchActiveTab('notes'); }}
+                  className="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500" />
+                  <div className="flex justify-between items-start mb-4 mt-2">
+                    <h4 className="font-bold text-slate-800 text-lg group-hover:text-indigo-600 transition-colors">{b.name}</h4>
+                  </div>
+                  <div className="text-sm text-slate-500 space-y-2">
+                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-indigo-400" /> {b.course}</p>
+                    <p className="flex items-center gap-2"><Calendar size={16} className="text-indigo-400" /> Start: {b.startDate || 'TBD'}</p>
+                    <p className="flex items-center gap-2"><Users size={16} className="text-indigo-400" /> {b.students ? b.students.length : 0} Students</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      );
+    }
+
+    const selectedBatch = batches.find(b => b.id === selectedBatchId);
+    if (!selectedBatch) return null;
+
+    return (
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
+        <div className="flex items-center gap-4 bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+          <button onClick={() => setSelectedBatchId(null)} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-colors">
+            <ChevronLeft size={20} />
+          </button>
+          <div>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Batch Details</p>
+            <h2 className="text-xl font-bold text-slate-800">{selectedBatch.name}</h2>
+          </div>
+        </div>
+
+        <div className="flex overflow-x-auto pb-2 mb-2 hide-scrollbar gap-2 border-b border-slate-100">
+          {[{id: 'notes', label: 'Notes', icon: Send}, {id: 'attendance', label: 'Attendance', icon: CheckCircle}, {id: 'assignments', label: 'Assignments', icon: ClipboardList}].map(tab => {
+            const isActive = batchActiveTab === tab.id;
+            return (
+              <button key={tab.id} onClick={() => setBatchActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-5 py-3 rounded-t-2xl text-sm font-bold transition-all whitespace-nowrap border-b-2 ${
+                  isActive ? 'border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                }`}>
+                <tab.icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-6">
+          <AnimatePresence mode="wait">
+            {batchActiveTab === 'notes' && <NotesTab key="notes" />}
+            {batchActiveTab === 'attendance' && <AttendanceTab key="attendance" />}
+            {batchActiveTab === 'assignments' && <AssignmentsTab key="assignments" />}
+          </AnimatePresence>
+        </div>
+      </motion.div>
     );
   };
 
@@ -1110,9 +1211,7 @@ export default function MentorDashboard() {
           {activeTab === 'overview' && <OverviewTab key="overview" />}
           {activeTab === 'students' && <StudentsTab key="students" />}
           {activeTab === 'courses' && <CoursesTab key="courses" />}
-          {activeTab === 'notes' && <NotesTab key="notes" />}
-          {activeTab === 'attendance' && <AttendanceTab key="attendance" />}
-          {activeTab === 'assignments' && <AssignmentsTab key="assignments" />}
+          {activeTab === 'batches' && <BatchesTab key="batches" />}
         </AnimatePresence>
       </div>
 

@@ -78,7 +78,7 @@ const Notes = () => {
                   {new Date(note.created_at).toLocaleDateString()}
                 </span>
                 {note.fileLink && (
-                  <a href={note.fileLink} target="_blank" rel="noopener noreferrer" 
+                  <a href={note.fileLink.startsWith('http') ? note.fileLink : `http://127.0.0.1:8000${note.fileLink}`} target="_blank" rel="noopener noreferrer" 
                     className="text-indigo-600 font-semibold text-sm hover:underline flex items-center gap-1">
                     <Eye size={14} /> View
                   </a>

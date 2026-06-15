@@ -355,7 +355,7 @@ class StudentAttendance(models.Model):
 
 class Batch(models.Model):
     name = models.CharField(max_length=100)
-    course = models.CharField(max_length=100, choices=COURSE_CHOICES)
+    course = models.CharField(max_length=200, blank=True, default='')
     startDate = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
