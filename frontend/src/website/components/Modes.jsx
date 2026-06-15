@@ -148,7 +148,7 @@ const Modes = () => {
   ];
 
   return (
-    <section id="modes" className="bg-slate-50 py-16 md:py-24">
+    <section id="modes" className="bg-slate-50 py-10 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 text-center">
         <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
           Modes We Train

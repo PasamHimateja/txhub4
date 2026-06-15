@@ -226,7 +226,15 @@ const Users = () => {
                         >
                           <option value="">Select Batch...</option>
                           {batches
-                            .filter(b => { const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,''); return u.courses.length === 0 || u.courses.some(c => c.title && b.course && (norm(c.title).includes(norm(b.course)) || norm(b.course).includes(norm(c.title)))); })
+                            .filter(b => {
+                              if (!b.course || !u.courses) return false;
+                              const normalizedBatch = b.course.toLowerCase().replace(/[^a-z0-9]/g, '');
+                              return u.courses.some(uc => {
+                                if (!uc || !uc.title) return false;
+                                const normalizedUserCourse = uc.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+                                return normalizedBatch.includes(normalizedUserCourse) || normalizedUserCourse.includes(normalizedBatch);
+                              });
+                            })
                             .map(b => (
                               <option key={b.id} value={b.id}>{b.name}</option>
                             ))
@@ -324,7 +332,15 @@ const Users = () => {
                       >
                         <option value="">Select Batch...</option>
                         {batches
-                          .filter(b => { const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,''); return u.courses.length === 0 || u.courses.some(c => c.title && b.course && (norm(c.title).includes(norm(b.course)) || norm(b.course).includes(norm(c.title)))); })
+                          .filter(b => {
+                            if (!b.course || !u.courses) return false;
+                            const normalizedBatch = b.course.toLowerCase().replace(/[^a-z0-9]/g, '');
+                            return u.courses.some(uc => {
+                              if (!uc || !uc.title) return false;
+                              const normalizedUserCourse = uc.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+                              return normalizedBatch.includes(normalizedUserCourse) || normalizedUserCourse.includes(normalizedBatch);
+                            });
+                          })
                           .map(b => (
                             <option key={b.id} value={b.id}>{b.name}</option>
                           ))

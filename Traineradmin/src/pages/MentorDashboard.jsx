@@ -208,6 +208,21 @@ export default function MentorDashboard() {
         }
 
         // Process overview
+        const MAIN_COURSES = [
+          "Java Full Stack",
+          "MERN Stack",
+          "Testing",
+          "Soft Skills",
+          "Data Science",
+          "React Full Stack Development",
+          "UI/UX Design",
+          "AI/ML",
+          "Devops",
+          "Python Development",
+          "SQL & Data Analytics",
+          "Software Development"
+        ];
+
         if (overviewRes.status === 'fulfilled' && overviewRes.value.data) {
           setOverviewData(overviewRes.value.data);
           if (overviewRes.value.data.course_breakdown) {
@@ -221,7 +236,18 @@ export default function MentorDashboard() {
                 image: COURSE_IMAGES[title] || COURSE_IMAGES['default'],
               }));
             
-            if (dynamicCourses.length > 0) {
+            if (trainerData?.assigned_course === 'All Courses') {
+              const activeTitles = dynamicCourses.map(dc => dc.title);
+              const remaining = MAIN_COURSES.filter(c => !activeTitles.includes(c)).map((c, idx) => ({
+                id: dynamicCourses.length + idx + 1,
+                title: c,
+                students: 0,
+                rating: (4.5 + Math.random() * 0.5).toFixed(1),
+                progress: 0,
+                image: COURSE_IMAGES[c] || COURSE_IMAGES['default']
+              }));
+              setCourses([...dynamicCourses, ...remaining]);
+            } else if (dynamicCourses.length > 0) {
               setCourses(dynamicCourses);
             } else if (trainerData?.assigned_course) {
               setCourses([{
@@ -233,10 +259,18 @@ export default function MentorDashboard() {
         } else {
           // Fallback: still show the mentor's course even if overview fails
           if (trainerData?.assigned_course) {
-            setCourses([{
-              id: 1, title: trainerData.assigned_course, students: 0, rating: 5.0, progress: 0,
-              image: COURSE_IMAGES[trainerData.assigned_course] || COURSE_IMAGES['default']
-            }]);
+            if (trainerData.assigned_course === 'All Courses') {
+              const list = MAIN_COURSES.map((c, i) => ({
+                id: i + 1, title: c, students: 0, rating: 5.0, progress: 0,
+                image: COURSE_IMAGES[c] || COURSE_IMAGES['default']
+              }));
+              setCourses(list);
+            } else {
+              setCourses([{
+                id: 1, title: trainerData.assigned_course, students: 0, rating: 5.0, progress: 0,
+                image: COURSE_IMAGES[trainerData.assigned_course] || COURSE_IMAGES['default']
+              }]);
+            }
           }
           console.error('Overview fetch failed:', overviewRes.reason);
         }
