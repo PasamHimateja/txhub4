@@ -152,7 +152,10 @@ export default function MentorDashboard() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const params = trainerData ? { trainer_id: trainerData.id } : {};
+        const params = trainerData ? { 
+          trainer_id: trainerData.id,
+          trainer_email: trainerData.email
+        } : {};
 
         // Use allSettled so one failing endpoint doesn't block others
         const [studentsRes, notesRes, assignmentsRes, overviewRes, batchesRes] = await Promise.allSettled([
@@ -189,18 +192,12 @@ export default function MentorDashboard() {
           console.error('Assignments fetch failed:', assignmentsRes.reason);
         }
 
-        // Process batches — normalize course names before comparing (handles "Python FullStack" vs "Python Full Stack")
+        // Process batches — show only the batches assigned to the logged-in mentor
         if (batchesRes.status === 'fulfilled') {
           let batchesData = batchesRes.value.data;
-          if (Array.isArray(batchesData) && batchesData.length > 0) {
-            if (trainerData && trainerData.assigned_course && trainerData.assigned_course !== 'All Courses') {
-              const normalize = (s) => s.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
-              const mentorCourse = normalize(trainerData.assigned_course);
-              batchesData = batchesData.filter(b => {
-                if (!b.course) return false;
-                const batchCourse = normalize(b.course);
-                return batchCourse.includes(mentorCourse) || mentorCourse.includes(batchCourse);
-              });
+          if (Array.isArray(batchesData)) {
+            if (trainerData && trainerData.id) {
+              batchesData = batchesData.filter(b => b.assigned_mentor === trainerData.id);
             }
             setBatches(batchesData);
           }
@@ -405,11 +402,13 @@ export default function MentorDashboard() {
   //  STUDENTS TAB
   // ═══════════════════════════════════════════
   const StudentsTab = () => {
-    const filtered = students.filter(s =>
-      (s.name || '').toLowerCase().includes(studentSearch.toLowerCase()) ||
-      (s.email || '').toLowerCase().includes(studentSearch.toLowerCase()) ||
-      (s.course || s.courseSpecialization || '').toLowerCase().includes(studentSearch.toLowerCase())
-    );
+    const filtered = students.filter(s => {
+      const matchesSearch = (s.name || '').toLowerCase().includes(studentSearch.toLowerCase()) ||
+        (s.email || '').toLowerCase().includes(studentSearch.toLowerCase()) ||
+        (s.course || s.courseSpecialization || '').toLowerCase().includes(studentSearch.toLowerCase());
+      const matchesBatch = !selectedBatchId || s.batch_id === selectedBatchId;
+      return matchesSearch && matchesBatch;
+    });
 
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
@@ -740,14 +739,21 @@ export default function MentorDashboard() {
   //  ATTENDANCE TAB
   // ═══════════════════════════════════════════
   const AttendanceTab = () => {
+    const [searchQuery, setSearchQuery] = useState('');
     const presentCount = Object.values(attendance).filter(Boolean).length;
-    const absentCount = (selectedBatchId ? students.filter(s => s.batch_date === batches.find(b => b.id === selectedBatchId)?.name).length : students.length) - presentCount;
+    const filteredStudents = students.filter(s => {
+      const matchSearch = (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (s.course || s.courseSpecialization || '').toLowerCase().includes(searchQuery.toLowerCase());
+      const matchBatch = !selectedBatchId || s.batch_id === selectedBatchId;
+      return matchSearch && matchBatch;
+    });
+
+    const absentCount = (selectedBatchId ? students.filter(s => s.batch_id === selectedBatchId).length : students.length) - presentCount;
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     // focusIndex is now at component level — doesn't reset on re-render
-    const [searchQuery, setSearchQuery] = useState('');
 
-    const currentFocusStudent = students.length > 0 ? students[focusIndex % students.length] : null;
+    const currentFocusStudent = filteredStudents.length > 0 ? filteredStudents[focusIndex % filteredStudents.length] : null;
 
     const handleFocusPresent = () => {
       if (!currentFocusStudent) return;
@@ -761,14 +767,6 @@ export default function MentorDashboard() {
       setFocusIndex(prev => prev + 1);
       showToast(`${currentFocusStudent.name} marked Absent!`, 'info');
     };
-
-    const batchName = selectedBatchId ? batches.find(b => b.id === selectedBatchId)?.name : null;
-    const filteredStudents = students.filter(s => {
-      const matchSearch = (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (s.course || s.courseSpecialization || '').toLowerCase().includes(searchQuery.toLowerCase());
-      const matchBatch = !batchName || s.batch_date === batchName;
-      return matchSearch && matchBatch;
-    });
 
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
@@ -1242,7 +1240,10 @@ export default function MentorDashboard() {
 
     const fetchClasses = async () => {
       try {
-        const params = trainerData ? { mentor_id: trainerData.id } : {};
+        const params = trainerData ? { 
+          mentor_id: trainerData.id,
+          mentor_email: trainerData.email
+        } : {};
         const res = await api.get('/online-classes/', { params });
         setClasses(Array.isArray(res.data) ? res.data : (res.data.results || []));
       } catch (e) {

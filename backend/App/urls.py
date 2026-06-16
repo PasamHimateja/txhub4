@@ -42,11 +42,13 @@ urlpatterns = [
     path('debug/', views.debug_db),
     path('batches/', views.manage_batches),
     path('batches/<int:pk>/', views.delete_batch),
+    path('batches/<int:pk>/assign-mentor/', views.assign_mentor_to_batch),
     path('mentors/', views.manage_trainers),
     path('mentors/<int:pk>/', views.delete_trainer),
     path('enrollments/<int:pk>/assign/', views.assign_batch_mentor),
     path('student/assignments/submit/', views.submit_assignment),
     path('assignments/submissions/', views.get_assignment_submissions),
+    path('courses/<str:course_id>/progress/', views.get_course_progress),
 ]
 
 from rest_framework.routers import DefaultRouter

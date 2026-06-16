@@ -156,11 +156,11 @@ const discount = originalPriceBase - actualPrice;
           clearCart();
 
           // ✅ redirect
-          navigate("/my-courses");
+          window.location.href = "http://localhost:5174/admin/users";
         }
 
-        // 🔥 Redirect to My Courses to see the new enrollment
-        navigate("/my-courses");
+        // 🔥 Redirect to admin users list
+        window.location.href = "http://localhost:5174/admin/users";
       } else {
         console.error("❌ Payment Failed:", data);
         alert(data.error || "Payment failed ❌");

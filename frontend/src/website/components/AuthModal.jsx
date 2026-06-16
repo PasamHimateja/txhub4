@@ -36,9 +36,8 @@ const AuthModal = () => {
     } else if (name === "email") {
       if (!value.trim()) {
         errMsg = "Email address is required";
-      }
-      else if (!/^[^\s@]+@(gmail\.com|admin\.org)$/.test(value)) {
-        errMsg = "Email must end with @gmail.com or @admin.org";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        errMsg = "Please enter a valid email address";
       }
     } else if (name === "phone") {
       if (!value.trim()) errMsg = "Phone number is required";
@@ -141,22 +140,10 @@ const AuthModal = () => {
       if (response.ok) {
         if (isLoginView) {
           const actualUser = data.data || data;
-          
-          // ✅ SET ADMIN FLAG
-          const isAdmin = actualUser.isAdmin || actualUser.role === "admin" || (actualUser.email || form.email || "").toLowerCase().endsWith("@admin.org");
-          if (isAdmin) {
-            actualUser.isAdmin = true;
-          }
-
           login(actualUser);
           alert("Login Successful");
-
-          if (isAdmin) {
-            window.location.href = "/admin"; // admin panel
-          } else {
-            closeAuthModal(); // normal user
-            navigate("/");
-          }
+          closeAuthModal();
+          navigate("/");
         } else {
           alert("Registration Successful! Please login.");
           setModalView("login");
@@ -189,22 +176,9 @@ const AuthModal = () => {
 
       if (res.ok) {
         const actualUser = data.data || data;
-
-        // ✅ SET ADMIN FLAG
-        const isAdmin = actualUser.isAdmin || actualUser.role === "admin" || (actualUser?.email || "").toLowerCase().endsWith("@admin.org");
-        if (isAdmin) {
-          actualUser.isAdmin = true;
-        }
-
         login(actualUser);
-
-        if (isAdmin) {
-          window.location.href = "/admin";
-        } else {
-          closeAuthModal();
-          navigate("/");
-        }
-
+        closeAuthModal();
+        navigate("/");
         alert("Google Login Successful");
       } else {
         alert(data.error || "Google login failed");

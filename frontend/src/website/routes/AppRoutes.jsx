@@ -29,22 +29,7 @@ import SEO from "../components/SEO";
 import { RefreshCcw } from "lucide-react";
 
 
-// ✅ Admin Route Protection
-const AdminRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
 
-  // Not logged in
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Not admin
-  if (!user.isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
-};
 
 const WebsiteLayout = ({ children }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -131,17 +116,7 @@ const AppRoutes = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/events" element={<Events />} />
 
-        {/* ✅ Protected Admin Route */}
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <div className="pt-32 text-center text-3xl font-bold">
-                Admin Panel
-              </div>
-            </AdminRoute>
-          }
-        />
+
       </Routes>
     </WebsiteLayout>
   );

@@ -1,41 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Star, Users, Clock, Plus, Trash2, X } from 'lucide-react';
+import { BookOpen, Star, Users, Clock, Plus, Trash2, X, Layers, UserCheck } from 'lucide-react';
 
 const INITIAL_COURSES = [
   {
     id: 'java-full-stack',
     title: 'Java Full Stack',
     category: 'Development',
-    students: 1,
-    rating: '4.9',
-    progress: 10,
+    students: 0,
+    batches: 0,
+    mentorAssignments: 0,
+    rating: '4.8',
+    progress: 0,
     banner: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&h=300&fit=crop'
   },
   {
     id: 'react-full-stack-development',
     title: 'MERN Stack',
     category: 'Development',
-    students: 1,
-    rating: '4.6',
-    progress: 10,
+    students: 0,
+    batches: 0,
+    mentorAssignments: 0,
+    rating: '4.9',
+    progress: 0,
     banner: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=600&h=300&fit=crop'
   },
   {
     id: 'testing',
     title: 'Testing',
     category: 'Testing',
-    students: 5,
+    students: 0,
+    batches: 0,
+    mentorAssignments: 0,
     rating: '4.9',
-    progress: 50,
+    progress: 0,
     banner: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&h=300&fit=crop'
   }
 ];
+
+const mapCourseId = (title) => {
+  if (!title) return 'other';
+  const t = title.toLowerCase();
+  if (t.includes('react') || t.includes('mern') || t.includes('mongodb')) return 'react-full-stack-development';
+  if (t.includes('java')) return 'java-full-stack';
+  if (t.includes('testing') || t.includes('qa') || t.includes('selenium')) return 'testing';
+  return 'other';
+};
+
+const getCourseImage = (title) => {
+  const t = (title || '').toLowerCase();
+  if (t.includes('react') || t.includes('mern') || t.includes('mongodb')) {
+    return 'http://localhost:5173/src/website/assets/react_full.jpg';
+  }
+  if (t.includes('java')) {
+    return 'http://localhost:5173/src/website/assets/java_full.jpg';
+  }
+  if (t.includes('testing') || t.includes('qa') || t.includes('selenium')) {
+    return 'https://images.unsplash.com/photo-1542626991-cbc4e32524cc?w=800&q=80';
+  }
+  if (t.includes('aws') || t.includes('devops')) {
+    return 'http://localhost:5173/src/website/assets/aws.jpg';
+  }
+  if (t.includes('learning') || t.includes('ml')) {
+    return 'http://localhost:5173/src/website/assets/ml.jpg';
+  }
+  if (t.includes('ui/ux') || t.includes('figma')) {
+    return 'http://localhost:5173/src/website/assets/ui_ux.jpg';
+  }
+  if (t.includes('science')) {
+    return 'http://localhost:5173/src/website/assets/dataScience.jpg';
+  }
+  if (t.includes('analytics')) {
+    return 'http://localhost:5173/src/website/assets/Data%20Analytics.jpg';
+  }
+  if (t.includes('python')) {
+    return 'http://localhost:5173/src/website/assets/python%20full%20stack.jpg';
+  }
+  return 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
+};
 
 const ClassManagement = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState(INITIAL_COURSES);
   const [selectedCourse, setSelectedCourse] = useState(null); // Course for modal display
+  const [loading, setLoading] = useState(true);
+
+  const fetchCourseData = async () => {
+    setLoading(true);
+    try {
+      const [enrollRes, batchRes] = await Promise.all([
+        fetch('http://127.0.0.1:8000/api/enrollments/'),
+        fetch('http://127.0.0.1:8000/api/batches/')
+      ]);
+
+      const enrollResult = await enrollRes.json();
+      const enrollData = Array.isArray(enrollResult) ? enrollResult : enrollResult.data || [];
+      const batchesData = await batchRes.json();
+
+      setCourses(prevCourses => {
+        return prevCourses.map(course => {
+          // Filter enrollments for this course
+          const courseEnrollments = enrollData.filter(e => {
+            const courseId = mapCourseId(e.title || (e.items && e.items[0]?.title));
+            return courseId === course.id;
+          });
+
+          // Filter batches for this course
+          const courseBatches = batchesData.filter(b => {
+            const courseId = mapCourseId(b.course);
+            return courseId === course.id;
+          });
+
+          // Calculate mentor assignments
+          const mentorAssignments = courseEnrollments.filter(e => e.assigned_mentor !== null).length;
+
+          // Calculate average progress (amount_paid / total_fee) * 100
+          let totalProgress = 0;
+          let studentsWithFee = 0;
+          courseEnrollments.forEach(e => {
+            const totalFee = parseFloat(e.total_fee) || 0;
+            const paid = parseFloat(e.amount_paid) || 0;
+            if (totalFee > 0) {
+              totalProgress += (paid / totalFee) * 100;
+              studentsWithFee++;
+            }
+          });
+          const avgProgress = studentsWithFee > 0 ? Math.round(totalProgress / studentsWithFee) : 0;
+
+          return {
+            ...course,
+            students: courseEnrollments.length,
+            batches: courseBatches.length,
+            mentorAssignments,
+            progress: avgProgress,
+            banner: getCourseImage(course.title)
+          };
+        });
+      });
+    } catch (err) {
+      console.error("Error fetching course metrics:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourseData();
+  }, []);
 
   const handleDelete = (id, title) => {
     if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
@@ -51,6 +162,8 @@ const ClassManagement = () => {
       title,
       category: 'General',
       students: 0,
+      batches: 0,
+      mentorAssignments: 0,
       rating: '5.0',
       progress: 0,
       banner: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&h=300&fit=crop'
@@ -88,11 +201,8 @@ const ClassManagement = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
               
-              {/* Rating Badge and Course Title aligned to bottom-left */}
+              {/* Course Title aligned to bottom-left */}
               <div className="absolute bottom-4 left-4 text-white space-y-1.5">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-black uppercase tracking-wider">
-                  <Star size={11} className="fill-white" /> {course.rating} Rating
-                </span>
                 <h4 className="font-bold text-lg leading-tight drop-shadow-sm">
                   {course.title}
                 </h4>
@@ -123,7 +233,7 @@ const ClassManagement = () => {
               {/* Action Buttons: Manage (Full width) and Trash icon */}
               <div className="flex gap-3 pt-1">
                 <button 
-                  onClick={() => setSelectedCourse(course)}
+                  onClick={() => navigate(`/admin/courses/${course.id}/progress`)}
                   className="flex-1 py-2.5 bg-indigo-50 hover:bg-indigo-100/80 text-indigo-600 rounded-xl text-xs font-black tracking-wide uppercase transition-colors active:scale-95 text-center"
                 >
                   Manage
@@ -175,20 +285,34 @@ const ClassManagement = () => {
               </h2>
               
               {/* Stats row inside rounded grey/blue containers */}
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-3">
                   <p className="text-[10px] font-black uppercase text-slate-400">Students</p>
                   <p className="text-lg font-black text-slate-700 mt-1">{selectedCourse.students}</p>
                 </div>
-                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-4">
-                  <p className="text-[10px] font-black uppercase text-slate-400">Rating</p>
-                  <p className="text-lg font-black text-slate-700 mt-1">{selectedCourse.rating} ★</p>
+                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-3">
+                  <p className="text-[10px] font-black uppercase text-slate-400">Batches</p>
+                  <p className="text-lg font-black text-slate-700 mt-1">{selectedCourse.batches}</p>
                 </div>
-                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-4">
+                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-3">
+                  <p className="text-[10px] font-black uppercase text-slate-400">Mentors</p>
+                  <p className="text-lg font-black text-slate-700 mt-1">{selectedCourse.mentorAssignments}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100/50 rounded-2xl p-3">
                   <p className="text-[10px] font-black uppercase text-slate-400">Progress</p>
                   <p className="text-lg font-black text-slate-700 mt-1">{selectedCourse.progress}%</p>
                 </div>
               </div>
+            </div>
+            
+            {/* Modal Footer */}
+            <div className="p-6 bg-slate-50 border-t border-slate-100 flex gap-3">
+              <button 
+                onClick={() => navigate(`/admin/courses/${selectedCourse.id}`)}
+                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider text-center transition-colors active:scale-95 shadow-md"
+              >
+                Open Course Dashboard
+              </button>
             </div>
           </div>
         </div>

@@ -186,6 +186,72 @@ const CourseDetails = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'curriculum' | 'instructor' | 'broadcast'
   const [expandedModule, setExpandedModule] = useState(0);
+  const [stats, setStats] = useState({ students: 0, batches: 0, mentorAssignments: 0, progress: 0 });
+
+  useEffect(() => {
+    const fetchCourseStats = async () => {
+      try {
+        const [enrollRes, batchRes] = await Promise.all([
+          fetch('http://127.0.0.1:8000/api/enrollments/'),
+          fetch('http://127.0.0.1:8000/api/batches/')
+        ]);
+
+        const enrollResult = await enrollRes.json();
+        const enrollData = Array.isArray(enrollResult) ? enrollResult : enrollResult.data || [];
+        const batchesData = await batchRes.json();
+
+        const mapCourseId = (title) => {
+          if (!title) return 'other';
+          const t = title.toLowerCase();
+          if (t.includes('react') || t.includes('mern') || t.includes('mongodb')) return 'react-full-stack-development';
+          if (t.includes('java')) return 'java-full-stack';
+          if (t.includes('testing') || t.includes('qa') || t.includes('selenium')) return 'testing';
+          return 'other';
+        };
+
+        const currentCourseId = courseId || 'react-full-stack-development';
+
+        // Filter enrollments for this course
+        const courseEnrollments = enrollData.filter(e => {
+          const cId = mapCourseId(e.title || (e.items && e.items[0]?.title));
+          return cId === currentCourseId;
+        });
+
+        // Filter batches for this course
+        const courseBatches = batchesData.filter(b => {
+          const cId = mapCourseId(b.course);
+          return cId === currentCourseId;
+        });
+
+        // Calculate mentor assignments
+        const mentorAssignments = courseEnrollments.filter(e => e.assigned_mentor !== null).length;
+
+        // Calculate average progress (amount_paid / total_fee) * 100
+        let totalProgress = 0;
+        let studentsWithFee = 0;
+        courseEnrollments.forEach(e => {
+          const totalFee = parseFloat(e.total_fee) || 0;
+          const paid = parseFloat(e.amount_paid) || 0;
+          if (totalFee > 0) {
+            totalProgress += (paid / totalFee) * 100;
+            studentsWithFee++;
+          }
+        });
+        const avgProgress = studentsWithFee > 0 ? Math.round(totalProgress / studentsWithFee) : 0;
+
+        setStats({
+          students: courseEnrollments.length,
+          batches: courseBatches.length,
+          mentorAssignments,
+          progress: avgProgress
+        });
+      } catch (err) {
+        console.error("Error fetching course metrics in details page:", err);
+      }
+    };
+
+    fetchCourseStats();
+  }, [courseId]);
 
   // Dynamic broadcast feed state for demo/broadcast simulation
   const [broadcastFeed, setBroadcastFeed] = useState([
@@ -256,7 +322,7 @@ const CourseDetails = () => {
                 <span className="text-slate-400 font-normal">({data.reviewsCount} reviews)</span>
               </div>
               <div className="flex items-center gap-1.5 font-bold">
-                <Users size={16} className="text-indigo-400" /> {data.studentsCount} Students Enrolled
+                <Users size={16} className="text-indigo-400" /> {stats.students} Students Enrolled
               </div>
               <div className="flex items-center gap-1.5 font-bold">
                 <Clock size={16} className="text-indigo-400" /> {data.duration}
@@ -344,19 +410,23 @@ const CourseDetails = () => {
 
                 {/* STATISTICS PANEL */}
                 <div className="bg-gradient-to-br from-indigo-50 to-white rounded-3xl border border-indigo-100 p-6">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-indigo-700 mb-4">Placement & Alumni Impact</h4>
-                  <div className="grid grid-cols-3 gap-4 text-center">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-indigo-700 mb-4">Course Operational Statistics</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div className="p-3">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{data.stats.placementRate}</p>
-                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Placement Rate</p>
+                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.students}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Students</p>
                     </div>
-                    <div className="p-3 border-x border-indigo-100">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{data.stats.averageSalary}</p>
-                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Average Salary</p>
+                    <div className="p-3 border-l md:border-x border-indigo-100">
+                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.batches}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Active Batches</p>
                     </div>
-                    <div className="p-3">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{data.stats.highestPackage}</p>
-                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Highest Package</p>
+                    <div className="p-3 border-t md:border-t-0 md:border-r border-indigo-100">
+                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.mentorAssignments}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Mentors Assigned</p>
+                    </div>
+                    <div className="p-3 border-t md:border-t-0 border-l border-indigo-100">
+                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.progress}%</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Avg Progress</p>
                     </div>
                   </div>
                 </div>

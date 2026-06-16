@@ -151,6 +151,7 @@ class StudentAttendanceSerializer(serializers.ModelSerializer):
 
 class BatchSerializer(serializers.ModelSerializer):
     students = serializers.SerializerMethodField()
+    assigned_mentor_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Batch
@@ -159,6 +160,11 @@ class BatchSerializer(serializers.ModelSerializer):
     def get_students(self, obj):
         enrollments = obj.enrollments.all()
         return [{"id": e.user.id, "name": e.user.full_name, "email": e.user.email} for e in enrollments if e.user]
+
+    def get_assigned_mentor_name(self, obj):
+        if obj.assigned_mentor:
+            return obj.assigned_mentor.name
+        return None
 
 class AssignmentSubmissionSerializer(serializers.ModelSerializer):
     student_name = serializers.ReadOnlyField(source='student.name')
@@ -174,4 +180,4 @@ class OnlineClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = OnlineClass
         fields = '__all__'
-
+

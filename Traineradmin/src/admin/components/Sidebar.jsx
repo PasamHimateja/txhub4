@@ -1,18 +1,21 @@
-import React, { useState, useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserPlus, Settings,
   LogOut, Menu, X, Bell, ChevronRight, Video, Layers, UserCheck, BookOpen, Award
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
-import { AuthContext } from '../../website/context/AuthContext';
-import logo1 from "../../website/assets/logo1.png";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { newCount } = useAdmin();
-  const { logout } = useContext(AuthContext);
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    navigate('/login');
+  };
 
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={22} /> },
@@ -30,11 +33,9 @@ const Sidebar = () => {
       {/* --- 1. PREMIUM MOBILE NAVIGATION (Pixel View) --- */}
       <nav className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] px-4 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
-          <img 
-            src={logo1} 
-            alt="TXhub Logo" 
-            className="h-10 w-auto object-contain mix-blend-multiply brightness-110 contrast-110" 
-          />
+          <div className="flex items-center justify-center h-10 w-10 bg-indigo-100 text-indigo-600 font-bold rounded-xl text-lg">
+            TX
+          </div>
           <div className="flex flex-col">
             <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-none">Admin Pro</span>
           </div>
@@ -114,11 +115,9 @@ const Sidebar = () => {
       {/* --- 2. DESKTOP SIDEBAR --- */}
       <aside className="hidden lg:flex w-64 bg-white border-r border-slate-100 h-screen sticky top-0 p-6 shadow-[4px_0_24px_rgba(0,0,0,0.02)] flex-col">
         <div className="flex flex-col gap-2 px-2 mb-10">
-          <img 
-            src={logo1} 
-            alt="TXhub Logo" 
-            className="h-14 w-auto object-contain mix-blend-multiply brightness-110 contrast-110 self-start" 
-          />
+          <div className="flex items-center justify-center h-14 w-14 bg-indigo-100 text-indigo-600 font-bold rounded-xl text-xl self-start">
+            TX
+          </div>
           <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] ml-1">Admin Pro</span>
         </div>
 

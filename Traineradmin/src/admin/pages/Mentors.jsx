@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserCheck, Trash2, Plus, Shield, Mail, BookOpen } from 'lucide-react';
+import { UserCheck, Trash2, Plus, Shield, Mail, BookOpen, Eye, X } from 'lucide-react';
 
 const courses = [
   'All Courses',
@@ -26,6 +26,7 @@ const Mentors = () => {
   const [mentors, setMentors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [selectedMentorForStudents, setSelectedMentorForStudents] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -191,7 +192,6 @@ const Mentors = () => {
                   <th className="p-4">Name</th>
                   <th className="p-4">Contact Info</th>
                   <th className="p-4">Assigned Course</th>
-                  <th className="p-4">Assigned Students</th>
                   <th className="p-4">Status</th>
                   <th className="p-4 text-right">Actions</th>
                 </tr>
@@ -218,30 +218,27 @@ const Mentors = () => {
                       </div>
                     </td>
                     <td className="p-4">
-                      {mentor.students && mentor.students.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {mentor.students.slice(0, 3).map(s => (
-                              <span key={s.id} className="bg-indigo-50 text-indigo-600 px-2 py-1 rounded text-[9px] font-bold" title={s.email}>{s.name}</span>
-                          ))}
-                          {mentor.students.length > 3 && <span className="bg-slate-100 text-slate-500 px-2 py-1 rounded text-[9px] font-bold">+{mentor.students.length - 3} more</span>}
-                        </div>
-                      ) : (
-                        <span className="text-xs text-slate-400">None</span>
-                      )}
-                    </td>
-                    <td className="p-4">
                       <span className={`inline-block text-[10px] font-black uppercase px-2 py-0.5 rounded ${mentor.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
                         {mentor.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="p-4 text-right">
-                      <button
-                        onClick={() => handleDelete(mentor.id)}
-                        className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors active:scale-95 inline-flex items-center"
-                        title="Delete Mentor"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => setSelectedMentorForStudents(mentor)}
+                          className="p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors active:scale-95 inline-flex items-center"
+                          title="View Assigned Students"
+                        >
+                          <Eye size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(mentor.id)}
+                          className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors active:scale-95 inline-flex items-center"
+                          title="Delete Mentor"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -250,6 +247,69 @@ const Mentors = () => {
           </div>
         )}
       </div>
+
+      {/* ASSIGNED STUDENTS MODAL */}
+      {selectedMentorForStudents && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden transform scale-100 transition-all duration-300">
+            {/* Modal Header */}
+            <div className="relative bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white">
+              <button
+                onClick={() => setSelectedMentorForStudents(null)}
+                className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all active:scale-90"
+              >
+                <X size={16} />
+              </button>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-100">
+                Mentor's Roster
+              </p>
+              <h3 className="text-xl font-black mt-1">
+                {selectedMentorForStudents.name}
+              </h3>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-4">
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Assigned Course</span>
+                <span className="text-xs font-bold text-slate-800 block mt-1">{selectedMentorForStudents.assigned_course || 'All Courses'}</span>
+              </div>
+
+              <div>
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">
+                  Assigned Students ({selectedMentorForStudents.students?.length || 0})
+                </span>
+                {selectedMentorForStudents.students && selectedMentorForStudents.students.length > 0 ? (
+                  <div className="max-h-48 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                    {selectedMentorForStudents.students.map(student => (
+                      <div key={student.id} className="flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-100/50 text-xs transition-colors">
+                        <div>
+                          <p className="font-bold text-slate-800">{student.name}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5">{student.email}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-400 italic bg-slate-50/50 p-4 rounded-xl border border-slate-100/50 text-center">
+                    No students assigned to this mentor yet.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-slate-50 px-6 py-4 flex justify-end">
+              <button
+                onClick={() => setSelectedMentorForStudents(null)}
+                className="bg-[#0F172A] hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-widest transition-all active:scale-95 shadow-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

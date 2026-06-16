@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import MentorDashboard from './pages/MentorDashboard';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminApp from './admin/App';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           </ProtectedRoute>
         } 
       />
+      <Route path="/admin/*" element={<AdminApp />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

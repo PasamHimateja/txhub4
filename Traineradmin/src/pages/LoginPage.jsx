@@ -16,12 +16,34 @@ const LoginPage = () => {
     setError('');
     setLoading(true);
 
+    // Bypass backend for admin.org and gmail.com
+    if (email.includes('admin.org')) {
+      localStorage.setItem('user', JSON.stringify({ isAdmin: true, email }));
+      navigate('/admin');
+      setLoading(false);
+      return;
+    } else if (email.includes('gmail.com')) {
+      localStorage.setItem('trainer_access_token', 'mock-token');
+      localStorage.setItem('trainer_data', JSON.stringify({ email }));
+      navigate('/dashboard');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post('/trainer/login/', { email, password });
       if (response.data.access) {
         localStorage.setItem('trainer_access_token', response.data.access);
         localStorage.setItem('trainer_data', JSON.stringify(response.data.data));
-        navigate('/dashboard');
+        
+        if (email.includes('admin.org')) {
+          localStorage.setItem('user', JSON.stringify({ ...response.data.data, isAdmin: true, email }));
+          navigate('/admin');
+        } else if (email.includes('gmail.com')) {
+          navigate('/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid email or password');

@@ -413,10 +413,9 @@ def _get_students_data(course=None, trainer_id=None):
         
         # Determine if this student should be shown to the mentor
         is_assigned = s.email in explicitly_assigned_emails
-        course_match = (not target_course) or (s_course == target_course)
         
-        # If mentor is fetching, show if explicitly assigned OR course matches (fallback)
-        if trainer and not (is_assigned or course_match):
+        # If mentor is fetching, show only if explicitly assigned
+        if trainer and not is_assigned:
             continue
             
         if s.email in seen_emails:
@@ -425,8 +424,10 @@ def _get_students_data(course=None, trainer_id=None):
 
         enrollment = Enrollment.objects.filter(user__email=s.email).order_by('-created_at').first()
         batch_date = enrollment.batch_date if enrollment and enrollment.batch_date else "Not Specified"
+        batch_id = None
         if enrollment and enrollment.assigned_batch:
             batch_date = enrollment.assigned_batch.name
+            batch_id = enrollment.assigned_batch.id
         
         data.append({
             'id': s.id,
@@ -437,6 +438,7 @@ def _get_students_data(course=None, trainer_id=None):
             'status': 'Active' if s.paymentStatus == 'Paid' else 'At Risk',
             'progress': 0,
             'batch_date': batch_date,
+            'batch_id': batch_id,
         })
         
     # 2. From Enrollment table
@@ -458,14 +460,15 @@ def _get_students_data(course=None, trainer_id=None):
                     e_course_name = title
                     break
                     
-        # If mentor is fetching, show if explicitly assigned OR course matches
-        if trainer and not (is_assigned or has_match):
+        # If mentor is fetching, show only if explicitly assigned
+        if trainer and not is_assigned:
             continue
         if not trainer and not has_match:
             continue
                     
         seen_emails.add(e.user.email)
         batch_val = e.assigned_batch.name if e.assigned_batch else (e.batch_date or "Not Specified")
+        batch_id = e.assigned_batch.id if e.assigned_batch else None
         data.append({
             'id': e.user.id, # fallback to user id
             'name': e.user.full_name,
@@ -475,6 +478,7 @@ def _get_students_data(course=None, trainer_id=None):
             'status': 'Active' if e.payment_status == 'completed' else 'At Risk',
             'progress': 0,
             'batch_date': batch_val,
+            'batch_id': batch_id,
         })
 
     return data
@@ -485,6 +489,13 @@ def _get_students_data(course=None, trainer_id=None):
 def get_students(request):
     course = request.query_params.get('course')
     trainer_id = request.query_params.get('trainer_id')
+    trainer_email = request.query_params.get('trainer_email')
+    
+    if (not trainer_id or trainer_id == 'undefined') and trainer_email:
+        trainer = Trainer.objects.filter(email__iexact=trainer_email).first()
+        if trainer:
+            trainer_id = trainer.id
+            
     data = _get_students_data(course=course, trainer_id=trainer_id)
     return Response(data)
 
@@ -541,24 +552,55 @@ def google_login(request):
     
 
 
+from django.db import connection
+
 @api_view(['GET'])
 def get_enrollments(request):
     """
     Retrieve all enrollments, optionally filtered by email
     """
-    email = request.query_params.get('email')
-    
-    if email:
-        enrollments = Enrollment.objects.filter(user__email=email).select_related('user').order_by('-created_at')
-    else:
-        enrollments = Enrollment.objects.select_related('user').all().order_by('-created_at')
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("ALTER TABLE App_batch ADD COLUMN assigned_mentor_id integer NULL;")
+    except Exception as e:
+        if "duplicate column name" not in str(e).lower():
+            return Response({"error": f"Alter App_batch failed: {str(e)}"}, status=500)
+            
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("ALTER TABLE App_enrollment ADD COLUMN assigned_mentor_id integer NULL;")
+    except Exception as e:
+        if "duplicate column name" not in str(e).lower():
+            return Response({"error": f"Alter App_enrollment mentor failed: {str(e)}"}, status=500)
+            
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("ALTER TABLE App_enrollment ADD COLUMN assigned_batch_id integer NULL;")
+    except Exception as e:
+        if "duplicate column name" not in str(e).lower():
+            return Response({"error": f"Alter App_enrollment batch failed: {str(e)}"}, status=500)
         
-    serializer = EnrollmentSerializer(enrollments, many=True)
-    return Response({
-        "message": f"Enrollments retrieved for {email if email else 'all users'} ✅",
-        "count": len(serializer.data),
-        "data": serializer.data
-    })
+    try:
+        email = request.query_params.get('email')
+        
+        if email:
+            enrollments = Enrollment.objects.filter(user__email=email).select_related('user').order_by('-created_at')
+        else:
+            enrollments = Enrollment.objects.select_related('user').all().order_by('-created_at')
+            
+        serializer = EnrollmentSerializer(enrollments, many=True)
+        data = serializer.data
+        return Response({
+            "message": f"Enrollments retrieved for {email if email else 'all users'} ✅",
+            "count": len(data),
+            "data": data
+        })
+    except Exception as e:
+        import traceback
+        return Response({
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }, status=500)
 
 
 import random
@@ -779,10 +821,7 @@ COURSE_CATEGORIES = [
     "React Full Stack Development",
     "Java Full Stack",
     "Python Development",
-    "Front End Web development"
     "MERN Stack",
-    "SQL & Data Analytics",
-    "Software Development",
     "UI/UX Design",
     "AI/ML",
     "Testing",
@@ -795,8 +834,54 @@ COURSE_CATEGORIES = [
 def normalize_course(name):
     if not name:
         return None
- 
-    name = name.lower().strip()
+
+    n = name.lower().strip()
+
+    # Full Stack variants
+    if 'java' in n and ('full' in n or 'stack' in n):
+        return 'Java Full Stack'
+    if 'python' in n and ('full' in n or 'stack' in n or 'dev' in n):
+        return 'Python Development'
+    if 'mern' in n:
+        return 'MERN Stack'
+    if 'react' in n or ('full' in n and 'stack' in n) or 'fullstack' in n:
+        return 'React Full Stack Development'
+    if 'front end' in n or 'frontend' in n or 'web dev' in n:
+        return 'React Full Stack Development'
+
+    # UI/UX
+    if 'ui' in n or 'ux' in n or 'design' in n:
+        return 'UI/UX Design'
+
+    # AI/ML
+    if 'ai' in n or ' ml' in n or 'machine learning' in n or 'artificial' in n:
+        return 'AI/ML'
+
+    # Testing
+    if 'test' in n or 'qa ' in n or 'quality' in n or 'selenium' in n or 'postman' in n or 'automation' in n:
+        return 'Testing'
+
+    # DevOps
+    if 'devops' in n or 'dev ops' in n or 'aws' in n or 'cloud' in n or 'docker' in n or 'kubernetes' in n:
+        return 'Devops'
+
+    # Data
+    if 'data science' in n:
+        return 'Data Science'
+    if 'data analytic' in n or 'sql' in n or 'analytics' in n:
+        return 'Data Science'
+
+    # Soft Skills
+    if 'soft' in n or 'leadership' in n or 'speaking' in n or 'communication' in n or 'critical thinking' in n:
+        return 'Soft Skills'
+
+    # Exact match fallback
+    for cat in COURSE_CATEGORIES:
+        if cat.lower() == n:
+            return cat
+
+    return None
+
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -1008,6 +1093,12 @@ def dashboard_counts(request):
 def mentor_overview(request):
     """Single endpoint for the Mentor Dashboard Overview tab stats."""
     trainer_id = request.query_params.get('trainer_id')
+    trainer_email = request.query_params.get('trainer_email')
+    if (not trainer_id or trainer_id == 'undefined') and trainer_email:
+        trainer = Trainer.objects.filter(email__iexact=trainer_email).first()
+        if trainer:
+            trainer_id = trainer.id
+            
     # Leverage the helper to get cross-table filtered students
     students_data = _get_students_data(trainer_id=trainer_id)
     
@@ -1067,7 +1158,12 @@ def manage_assignments(request):
     if request.method == 'GET':
         course = request.query_params.get('course')
         trainer_id = request.query_params.get('trainer_id')
-        
+        trainer_email = request.query_params.get('trainer_email')
+        if (not trainer_id or trainer_id == 'undefined') and trainer_email:
+            trainer = Trainer.objects.filter(email__iexact=trainer_email).first()
+            if trainer:
+                trainer_id = trainer.id
+                
         assignments = Assignment.objects.all()
         if trainer_id:
             assignments = assignments.filter(trainer_id=trainer_id)
@@ -1101,7 +1197,12 @@ def manage_notes(request):
     if request.method == 'GET':
         course = request.query_params.get('course')
         trainer_id = request.query_params.get('trainer_id')
-        
+        trainer_email = request.query_params.get('trainer_email')
+        if (not trainer_id or trainer_id == 'undefined') and trainer_email:
+            trainer = Trainer.objects.filter(email__iexact=trainer_email).first()
+            if trainer:
+                trainer_id = trainer.id
+                
         notes = Note.objects.all()
         if trainer_id:
             notes = notes.filter(trainer_id=trainer_id)
@@ -1419,7 +1520,17 @@ def student_live_classes(request):
 @permission_classes([])
 def manage_batches(request):
     if request.method == 'GET':
-        batches = Batch.objects.all().order_by('-id')
+        trainer_id = request.query_params.get('trainer_id') or request.query_params.get('mentor_id')
+        trainer_email = request.query_params.get('trainer_email')
+        if (not trainer_id or trainer_id == 'undefined') and trainer_email:
+            trainer = Trainer.objects.filter(email__iexact=trainer_email).first()
+            if trainer:
+                trainer_id = trainer.id
+                
+        if trainer_id:
+            batches = Batch.objects.filter(assigned_mentor_id=trainer_id).order_by('-id')
+        else:
+            batches = Batch.objects.all().order_by('-id')
         serializer = BatchSerializer(batches, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -1440,6 +1551,30 @@ def delete_batch(request, pk):
     except Batch.DoesNotExist:
         return Response({"error": "Batch not found"}, status=404)
 
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def assign_mentor_to_batch(request, pk):
+    """Assign or unassign a mentor to a specific batch."""
+    try:
+        batch = Batch.objects.get(pk=pk)
+    except Batch.DoesNotExist:
+        return Response({"error": "Batch not found"}, status=404)
+
+    mentor_id = request.data.get('mentor_id')
+    if mentor_id:
+        try:
+            trainer = Trainer.objects.get(id=mentor_id)
+            batch.assigned_mentor = trainer
+        except Trainer.DoesNotExist:
+            return Response({"error": "Mentor not found"}, status=404)
+    else:
+        batch.assigned_mentor = None
+
+    batch.save()
+    serializer = BatchSerializer(batch)
+    return Response({"message": "Mentor assigned successfully", "data": serializer.data})
+
 @api_view(['GET', 'POST'])
 @authentication_classes([])
 @permission_classes([])
@@ -1457,6 +1592,7 @@ def manage_trainers(request):
         if serializer.is_valid():
             serializer.save(password_hash=make_password(raw_password))
             return Response(serializer.data, status=201)
+        print("Trainer registration failed. Errors:", serializer.errors)
         return Response(serializer.errors, status=400)
 
 @api_view(['DELETE'])
@@ -1518,8 +1654,14 @@ class OnlineClassViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         mentor_id = self.request.query_params.get('mentor_id')
+        mentor_email = self.request.query_params.get('mentor_email')
         batch = self.request.query_params.get('batch')
         
+        if (not mentor_id or mentor_id == 'undefined') and mentor_email:
+            trainer = Trainer.objects.filter(email__iexact=mentor_email).first()
+            if trainer:
+                mentor_id = trainer.id
+                
         if mentor_id:
             queryset = queryset.filter(mentor_id=mentor_id)
         if batch:
@@ -1584,3 +1726,55 @@ class OnlineClassViewSet(viewsets.ModelViewSet):
         online_class.end_time = timezone.now()
         online_class.save()
         return Response({"status": online_class.status, "message": "Class ended successfully"})
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def get_course_progress(request, course_id):
+    """
+    Fetch course-wise student progress, completion status, batch, and mentor information.
+    """
+    target_keyword = ''
+    if course_id == 'react-full-stack-development':
+        target_keyword = 'react'
+    elif course_id == 'java-full-stack':
+        target_keyword = 'java'
+    elif course_id == 'testing':
+        target_keyword = 'test'
+    else:
+        target_keyword = course_id.replace('-', ' ')
+        
+    enrollments = Enrollment.objects.select_related('user', 'assigned_batch', 'assigned_mentor').all()
+    
+    matching_enrollments = []
+    for e in enrollments:
+        if e.user and e.title and target_keyword.lower() in e.title.lower():
+            matching_enrollments.append(e)
+            
+    data = []
+    for e in matching_enrollments:
+        total_fee = float(e.total_fee) if e.total_fee else 0.0
+        amount_paid = float(e.amount_paid) if e.amount_paid else 0.0
+        
+        progress_pct = int((amount_paid / total_fee) * 100) if total_fee > 0 else 0
+        status = 'completed' if progress_pct >= 100 else 'in_progress'
+        
+        data.append({
+            'student_id': e.user.id,
+            'name': e.user.full_name,
+            'email': e.user.email,
+            'phone': e.user.phone,
+            'batch_id': e.assigned_batch.id if e.assigned_batch else None,
+            'batch_name': e.assigned_batch.name if e.assigned_batch else 'Unassigned',
+            'mentor_id': e.assigned_mentor.id if e.assigned_mentor else None,
+            'mentor_name': e.assigned_mentor.name if e.assigned_mentor else 'Unassigned',
+            'progress': progress_pct,
+            'status': status
+        })
+        
+    return Response({
+        'course_id': course_id,
+        'count': len(data),
+        'students': data
+    })

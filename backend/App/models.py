@@ -357,6 +357,7 @@ class Batch(models.Model):
     name = models.CharField(max_length=100)
     course = models.CharField(max_length=200, blank=True, default='')
     startDate = models.DateField(null=True, blank=True)
+    assigned_mentor = models.ForeignKey('Trainer', on_delete=models.SET_NULL, null=True, blank=True, related_name='batches')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

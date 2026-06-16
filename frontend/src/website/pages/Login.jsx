@@ -9,15 +9,10 @@ const Login = () => {
   const navigate = useNavigate();
   const { login, user } = useContext(AuthContext);
 
-  // ✅ Role-based redirection
+  // Redirect already logged-in users to home
   useEffect(() => {
     if (user) {
-      const isAdmin = user.isAdmin || user.role === "admin" || user.email?.endsWith("@admin.org");
-      if (isAdmin) {
-        window.location.href = "/admin";
-      } else {
-        navigate("/");
-      }
+      navigate("/");
     }
   }, [user, navigate]);
   const [loading, setLoading] = useState(false);
@@ -93,17 +88,8 @@ const Login = () => {
       if (response.ok) {
         toast.success("Login Successful! Welcome back.");
         const actualUser = data.data || data;
-        
-        const isAdmin = actualUser.isAdmin || actualUser.role === "admin" || actualUser.email?.endsWith("@admin.org");
-        
-        if (isAdmin) {
-          actualUser.isAdmin = true; // Normalize for frontend
-          login(actualUser);
-          window.location.href = "/admin";
-        } else {
-          login(actualUser);
-          navigate("/");
-        }
+        login(actualUser);
+        navigate("/");
       } else {
         toast.error(data.error || "Login failed. Please check your credentials.");
       }
@@ -135,20 +121,9 @@ const Login = () => {
 
       if (res.ok) {
         toast.success("Login Successful!");
-
-        // FIX: handle both cases
         const actualUser = data.data || data;
-
-        const isAdmin = actualUser.isAdmin || actualUser.role === "admin" || actualUser.email?.endsWith("@admin.org");
-
-        if (isAdmin) {
-          actualUser.isAdmin = true;
-          login(actualUser);
-          window.location.href = "/admin";
-        } else {
-          login(actualUser);
-          navigate("/");
-        }
+        login(actualUser);
+        navigate("/");
       } else {
         toast.error(data.error || "Google Login failed");
       }
