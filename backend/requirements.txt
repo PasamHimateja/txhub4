@@ -7,3 +7,4 @@ requests
 PyJWT
 cryptography
 google-auth
+djangorestframework-simplejwt

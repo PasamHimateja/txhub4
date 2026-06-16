@@ -125,10 +125,10 @@ const Sidebar = () => {
         <div className="mt-auto pt-6 space-y-4 border-t border-slate-50 text-left">
           <div className="group flex items-center gap-3 p-3 rounded-2xl bg-slate-50 transition-all">
             <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black shadow-sm">
-              {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
+              {(user?.full_name || user?.name) ? (user?.full_name || user?.name).charAt(0).toUpperCase() : 'S'}
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-black text-slate-800 truncate">{user?.name || 'Student'}</p>
+              <p className="text-sm font-black text-slate-800 truncate">{user?.full_name || user?.name || 'Student'}</p>
               <p className="text-[10px] text-slate-400 font-bold uppercase truncate">{user?.email || 'Active'}</p>
             </div>
           </div>

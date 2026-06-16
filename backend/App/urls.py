@@ -49,3 +49,8 @@ urlpatterns = [
     path('assignments/submissions/', views.get_assignment_submissions),
 ]
 
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'online-classes', views.OnlineClassViewSet, basename='online-class')
+
+urlpatterns += router.urls

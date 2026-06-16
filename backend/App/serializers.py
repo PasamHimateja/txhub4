@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from App.models import UserRegister, AdminUser, Student, Enrollment, LiveClass, RecordedClass, Resource, Cart, Assignment, Note, StudentAttendance, Trainer, Batch, AssignmentSubmission
+from App.models import UserRegister, AdminUser, Student, Enrollment, LiveClass, RecordedClass, Resource, Cart, Assignment, Note, StudentAttendance, Trainer, Batch, AssignmentSubmission, OnlineClass
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -166,5 +166,12 @@ class AssignmentSubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssignmentSubmission
+        fields = '__all__'
+
+class OnlineClassSerializer(serializers.ModelSerializer):
+    mentor_name = serializers.ReadOnlyField(source='mentor.name')
+
+    class Meta:
+        model = OnlineClass
         fields = '__all__'
 

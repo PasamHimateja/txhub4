@@ -5,7 +5,8 @@ import {
   Users, BookOpen, Send, CheckCircle, ClipboardList,
   TrendingUp, Award, Clock, Search, MoreVertical, Plus, FileText, Download,
   GraduationCap, Calendar, Bell, X, Upload, Trash2, Eye, Edit3, Check,
-  ChevronDown, AlertCircle, Star, Paperclip, LogOut, Layers, ChevronLeft
+  ChevronDown, AlertCircle, Star, Paperclip, LogOut, Layers, ChevronLeft,
+  Video, Radio, StopCircle, History, UserCheck
 } from 'lucide-react';
 import api from '../api/client';
 
@@ -16,15 +17,13 @@ function Toast({ message, type = 'success', onClose }) {
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 20, scale: 0.9 }}
-      className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl ${
-        type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
-        type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
-        'bg-blue-50 border-blue-200 text-blue-800'
-      }`}
+      className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl ${type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+          type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+            'bg-blue-50 border-blue-200 text-blue-800'
+        }`}
     >
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-        type === 'success' ? 'bg-green-200' : type === 'error' ? 'bg-red-200' : 'bg-blue-200'
-      }`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${type === 'success' ? 'bg-green-200' : type === 'error' ? 'bg-red-200' : 'bg-blue-200'
+        }`}>
         {type === 'success' ? <Check className="w-4 h-4" /> : type === 'error' ? <X className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
       </div>
       <span className="text-sm font-semibold">{message}</span>
@@ -111,8 +110,8 @@ const ALL_COURSES_LIST = [
 const TABS = [
   { id: 'overview', label: 'Overview', icon: TrendingUp },
   { id: 'students', label: 'Students', icon: Users },
-  { id: 'courses', label: 'Courses', icon: BookOpen },
   { id: 'batches', label: 'Batches', icon: Layers },
+  { id: 'online-classes', label: 'Online Classes', icon: Video },
 ];
 
 const COURSE_IMAGES = {
@@ -142,8 +141,10 @@ export default function MentorDashboard() {
   const [overviewData, setOverviewData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [focusIndex, setFocusIndex] = useState(0);
+  const [onlineClasses, setOnlineClasses] = useState([]);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
   const navigate = useNavigate();
-  
+
   const trainerDataRaw = localStorage.getItem('trainer_data');
   const trainerData = trainerDataRaw ? JSON.parse(trainerDataRaw) : null;
 
@@ -152,7 +153,7 @@ export default function MentorDashboard() {
       setLoading(true);
       try {
         const params = trainerData ? { trainer_id: trainerData.id } : {};
-        
+
         // Use allSettled so one failing endpoint doesn't block others
         const [studentsRes, notesRes, assignmentsRes, overviewRes, batchesRes] = await Promise.allSettled([
           api.get('/students/', { params }),
@@ -161,7 +162,7 @@ export default function MentorDashboard() {
           api.get('/mentor-overview/', { params }),
           api.get('/batches/', { params }),
         ]);
-        
+
         // Process students — core data, always show
         if (studentsRes.status === 'fulfilled') {
           const studentData = studentsRes.value.data;
@@ -235,7 +236,7 @@ export default function MentorDashboard() {
                 progress: Math.min(100, count * 10),
                 image: COURSE_IMAGES[title] || COURSE_IMAGES['default'],
               }));
-            
+
             if (trainerData?.assigned_course === 'All Courses') {
               const activeTitles = dynamicCourses.map(dc => dc.title);
               const remaining = MAIN_COURSES.filter(c => !activeTitles.includes(c)).map((c, idx) => ({
@@ -320,80 +321,83 @@ export default function MentorDashboard() {
     const recentStudents = overviewData?.recent_students?.length > 0
       ? overviewData.recent_students
       : students.slice(0, 3);
-    
+
     return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
-      {loading && (
-        <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-3 text-indigo-700 text-sm font-medium">
-          <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-          Loading real data from server...
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
+        {loading && (
+          <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-3 text-indigo-700 text-sm font-medium">
+            <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+            Loading real data from server...
+          </div>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, idx) => (
+            <div key={idx} className={`bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all ${idx !== 1 ? 'cursor-pointer' : ''}`}
+              onClick={() => {
+                if (idx === 0) setActiveTab('students');
+                else if (idx === 2) setActiveTab('notes');
+                else if (idx === 3) setActiveTab('assignments');
+              }}>
+              <div className="flex justify-between items-start">
+                <div className={`p-3 rounded-2xl ${stat.bg}`}><stat.icon className={`w-6 h-6 ${stat.color}`} /></div>
+                <span className={`text-xs font-bold px-2 py-1 rounded-full ${stat.trend.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-rose-100 text-rose-700'}`}>{stat.trend}</span>
+              </div>
+              <div className="mt-4">
+                <h4 className="text-slate-400 text-sm font-medium">{stat.label}</h4>
+                <h2 className="text-3xl font-black text-slate-800 mt-1">{stat.value}</h2>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, idx) => (
-          <div key={idx} className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all cursor-pointer"
-            onClick={() => setActiveTab(idx === 0 ? 'students' : idx === 1 ? 'courses' : idx === 2 ? 'notes' : 'assignments')}>
-            <div className="flex justify-between items-start">
-              <div className={`p-3 rounded-2xl ${stat.bg}`}><stat.icon className={`w-6 h-6 ${stat.color}`} /></div>
-              <span className={`text-xs font-bold px-2 py-1 rounded-full ${stat.trend.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-rose-100 text-rose-700'}`}>{stat.trend}</span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-bold text-lg text-slate-800">Recent Students <span className="text-xs font-normal text-slate-400 ml-1">({recentStudents.length} shown)</span></h3>
+              <button onClick={() => setActiveTab('students')} className="text-sm text-indigo-600 font-semibold hover:underline">View All →</button>
             </div>
-            <div className="mt-4">
-              <h4 className="text-slate-400 text-sm font-medium">{stat.label}</h4>
-              <h2 className="text-3xl font-black text-slate-800 mt-1">{stat.value}</h2>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-lg text-slate-800">Recent Students <span className="text-xs font-normal text-slate-400 ml-1">({recentStudents.length} shown)</span></h3>
-            <button onClick={() => setActiveTab('students')} className="text-sm text-indigo-600 font-semibold hover:underline">View All →</button>
-          </div>
-          <div className="space-y-4">
-            {recentStudents.length === 0 ? (
-              <div className="text-center py-8 text-slate-400 text-sm">No students registered yet.</div>
-            ) : recentStudents.map((student) => (
-              <div key={student.id} onClick={() => setShowStudentDetail(student)} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">{(student.name || '?').charAt(0).toUpperCase()}</div>
-                  <div>
-                    <h4 className="font-semibold text-sm text-slate-800">{student.name}</h4>
-                    <p className="text-xs text-slate-500">{student.course || student.courseSpecialization || 'No course'}</p>
-                    {student.batch_date && student.batch_date !== 'Not Specified' && (
-                      <p className="text-[10px] text-indigo-500 font-semibold mt-0.5 flex items-center gap-1">
-                        <span>📅</span> Batch: {student.batch_date}
-                      </p>
-                    )}
+            <div className="space-y-4">
+              {recentStudents.length === 0 ? (
+                <div className="text-center py-8 text-slate-400 text-sm">No students registered yet.</div>
+              ) : recentStudents.map((student) => (
+                <div key={student.id} onClick={() => setShowStudentDetail(student)} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">{(student.name || '?').charAt(0).toUpperCase()}</div>
+                    <div>
+                      <h4 className="font-semibold text-sm text-slate-800">{student.name}</h4>
+                      <p className="text-xs text-slate-500">{student.course || student.courseSpecialization || 'No course'}</p>
+                      {student.batch_date && student.batch_date !== 'Not Specified' && (
+                        <p className="text-[10px] text-indigo-500 font-semibold mt-0.5 flex items-center gap-1">
+                          <span>📅</span> Batch: {student.batch_date}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${student.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                      }`}>{student.status}</span>
+                    <CircularProgress progress={student.progress || 0} size={40} />
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    student.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
-                  }`}>{student.status}</span>
-                  <CircularProgress progress={student.progress || 0} size={40} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-6 text-white shadow-lg shadow-indigo-200">
+            <h3 className="font-bold text-lg mb-6">Quick Actions</h3>
+            <div className="space-y-3">
+              {[
+                { label: 'Schedule Class', icon: Calendar, action: () => showToast('Class scheduling feature coming soon!', 'info') },
+                { label: 'Upload Notes', icon: Send, action: () => setActiveTab('notes') },
+                { label: 'Create Assignment', icon: Plus, action: () => { setActiveTab('assignments'); setTimeout(() => setShowNewAssignment(true), 300); } },
+              ].map((a, idx) => (
+                <button key={idx} onClick={a.action} className="w-full flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-md border border-white/10 active:scale-[0.98]">
+                  <a.icon className="w-5 h-5 text-indigo-100" />
+                  <span className="font-semibold text-sm">{a.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-6 text-white shadow-lg shadow-indigo-200">
-          <h3 className="font-bold text-lg mb-6">Quick Actions</h3>
-          <div className="space-y-3">
-            {[
-              { label: 'Schedule Class', icon: Calendar, action: () => showToast('Class scheduling feature coming soon!', 'info') },
-              { label: 'Upload Notes', icon: Send, action: () => setActiveTab('notes') },
-              { label: 'Create Assignment', icon: Plus, action: () => { setActiveTab('assignments'); setTimeout(() => setShowNewAssignment(true), 300); } },
-            ].map((a, idx) => (
-              <button key={idx} onClick={a.action} className="w-full flex items-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-md border border-white/10 active:scale-[0.98]">
-                <a.icon className="w-5 h-5 text-indigo-100" />
-                <span className="font-semibold text-sm">{a.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
     );
   };
 
@@ -478,10 +482,9 @@ export default function MentorDashboard() {
                     <CircularProgress progress={student.progress || 0} size={36} />
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase ${
-                      student.status === 'Active' ? 'bg-green-100 text-green-700' :
-                      student.status === 'At Risk' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'
-                    }`}>{student.status}</span>
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase ${student.status === 'Active' ? 'bg-green-100 text-green-700' :
+                        student.status === 'At Risk' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'
+                      }`}>{student.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button onClick={() => setShowStudentDetail(student)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="View Details"><Eye className="w-4 h-4" /></button>
@@ -550,10 +553,10 @@ export default function MentorDashboard() {
 
     const typeStyle = (ext) => {
       if (ext === 'PDF') return { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-100' };
-      if (['DOC','DOCX'].includes(ext)) return { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-100' };
-      if (['PPT','PPTX'].includes(ext)) return { bg: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-100' };
-      if (['XLS','XLSX'].includes(ext)) return { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-100' };
-      if (['ZIP','RAR'].includes(ext)) return { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-100' };
+      if (['DOC', 'DOCX'].includes(ext)) return { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-100' };
+      if (['PPT', 'PPTX'].includes(ext)) return { bg: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-100' };
+      if (['XLS', 'XLSX'].includes(ext)) return { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-100' };
+      if (['ZIP', 'RAR'].includes(ext)) return { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-100' };
       return { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-100' };
     };
 
@@ -626,7 +629,7 @@ export default function MentorDashboard() {
                       <div>
                         <h4 className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm">{note.title}</h4>
                         <p className="text-xs text-slate-400 mt-0.5">
-                          {note.course}{note.batch_month ? ` · ${note.batch_month}` : ' · All Batches'} · {new Date(note.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}
+                          {note.course}{note.batch_month ? ` · ${note.batch_month}` : ' · All Batches'} · {new Date(note.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
                       </div>
                     </div>
@@ -676,9 +679,8 @@ export default function MentorDashboard() {
               onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
               onDragLeave={() => setDragOver(false)}
               onDrop={(e) => { e.preventDefault(); setDragOver(false); stageFiles(e.dataTransfer.files); }}
-              className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${
-                dragOver ? 'border-indigo-400 bg-indigo-50 scale-[1.01]' : 'border-slate-300 hover:bg-indigo-50/50 hover:border-indigo-300'
-              }`}
+              className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${dragOver ? 'border-indigo-400 bg-indigo-50 scale-[1.01]' : 'border-slate-300 hover:bg-indigo-50/50 hover:border-indigo-300'
+                }`}
             >
               <Upload className="w-7 h-7 text-slate-400 mx-auto mb-2" />
               <p className="text-sm font-semibold text-slate-600">Click or drag & drop files here</p>
@@ -720,10 +722,9 @@ export default function MentorDashboard() {
 
           {/* Send button */}
           <button onClick={handleSend} disabled={sending || stagedFiles.length === 0}
-            className={`w-full py-3 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 ${
-              stagedFiles.length === 0 ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
+            className={`w-full py-3 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 ${stagedFiles.length === 0 ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
                 : 'bg-indigo-600 text-white shadow-indigo-200 hover:bg-indigo-700'
-            }`}>
+              }`}>
             {sending
               ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Sending...</>
               : <><Send className="w-4 h-4" /> Send to Students{stagedFiles.length > 0 ? ` (${stagedFiles.length})` : ''}</>}
@@ -742,12 +743,12 @@ export default function MentorDashboard() {
     const presentCount = Object.values(attendance).filter(Boolean).length;
     const absentCount = (selectedBatchId ? students.filter(s => s.batch_date === batches.find(b => b.id === selectedBatchId)?.name).length : students.length) - presentCount;
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    
+
     // focusIndex is now at component level — doesn't reset on re-render
     const [searchQuery, setSearchQuery] = useState('');
-    
+
     const currentFocusStudent = students.length > 0 ? students[focusIndex % students.length] : null;
-    
+
     const handleFocusPresent = () => {
       if (!currentFocusStudent) return;
       setAttendance(prev => ({ ...prev, [currentFocusStudent.id]: true }));
@@ -764,14 +765,14 @@ export default function MentorDashboard() {
     const batchName = selectedBatchId ? batches.find(b => b.id === selectedBatchId)?.name : null;
     const filteredStudents = students.filter(s => {
       const matchSearch = (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          (s.course || s.courseSpecialization || '').toLowerCase().includes(searchQuery.toLowerCase());
+        (s.course || s.courseSpecialization || '').toLowerCase().includes(searchQuery.toLowerCase());
       const matchBatch = !batchName || s.batch_date === batchName;
       return matchSearch && matchBatch;
     });
 
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
-        
+
         {/* Hub Header */}
         <div className="flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 gap-4">
           <div>
@@ -792,34 +793,34 @@ export default function MentorDashboard() {
               <p className="text-xl font-black text-rose-600">{absentCount}</p>
             </div>
             <div className="w-px h-8 bg-slate-200"></div>
-            <button onClick={async () => { 
-                const records = Object.keys(attendance).map(id => ({
-                  student: parseInt(id),
-                  date: new Date().toISOString().split('T')[0],
-                  status: attendance[id] ? 'present' : 'absent',
-                  course: students.find(s => s.id == id)?.course || 'Unknown'
-                }));
-                try {
-                  const res = await api.post('/attendance/', records);
-                  if (res.status === 200 || res.status === 201) {
-                    showToast('Attendance records saved!');
-                  } else {
-                    showToast('Failed to save attendance', 'error');
-                  }
-                } catch(e) {
-                  showToast('Network error while saving attendance', 'error');
+            <button onClick={async () => {
+              const records = Object.keys(attendance).map(id => ({
+                student: parseInt(id),
+                date: new Date().toISOString().split('T')[0],
+                status: attendance[id] ? 'present' : 'absent',
+                course: students.find(s => s.id == id)?.course || 'Unknown'
+              }));
+              try {
+                const res = await api.post('/attendance/', records);
+                if (res.status === 200 || res.status === 201) {
+                  showToast('Attendance records saved!');
+                } else {
+                  showToast('Failed to save attendance', 'error');
                 }
-              }} className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 active:scale-95">
+              } catch (e) {
+                showToast('Network error while saving attendance', 'error');
+              }
+            }} className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 active:scale-95">
               Save Records
             </button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          
+
           {/* LEFT PANEL: Focus, Check-in, Calendar */}
           <div className="xl:col-span-1 space-y-6">
-            
+
             {/* Minimalist Check-in (Search) */}
             <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
               <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Search className="w-5 h-5 text-indigo-500" /> Quick Check-in</h3>
@@ -835,7 +836,7 @@ export default function MentorDashboard() {
               <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500 opacity-20 blur-3xl rounded-full"></div>
                 <h3 className="font-bold text-indigo-300 mb-6 flex items-center gap-2"><Star className="w-5 h-5" /> Focus Mode</h3>
-                
+
                 <AnimatePresence mode="wait">
                   <motion.div key={currentFocusStudent.id} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -50, opacity: 0 }} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center shadow-inner relative z-10">
                     <div className="w-16 h-16 rounded-full bg-indigo-500/30 border-2 border-indigo-400/50 mx-auto flex items-center justify-center text-2xl font-black shadow-lg mb-4 text-white">
@@ -843,7 +844,7 @@ export default function MentorDashboard() {
                     </div>
                     <h4 className="font-bold text-xl mb-1">{currentFocusStudent.name}</h4>
                     <p className="text-sm text-indigo-200 mb-6">{currentFocusStudent.course}</p>
-                    
+
                     <div className="flex gap-3">
                       <button onClick={handleFocusAbsent} className="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-rose-500/20 hover:border-rose-500/50 hover:text-rose-400 transition-all font-bold text-sm text-slate-300 active:scale-95">
                         Absent
@@ -862,7 +863,7 @@ export default function MentorDashboard() {
             <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
               <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-indigo-500" /> Weekly Trends</h3>
               <div className="flex justify-between items-end h-32 gap-2 pb-2">
-                {['M','T','W','T','F','S','S'].map((day, i) => {
+                {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => {
                   const height = [40, 60, 80, 50, 90, 20, 10][i];
                   return (
                     <div key={i} className="flex flex-col items-center gap-2 flex-1">
@@ -887,7 +888,7 @@ export default function MentorDashboard() {
                 <button onClick={() => { const all = {}; students.forEach(s => all[s.id] = false); setAttendance(all); showToast('Reset'); }} className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors">Reset</button>
               </div>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto p-0 hide-scrollbar">
               <table className="w-full text-left border-collapse min-w-[600px]">
                 <thead className="sticky top-0 bg-slate-50/95 backdrop-blur-md z-10 border-b border-slate-100">
@@ -907,9 +908,8 @@ export default function MentorDashboard() {
                       <motion.tr layout key={student.id} className={`group transition-colors hover:bg-slate-50/50 ${isPresent ? 'bg-green-50/20' : ''}`}>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-sm transition-colors ${
-                              isPresent ? 'bg-green-500' : 'bg-slate-300 group-hover:bg-indigo-400'
-                            }`}>
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-sm transition-colors ${isPresent ? 'bg-green-500' : 'bg-slate-300 group-hover:bg-indigo-400'
+                              }`}>
                               {student.name.charAt(0)}
                             </div>
                             <div>
@@ -921,14 +921,13 @@ export default function MentorDashboard() {
                         <td className="px-6 py-4 text-sm font-medium text-slate-600">{student.course}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-center">
-                            <select 
+                            <select
                               value={isPresent ? 'present' : 'absent'}
                               onChange={(e) => setAttendance(prev => ({ ...prev, [student.id]: e.target.value === 'present' }))}
-                              className={`px-3 py-1.5 rounded-lg text-sm font-bold border outline-none cursor-pointer transition-colors ${
-                                isPresent 
-                                  ? 'bg-green-50 text-green-700 border-green-200 focus:ring-2 focus:ring-green-500/20' 
+                              className={`px-3 py-1.5 rounded-lg text-sm font-bold border outline-none cursor-pointer transition-colors ${isPresent
+                                  ? 'bg-green-50 text-green-700 border-green-200 focus:ring-2 focus:ring-green-500/20'
                                   : 'bg-rose-50 text-rose-700 border-rose-200 focus:ring-2 focus:ring-rose-500/20'
-                              }`}
+                                }`}
                             >
                               <option value="present">Present</option>
                               <option value="absent">Absent</option>
@@ -966,9 +965,8 @@ export default function MentorDashboard() {
         {assignments.filter(a => !selectedBatchId || a.batch_month === batches.find(b => b.id === selectedBatchId)?.name).map(a => (
           <div key={a.id} className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-md transition-all">
             <div className="flex justify-between items-start mb-4">
-              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${
-                a.status === 'Active' ? 'bg-green-100 text-green-700' : a.status === 'Closed' ? 'bg-slate-100 text-slate-500' : 'bg-amber-100 text-amber-700'
-              }`}>{a.status}</span>
+              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${a.status === 'Active' ? 'bg-green-100 text-green-700' : a.status === 'Closed' ? 'bg-slate-100 text-slate-500' : 'bg-amber-100 text-amber-700'
+                }`}>{a.status}</span>
               <button onClick={() => { setAssignments(prev => prev.filter(x => x.id !== a.id)); showToast(`Deleted "${a.title}"`); }}
                 className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
@@ -1048,7 +1046,7 @@ export default function MentorDashboard() {
     }, [assignment]);
 
     if (loadingSubs) return <div className="text-center py-6 text-slate-500">Loading submissions...</div>;
-    
+
     if (submissions.length === 0) return <div className="text-center py-6 text-slate-500">No submissions yet.</div>;
 
     return (
@@ -1089,7 +1087,7 @@ export default function MentorDashboard() {
     const handleSubmit = async (e) => {
       e.preventDefault();
       if (!title.trim() || !dueDate) { showToast('Please fill all fields', 'error'); return; }
-      
+
       try {
         const res = await api.post('/assignments/', {
           title: title.trim(),
@@ -1206,13 +1204,12 @@ export default function MentorDashboard() {
         </div>
 
         <div className="flex overflow-x-auto pb-2 mb-2 hide-scrollbar gap-2 border-b border-slate-100">
-          {[{id: 'notes', label: 'Notes', icon: Send}, {id: 'attendance', label: 'Attendance', icon: CheckCircle}, {id: 'assignments', label: 'Assignments', icon: ClipboardList}].map(tab => {
+          {[{ id: 'notes', label: 'Notes', icon: Send }, { id: 'attendance', label: 'Attendance', icon: CheckCircle }, { id: 'assignments', label: 'Assignments', icon: ClipboardList }].map(tab => {
             const isActive = batchActiveTab === tab.id;
             return (
               <button key={tab.id} onClick={() => setBatchActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-t-2xl text-sm font-bold transition-all whitespace-nowrap border-b-2 ${
-                  isActive ? 'border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
-                }`}>
+                className={`flex items-center gap-2 px-5 py-3 rounded-t-2xl text-sm font-bold transition-all whitespace-nowrap border-b-2 ${isActive ? 'border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                  }`}>
                 <tab.icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
                 {tab.label}
               </button>
@@ -1226,6 +1223,220 @@ export default function MentorDashboard() {
             {batchActiveTab === 'attendance' && <AttendanceTab key="attendance" />}
             {batchActiveTab === 'assignments' && <AssignmentsTab key="assignments" />}
           </AnimatePresence>
+        </div>
+      </motion.div>
+    );
+  };
+
+  // ═══════════════════════════════════════════
+  //  ONLINE CLASSES TAB
+  // ═══════════════════════════════════════════
+  const OnlineClassesTab = () => {
+    const [classes, setClasses] = useState([]);
+    const [tabView, setTabView] = useState('upcoming'); // 'upcoming' | 'history'
+    const [scheduling, setScheduling] = useState(false);
+    const [form, setForm] = useState({ title: '', batch: '', start_time: '' });
+    const [saving, setSaving] = useState(false);
+    const [startingId, setStartingId] = useState(null);
+    const [endingId, setEndingId] = useState(null);
+
+    const fetchClasses = async () => {
+      try {
+        const params = trainerData ? { mentor_id: trainerData.id } : {};
+        const res = await api.get('/online-classes/', { params });
+        setClasses(Array.isArray(res.data) ? res.data : (res.data.results || []));
+      } catch (e) {
+        console.error('Failed to load online classes:', e);
+        // Do NOT call showToast here to prevent infinite re-render loops 
+        // since this component is defined inside the parent render function.
+      }
+    };
+
+    useEffect(() => { fetchClasses(); }, []);
+
+    const handleSchedule = async () => {
+      if (!form.title.trim() || !form.batch || !form.start_time) {
+        showToast('Please fill all fields', 'error'); return;
+      }
+      setSaving(true);
+      try {
+        await api.post('/online-classes/', {
+          title: form.title,
+          batch: form.batch,
+          start_time: new Date(form.start_time).toISOString(),
+          mentor: trainerData?.id,
+          status: 'SCHEDULED',
+        });
+        showToast('Class scheduled successfully!');
+        setScheduling(false);
+        setForm({ title: '', batch: '', start_time: '' });
+        fetchClasses();
+      } catch (e) {
+        showToast('Failed to schedule class', 'error');
+      } finally {
+        setSaving(false);
+      }
+    };
+
+    const handleStart = async (cls) => {
+      setStartingId(cls.id);
+      try {
+        const res = await api.post(`/online-classes/${cls.id}/start/`);
+        const { join_url } = res.data;
+        fetchClasses();
+        showToast('Class started! Opening BBB room…', 'success');
+        window.open(join_url, '_blank');
+      } catch (e) {
+        showToast('Failed to start class', 'error');
+      } finally {
+        setStartingId(null);
+      }
+    };
+
+    const handleEnd = async (cls) => {
+      setEndingId(cls.id);
+      try {
+        await api.post(`/online-classes/${cls.id}/end/`);
+        showToast('Class ended');
+        fetchClasses();
+      } catch (e) {
+        showToast('Failed to end class', 'error');
+      } finally {
+        setEndingId(null);
+      }
+    };
+
+    const upcoming = classes.filter(c => c.status === 'SCHEDULED' || c.status === 'LIVE');
+    const history  = classes.filter(c => c.status === 'ENDED');
+
+    const StatusBadge = ({ status }) => {
+      const map = {
+        LIVE:      { bg: 'bg-red-100 text-red-700 border border-red-200', dot: 'bg-red-500', label: 'LIVE' },
+        SCHEDULED: { bg: 'bg-indigo-100 text-indigo-700 border border-indigo-200', dot: 'bg-indigo-400', label: 'Scheduled' },
+        ENDED:     { bg: 'bg-slate-100 text-slate-500 border border-slate-200', dot: 'bg-slate-400', label: 'Ended' },
+      };
+      const s = map[status] || map.ENDED;
+      return (
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${s.bg}`}>
+          {status === 'LIVE' && <span className={`w-1.5 h-1.5 rounded-full ${s.dot} animate-pulse`} />}
+          {s.label}
+        </span>
+      );
+    };
+
+    return (
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
+        {/* Header */}
+        <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <p className="text-indigo-200 text-sm font-semibold mb-1 flex items-center gap-2"><Radio className="w-4 h-4 animate-pulse" /> Live Teaching</p>
+              <h2 className="text-2xl font-black">Online Classes</h2>
+              <p className="text-indigo-200 text-sm mt-1">{upcoming.filter(c => c.status === 'LIVE').length} live · {upcoming.filter(c => c.status === 'SCHEDULED').length} scheduled</p>
+            </div>
+            <button onClick={() => setScheduling(true)} className="flex items-center gap-2 px-5 py-3 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white font-bold rounded-2xl transition-all active:scale-95 shadow-lg">
+              <Plus className="w-4 h-4" /> Schedule Class
+            </button>
+          </div>
+        </div>
+
+        {/* Sub-tabs */}
+        <div className="flex gap-2">
+          {[{ id: 'upcoming', label: 'Upcoming & Live', icon: Video }, { id: 'history', label: 'Class History', icon: History }].map(t => (
+            <button key={t.id} onClick={() => setTabView(t.id)}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${ tabView === t.id ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'}`}>
+              <t.icon className="w-4 h-4" /> {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Schedule Class Form */}
+        {scheduling && (
+          <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-indigo-100">
+            <div className="flex justify-between items-center mb-5">
+              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><Calendar className="w-5 h-5 text-indigo-500" /> Schedule New Class</h3>
+              <button onClick={() => setScheduling(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-4 h-4 text-slate-400" /></button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Class Title</label>
+                <input value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} placeholder="e.g. React Hooks Deep Dive" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all" />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Batch</label>
+                <select value={form.batch} onChange={e => setForm(f => ({...f, batch: e.target.value}))} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                  <option value="">Select batch…</option>
+                  {batches.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Start Date & Time</label>
+                <input 
+                  type="datetime-local" 
+                  value={form.start_time} 
+                  min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
+                  onChange={e => setForm(f => ({...f, start_time: e.target.value}))} 
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer" 
+                />
+              </div>
+            </div>
+            <button onClick={handleSchedule} disabled={saving} className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 flex items-center gap-2 disabled:opacity-60">
+              {saving ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Saving…</> : <><Check className="w-4 h-4" /> Confirm Schedule</>}
+            </button>
+          </div>
+        )}
+
+        {/* Class Cards */}
+        <div className="space-y-4">
+          {(tabView === 'upcoming' ? upcoming : history).length === 0 ? (
+            <div className="text-center py-16 text-slate-400">
+              <Video className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p className="font-semibold">{tabView === 'upcoming' ? 'No upcoming or live classes' : 'No class history yet'}</p>
+              {tabView === 'upcoming' && <button onClick={() => setScheduling(true)} className="mt-3 text-indigo-600 text-sm font-bold hover:underline">Schedule your first class →</button>}
+            </div>
+          ) : (tabView === 'upcoming' ? upcoming : history).map(cls => (
+            <div key={cls.id} className={`bg-white rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border transition-all ${ cls.status === 'LIVE' ? 'border-red-200 shadow-red-50 ring-1 ring-red-100' : 'border-slate-100 hover:shadow-md'}`}>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className={`p-3 rounded-2xl ${ cls.status === 'LIVE' ? 'bg-red-100' : cls.status === 'ENDED' ? 'bg-slate-100' : 'bg-indigo-100'}`}>
+                    <Video className={`w-5 h-5 ${ cls.status === 'LIVE' ? 'text-red-600' : cls.status === 'ENDED' ? 'text-slate-400' : 'text-indigo-600'}`} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-bold text-slate-800">{cls.title}</h4>
+                      <StatusBadge status={cls.status} />
+                    </div>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+                      <span className="flex items-center gap-1"><UserCheck className="w-3.5 h-3.5" /> {cls.mentor_name || trainerData?.name || 'You'}</span>
+                      <span className="flex items-center gap-1"><Layers className="w-3.5 h-3.5" /> {cls.batch}</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {cls.start_time ? new Date(cls.start_time).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'}</span>
+                      {cls.end_time && <span className="flex items-center gap-1"><StopCircle className="w-3.5 h-3.5" /> Ended: {new Date(cls.end_time).toLocaleString('en-IN', { timeStyle: 'short' })}</span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  {cls.status === 'SCHEDULED' && (
+                    <button onClick={() => handleStart(cls)} disabled={startingId === cls.id} className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-md shadow-green-200 disabled:opacity-60">
+                      {startingId === cls.id ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Radio className="w-4 h-4" />}
+                      Start Class
+                    </button>
+                  )}
+                  {cls.status === 'LIVE' && (
+                    <>
+                      <button onClick={() => handleStart(cls)} disabled={startingId === cls.id} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-md disabled:opacity-60">
+                        <Video className="w-4 h-4" /> Rejoin
+                      </button>
+                      <button onClick={() => handleEnd(cls)} disabled={endingId === cls.id} className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-md shadow-rose-200 disabled:opacity-60">
+                        {endingId === cls.id ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <StopCircle className="w-4 h-4" />}
+                        End Class
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </motion.div>
     );
@@ -1275,9 +1486,8 @@ export default function MentorDashboard() {
           const isActive = activeTab === tab.id;
           return (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all whitespace-nowrap ${
-                isActive ? 'bg-slate-800 text-white shadow-lg shadow-slate-300/50' : 'bg-white text-slate-500 hover:bg-slate-100 border border-slate-200'
-              }`}>
+              className={`flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all whitespace-nowrap ${isActive ? 'bg-slate-800 text-white shadow-lg shadow-slate-300/50' : 'bg-white text-slate-500 hover:bg-slate-100 border border-slate-200'
+                }`}>
               <tab.icon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
               {tab.label}
             </button>
@@ -1292,6 +1502,7 @@ export default function MentorDashboard() {
           {activeTab === 'students' && <StudentsTab key="students" />}
           {activeTab === 'courses' && <CoursesTab key="courses" />}
           {activeTab === 'batches' && <BatchesTab key="batches" />}
+          {activeTab === 'online-classes' && <OnlineClassesTab key="online-classes" />}
         </AnimatePresence>
       </div>
 
@@ -1323,11 +1534,10 @@ export default function MentorDashboard() {
                 ].map((item, i) => (
                   <div key={i} className="bg-slate-50 rounded-2xl p-4 flex-1 min-w-[100px]">
                     <p className="text-xs text-slate-400 font-bold uppercase">{item.label}</p>
-                    <p className={`text-sm font-bold mt-1 ${
-                      item.label === 'Status' && item.value === 'Active' ? 'text-green-600' :
-                      item.label === 'Status' && item.value === 'At Risk' ? 'text-amber-600' :
-                      item.label === 'Batch Date' ? 'text-indigo-600' : 'text-slate-700'
-                    }`}>{item.value}</p>
+                    <p className={`text-sm font-bold mt-1 ${item.label === 'Status' && item.value === 'Active' ? 'text-green-600' :
+                        item.label === 'Status' && item.value === 'At Risk' ? 'text-amber-600' :
+                          item.label === 'Batch Date' ? 'text-indigo-600' : 'text-slate-700'
+                      }`}>{item.value}</p>
                   </div>
                 ))}
               </div>
@@ -1364,7 +1574,6 @@ export default function MentorDashboard() {
               {[
                 { label: 'Upload Notes / Material', icon: FileText, action: () => { setShowResourceModal(false); setActiveTab('notes'); } },
                 { label: 'Create New Assignment', icon: ClipboardList, action: () => { setShowResourceModal(false); setActiveTab('assignments'); setTimeout(() => setShowNewAssignment(true), 300); } },
-                { label: 'Add New Course', icon: BookOpen, action: () => { setShowResourceModal(false); setActiveTab('courses'); setTimeout(() => setShowNewCourse(true), 300); } },
               ].map((item, i) => (
                 <button key={i} onClick={item.action}
                   className="w-full flex items-center gap-4 p-4 rounded-2xl border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all text-left active:scale-[0.98]">

@@ -372,3 +372,16 @@ class AssignmentSubmission(models.Model):
     def __str__(self):
         student_name = self.student.name if self.student else 'Unknown'
         return f"{self.assignment.title} - {student_name}"
+
+class OnlineClass(models.Model):
+    title = models.CharField(max_length=255)
+    mentor = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='online_classes')
+    batch = models.CharField(max_length=100) # Assuming batch name string like 'June Batch' to match existing Batch choices
+    meeting_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    status = models.CharField(max_length=20, default='SCHEDULED', choices=[('SCHEDULED', 'Scheduled'), ('LIVE', 'Live'), ('ENDED', 'Ended')])
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.batch} ({self.status})"

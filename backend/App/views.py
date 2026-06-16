@@ -1501,3 +1501,86 @@ def assign_batch_mentor(request, pk):
     enrollment.save()
     serializer = EnrollmentSerializer(enrollment)
     return Response({"message": "Assigned successfully", "data": serializer.data})
+
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from .models import OnlineClass
+from .serializers import OnlineClassSerializer
+from . import bbb_utils
+import uuid
+
+class OnlineClassViewSet(viewsets.ModelViewSet):
+    queryset = OnlineClass.objects.all().order_by('-created_at')
+    serializer_class = OnlineClassSerializer
+    permission_classes = [] # Allow any for now as requested
+    authentication_classes = []
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        mentor_id = self.request.query_params.get('mentor_id')
+        batch = self.request.query_params.get('batch')
+        
+        if mentor_id:
+            queryset = queryset.filter(mentor_id=mentor_id)
+        if batch:
+            # Match strictly or roughly based on your batch name formats
+            queryset = queryset.filter(batch__icontains=batch)
+            
+        return queryset
+
+    @action(detail=True, methods=['post'])
+    def start(self, request, pk=None):
+        online_class = self.get_object()
+        
+        # Generate meeting ID if not exists
+        if not online_class.meeting_id:
+            online_class.meeting_id = f"txhub-{online_class.id}-{uuid.uuid4().hex[:8]}"
+            online_class.save()
+            
+        # Update status
+        online_class.status = 'LIVE'
+        online_class.save()
+        
+        # We don't necessarily need to call the BBB create API here if we rely on join creating it.
+        # But explicitly creating it is better.
+        try:
+            import requests
+            create_url = bbb_utils.get_create_meeting_url(
+                meeting_id=online_class.meeting_id,
+                name=online_class.title,
+            )
+            requests.get(create_url)
+        except Exception as e:
+            pass # Ignoring create error, joining as moderator often auto-creates in BBB
+
+        mentor_name = online_class.mentor.name if online_class.mentor else "Mentor"
+        join_url = bbb_utils.get_join_url(
+            meeting_id=online_class.meeting_id,
+            full_name=mentor_name,
+            password='mp' # moderator password
+        )
+        return Response({"join_url": join_url, "status": online_class.status})
+
+    @action(detail=True, methods=['post'])
+    def join(self, request, pk=None):
+        online_class = self.get_object()
+        student_name = request.data.get('student_name', 'Student')
+        
+        if online_class.status != 'LIVE' and online_class.status != 'SCHEDULED':
+             return Response({"error": "Class is not active"}, status=400)
+             
+        join_url = bbb_utils.get_join_url(
+            meeting_id=online_class.meeting_id,
+            full_name=student_name,
+            password='ap' # attendee password
+        )
+        return Response({"join_url": join_url})
+
+    @action(detail=True, methods=['post'])
+    def end(self, request, pk=None):
+        online_class = self.get_object()
+        online_class.status = 'ENDED'
+        from django.utils import timezone
+        online_class.end_time = timezone.now()
+        online_class.save()
+        return Response({"status": online_class.status, "message": "Class ended successfully"})

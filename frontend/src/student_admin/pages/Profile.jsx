@@ -16,10 +16,10 @@ const Profile = () => {
       <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
         <div className="flex items-center gap-6">
           <div className="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-3xl">
-            {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
+            {(user?.full_name || user?.name) ? (user?.full_name || user?.name).charAt(0).toUpperCase() : 'S'}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800">{user?.name || 'Student Name'}</h2>
+            <h2 className="text-2xl font-bold text-slate-800">{user?.full_name || user?.name || 'Student Name'}</h2>
             <p className="text-slate-500">{user?.email || 'student@example.com'}</p>
             <div className="mt-4 flex gap-3">
               <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider">Active Student</span>
@@ -33,7 +33,7 @@ const Profile = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm text-slate-500 mb-1">Full Name</label>
-                <div className="p-3 bg-slate-50 rounded-lg text-slate-800 font-medium">{user?.name || 'Student Name'}</div>
+                <div className="p-3 bg-slate-50 rounded-lg text-slate-800 font-medium">{user?.full_name || user?.name || 'Student Name'}</div>
               </div>
               <div>
                 <label className="block text-sm text-slate-500 mb-1">Email Address</label>
