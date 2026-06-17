@@ -44,61 +44,59 @@ const Dashboard = () => {
     { name: 'Soft Skills', key: 'Soft Skills', icon: <BookOpen size={18} />, color: 'bg-yellow-400' },
   ];
 
-  const trainers = [
-    { id: 1, name: 'Vasavi', role: 'Full Stack', photo: 'https://i.pravatar.cc/150?u=1' },
-    { id: 2, name: 'Jayanth', role: 'QA', photo: 'https://i.pravatar.cc/150?u=2' },
-    { id: 3, name: 'Hima Teja', role: 'QA', photo: 'https://i.pravatar.cc/150?u=3' },
-  ];
 
   return (
     <div className="min-h-screen bg-[#F4F7FE] pt-10 lg:pt-20 px-4 md:px-10 pb-20 space-y-10">
 
       {/* ================= SYSTEM OVERVIEW ================= */}
       <section>
-        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 mb-6">
-          System Overview
-        </h2>
+       <h2 className="text-2xl font-semibold text-slate-800 mb-6">
+  System Overview
+</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
           {/* ✅ TOTAL USERS */}
-          <div className="bg-blue-600 p-6 rounded-[2rem] text-white shadow-xl flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-[10px] font-bold uppercase mb-1">
-                Total Users
-              </p>
-              <h3 className="text-3xl font-black">
-                {stats.total_users}
-              </h3>
-            </div>
-            <div className="bg-white/20 p-3 rounded-2xl">
-              <Users size={24} />
-            </div>
-          </div>
+       <div className="bg-blue-600 p-6 rounded-3xl text-white shadow-lg flex items-center justify-between">
+  <div>
+    <p className="text-blue-100 text-sm font-medium mb-1">
+      Total Users
+    </p>
+
+    <h3 className="text-3xl font-semibold">
+      {stats.total_users}
+    </h3>
+  </div>
+
+  <div className="bg-white/20 p-3 rounded-2xl">
+    <Users size={24} />
+  </div>
+</div>
 
           {/* ✅ COURSE CARDS */}
-          {courseStats.map((course, index) => (
-            <div key={index} className="bg-white p-6 rounded-[2rem] border border-blue-100 shadow-sm flex items-center gap-4">
+      {courseStats.map((course, index) => (
+  <div
+    key={index}
+    className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center gap-4"
+  >
+    <div className={`${course.color} text-white p-3 rounded-2xl`}>
+      {course.icon}
+    </div>
 
-              <div className={`${course.color} text-white p-3 rounded-2xl`}>
-                {course.icon}
-              </div>
+    <div>
+      <p className="text-slate-500 text-sm font-medium">
+        {course.name}
+      </p>
 
-              <div>
-                <p className="text-slate-400 text-[10px] font-bold uppercase">
-                  {course.name}
-                </p>
-
-                <h3 className="text-xl font-bold text-slate-800">
-                  {stats.course_counts?.[course.key] || 0}
-                  <span className="text-xs text-slate-400 ml-1">
-                    students
-                  </span>
-                </h3>
-              </div>
-
-            </div>
-          ))}
+      <h3 className="text-2xl font-semibold text-slate-900">
+        {stats.course_counts?.[course.key] || 0}
+        <span className="text-sm text-slate-500 ml-1">
+          Students
+        </span>
+      </h3>
+    </div>
+  </div>
+))}
         </div>
       </section>
 

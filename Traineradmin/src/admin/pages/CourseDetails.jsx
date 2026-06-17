@@ -22,12 +22,12 @@ const COURSE_DETAILS_DATA = {
     originalPrice: '₹19,999',
     language: 'English & Hindi',
     certificate: 'Verifiable Professional Certificate',
-    mentor: {
-      name: 'Dr. John Doe',
-      role: 'Principal Engineer & Mentor',
-      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&h=150&fit=crop',
-      bio: 'Former Senior Architect at Tech Giants. Over 15 years of industry experience specializing in React, Node.js, and cloud systems.'
-    },
+    // mentor: {
+    //   name: 'Dr. John Doe',
+    //   role: 'Principal Engineer & Mentor',
+    //   avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&h=150&fit=crop',
+    //   bio: 'Former Senior Architect at Tech Giants. Over 15 years of industry experience specializing in React, Node.js, and cloud systems.'
+    // },
     overview: 'Master React, Redux, Node.js, Express, and MongoDB in this comprehensive industry-aligned track. You will build highly scalable modern web applications from scratch, implement advanced state management patterns, and deploy them on AWS cloud infrastructure.',
     outcomes: [
       'Build rich interactive SPA using React Hooks, Context API, and Redux Toolkit.',

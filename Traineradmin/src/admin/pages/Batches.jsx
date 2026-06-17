@@ -1,28 +1,52 @@
 import React, { useState, useEffect } from 'react';
+
 import {
-  Calendar, Trash2, Plus, Layers, Cpu, Clock,
-  ChevronLeft, User, ArrowRight
-} from 'lucide-react';
+  Calendar,
+  Trash2,
+  Plus,
+  Layers,
+  Cpu,
+  Clock,
+  ChevronLeft,
+  User,
+  ArrowRight,
+  Code2,
+  Coffee,
+  Database,
+  Globe,
+  Bug,
+  ShieldCheck,
+  Terminal,
+  Smartphone,
+  PenTool,
+  Cloud,
+  Brain,
+  BarChart3,
+  PieChart,
+  Mic
+} from "lucide-react";
 
 const COURSE_LIST = [
-  { name: 'React', color: 'from-cyan-500 to-blue-600', light: 'bg-cyan-50 text-cyan-700' },
-  { name: 'Java Full Stack', color: 'from-orange-400 to-red-500', light: 'bg-orange-50 text-orange-700' },
-  { name: 'Python FullStack', color: 'from-yellow-400 to-green-500', light: 'bg-yellow-50 text-yellow-700' },
-  { name: 'MERN Stack', color: 'from-green-400 to-teal-500', light: 'bg-green-50 text-green-700' },
-  { name: 'Web Development', color: 'from-green-400 to-teal-500', light: 'bg-green-50 text-green-700' },
-  { name: 'Manual Testing', color: 'from-violet-500 to-purple-600', light: 'bg-violet-50 text-violet-700' },
-  { name: 'Advanced Software Testnig', color: 'from-sky-400 to-blue-500', light: 'bg-sky-50 text-sky-700' },
-  { name: 'API Testing with Postman', color: 'from-red-400 to-rose-500', light: 'bg-red-50 text-red-700' },
-  { name: 'Mobile App Automation', color: 'from-red-400 to-rose-500', light: 'bg-red-50 text-red-700' },
-  { name: 'UI/UX Design', color: 'from-pink-400 to-fuchsia-500', light: 'bg-pink-50 text-pink-700' },
-  { name: 'AWS & DevOps', color: 'from-slate-500 to-gray-600', light: 'bg-slate-50 text-slate-700' },
-  { name: 'Machine Learning', color: 'from-indigo-500 to-blue-700', light: 'bg-indigo-50 text-indigo-700' },
-  { name: 'Data Science', color: 'from-teal-500 to-cyan-600', light: 'bg-teal-50 text-teal-700' },
-  { name: 'Data Analytics', color: 'from-teal-500 to-cyan-600', light: 'bg-teal-50 text-teal-700' },
-  { name: 'Leadership & Team Management', color: 'from-amber-400 to-orange-500', light: 'bg-amber-50 text-amber-700' },
-  { name: 'Public Speaking', color: 'from-amber-400 to-orange-500', light: 'bg-amber-50 text-amber-700' },
-  { name: 'Critical Thinking & Problem Solving', color: 'from-amber-400 to-orange-500', light: 'bg-amber-50 text-amber-700' },
+  { name: 'React'},
+  { name: 'Java Full Stack'},
+  { name: 'Python FullStack' },
+  { name: 'MERN Stack' },
+  { name: 'Web Development' },
+  { name: 'Manual Testing' },
+  { name: 'Advanced Software Testnig' },
+  { name: 'API Testing with Postman'},
+  { name: 'Mobile App Automation' },
+  { name: 'UI/UX Design' },
+  { name: 'AWS & DevOps' },
+  { name: 'Machine Learning'},
+  { name: 'Data Science' },
+  { name: 'Data Analytics' },
+  { name: 'Leadership & Team Management' },
+  { name: 'Public Speaking' },
+  { name: 'Critical Thinking & Problem Solving' },
+ 
 ];
+
 
 const Batches = () => {
   const [batches, setBatches] = useState([]);
@@ -137,6 +161,32 @@ const Batches = () => {
     }
     return 'Unassigned';
   };
+  
+
+
+
+
+    const getCourseIcon = (name) => {
+  if (name.includes("React")) return Code2;
+  if (name.includes("Java")) return Coffee;
+  if (name.includes("Python")) return Cpu;
+  if (name.includes("MERN")) return Database;
+  if (name.includes("Web")) return Globe;
+  if (name.includes("Manual")) return Bug;
+  if (name.includes("Advanced")) return ShieldCheck;
+  if (name.includes("Postman")) return Terminal;
+  if (name.includes("Mobile")) return Smartphone;
+  if (name.includes("UI")) return PenTool;
+  if (name.includes("AWS")) return Cloud;
+  if (name.includes("Machine")) return Brain;
+  if (name.includes("Data Science")) return BarChart3;
+  if (name.includes("Analytics")) return PieChart;
+  if (name.includes("Leadership")) return User;
+  if (name.includes("Speaking")) return Mic;
+
+  return Layers;
+};
+
 
   // ── COURSE GRID VIEW ────────────────────────────────────────────────────
   if (!selectedCourse) {
@@ -161,30 +211,65 @@ const Batches = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {COURSE_LIST.map(({ name, color, light }) => {
               const count = batchCountByCourse[name] || 0;
+               const Icon = getCourseIcon(name);
               return (
-                <button
-                  key={name}
-                  onClick={() => setSelectedCourse(name)}
-                  className="group relative bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 text-left overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-300"
-                >
-                  {/* Gradient top bar */}
-                  <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${color}`} />
 
-                  <div className="mt-2 space-y-3">
-                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase ${light}`}>
-                      <Cpu size={11} /> Course
-                    </div>
-                    <p className="font-bold text-slate-800 text-sm leading-snug group-hover:text-blue-600 transition-colors">
-                      {name}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] text-slate-400 font-semibold">
-                        {count} {count === 1 ? 'Batch' : 'Batches'}
-                      </span>
-                      <ArrowRight size={14} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
-                    </div>
-                  </div>
-                </button>
+
+<button
+  key={name}
+  onClick={() => setSelectedCourse(name)}
+  className="
+    group
+    bg-white
+    rounded-2xl
+    p-5
+    border
+    border-slate-200
+    shadow-sm
+    hover:shadow-lg
+    hover:border-blue-200
+    hover:-translate-y-1
+    transition-all
+    duration-300
+    text-left
+  "
+>
+  <div className="flex items-start gap-4">
+
+    {/* Icon */}
+    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+      <Icon size={22} className="text-blue-600" />
+    </div>
+
+    {/* Content */}
+    <div className="flex-1">
+      <h3 className="text-lg font-semibold text-slate-800">
+        {name}
+      </h3>
+
+      
+
+      <div className="flex items-center gap-2 mt-3 text-sm text-slate-500">
+        <Layers size={14} />
+        <span>
+          {count} {count === 1 ? "Batch" : "Batches"}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  {/* Footer */}
+  <div className="mt-5 pt-4 border-t border-slate-100">
+    <div className="flex items-center justify-between text-blue-600 font-medium text-sm">
+      <span>View Batches</span>
+
+      <ArrowRight
+        size={16}
+        className="group-hover:translate-x-1 transition-all"
+      />
+    </div>
+  </div>
+</button>
               );
             })}
           </div>

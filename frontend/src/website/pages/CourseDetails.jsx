@@ -947,24 +947,24 @@ const CourseDetails = () => {
               </div>
 
               {/* Instructor Section */}
-              
+
             </div>
           </div>
 
           {/* SIDEBAR PANEL */}
           <div className="relative">
-            <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_32px_64px_-16px_rgba(37,99,235,0.1)] sticky top-28 p-10 flex flex-col items-center">
+            <div className="bg-white rounded-[2rem] border border-slate-100 shadow-lg sticky top-24 p-6 flex flex-col items-center">
 
-              <div className="w-full text-center mb-10">
+              <div className="w-full text-center mb-6">
                 <p className="text-slate-400 text-xs font-black uppercase tracking-[0.3em] mb-2 px-4 py-1.5 bg-slate-50 rounded-full inline-block">Enrollment Fee</p>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-6xl font-black text-blue-600 italic tracking-tighter">₹{course.price}</span>
+                  <span className="text-4xl font-black text-blue-600 italic tracking-tighter">₹{course.price}</span>
                 </div>
                 <p className="text-slate-400 text-sm font-bold mt-4 italic">No hidden charges • GST Included</p>
               </div>
 
               {/* USP List */}
-              <div className="w-full space-y-5 mb-12">
+              <div className="w-full space-y-3 mb-6">
                 {[
                   { text: "Full lifetime access", color: "text-green-500" },
                   { text: "Certificate of completion", color: "text-green-500" },
@@ -1065,31 +1065,30 @@ const CourseDetails = () => {
                   </button>
                 ) : (
                   <>
-                    {/* <button
-                      onClick={handleEnroll}
-                      disabled={added}
-                      className={`w-full py-5 rounded-2xl font-black text-xl transition-all shadow-2xl relative overflow-hidden group ${added
-                        ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
-                        : "bg-blue-600 text-white shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0"
-                        }`}
-                    >
-                      <span className="relative z-10">
-                        {added ? "Already in Cart" : "Enroll Now"}
-                      </span>
-                      {!added && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                      )}
-                    </button> */}
 
                     <button
                       onClick={handleAddToCart}
                       disabled={added}
-                      className={`w-full py-5 rounded-2xl border-2 font-black text-lg transition-all flex items-center justify-center gap-3 ${added
-                        ? "bg-green-50 border-green-200 text-green-600 cursor-not-allowed"
-                        : "border-blue-600 text-blue-600 hover:bg-blue-50"
-                        }`}
+                      className={`
+    w-[70%]
+    mx-auto
+    py-2.5
+    rounded-xl
+    font-semibold
+    text-sm
+    transition-all
+    duration-300
+    flex
+    items-center
+    justify-center
+    gap-2
+    ${added
+                          ? "bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 text-emerald-600 cursor-not-allowed"
+                          : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white border border-transparent shadow-lg shadow-blue-500/25 hover:shadow-xl hover:scale-[1.02]"
+                        }
+  `}
                     >
-                      {added ? <CheckCircle size={20} /> : null}
+                      {added && <CheckCircle size={16} />}
                       {added ? "Added to Cart" : "Add to Cart"}
                     </button>
 
@@ -1101,7 +1100,27 @@ const CourseDetails = () => {
                           navigate("/checkout", { state: { items: [course] } });
                         }
                       }}
-                      className="w-full py-5 rounded-2xl border border-blue-600 text-blue-600 font-black text-lg hover:bg-blue-50 transition-all flex items-center justify-center gap-3"
+                      className="
+    w-[70%]
+    mx-auto
+    py-2.5
+    rounded-xl
+    bg-gradient-to-r
+    from-slate-50
+    to-blue-50
+    border
+    border-blue-200
+    text-blue-700
+    font-semibold
+    text-sm
+    hover:from-blue-50
+    hover:to-blue-100
+    transition-all
+    duration-300
+    flex
+    items-center
+    justify-center
+  "
                     >
                       Checkout
                     </button>

@@ -246,7 +246,7 @@ const handleSubmit = async (e) => {
                       value={form.name}
                       onChange={handleChange}
                       required
-                      placeholder=".........."
+                      placeholder="Your Name"
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm font-medium text-slate-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 focus:bg-white transition-all placeholder:text-slate-400 shadow-sm"
                     />
                   </div>
@@ -265,7 +265,7 @@ const handleSubmit = async (e) => {
                       value={form.email}
                       onChange={handleChange}
                       required
-                      placeholder="john@email.com"
+                      placeholder="Enter your email address"
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm font-medium text-slate-700 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 focus:bg-white transition-all placeholder:text-slate-400 shadow-sm"
                     />
                   </div>

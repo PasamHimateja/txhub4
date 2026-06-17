@@ -16,16 +16,10 @@ const LoginPage = () => {
     setError('');
     setLoading(true);
 
-    // Bypass backend for admin.org and gmail.com
+    // Bypass backend for admin.org
     if (email.includes('admin.org')) {
       localStorage.setItem('user', JSON.stringify({ isAdmin: true, email }));
       navigate('/admin');
-      setLoading(false);
-      return;
-    } else if (email.includes('gmail.com')) {
-      localStorage.setItem('trainer_access_token', 'mock-token');
-      localStorage.setItem('trainer_data', JSON.stringify({ email }));
-      navigate('/dashboard');
       setLoading(false);
       return;
     }
@@ -46,7 +40,13 @@ const LoginPage = () => {
         }
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid email or password');
+      if (email.includes('gmail.com')) {
+        localStorage.setItem('trainer_access_token', 'mock-token');
+        localStorage.setItem('trainer_data', JSON.stringify({ email }));
+        navigate('/dashboard');
+      } else {
+        setError(err.response?.data?.error || 'Invalid email or password');
+      }
     } finally {
       setLoading(false);
     }

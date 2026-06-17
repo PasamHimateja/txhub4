@@ -382,7 +382,8 @@ class OnlineClass(models.Model):
     status = models.CharField(max_length=20, default='SCHEDULED', choices=[('SCHEDULED', 'Scheduled'), ('LIVE', 'Live'), ('ENDED', 'Ended')])
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
+    meeting_link = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+ 
     def __str__(self):
         return f"{self.title} - {self.batch} ({self.status})"

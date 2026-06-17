@@ -1656,6 +1656,8 @@ class OnlineClassViewSet(viewsets.ModelViewSet):
         mentor_id = self.request.query_params.get('mentor_id')
         mentor_email = self.request.query_params.get('mentor_email')
         batch = self.request.query_params.get('batch')
+        student_id = self.request.query_params.get('student_id')
+        email = self.request.query_params.get('email')
         
         if (not mentor_id or mentor_id == 'undefined') and mentor_email:
             trainer = Trainer.objects.filter(email__iexact=mentor_email).first()
@@ -1664,11 +1666,49 @@ class OnlineClassViewSet(viewsets.ModelViewSet):
                 
         if mentor_id:
             queryset = queryset.filter(mentor_id=mentor_id)
-        if batch:
-            # Match strictly or roughly based on your batch name formats
+
+        # Filter by student's batch if student_id or email is provided
+        resolved_batches = []
+        if email or student_id:
+            _, resolved_batch = get_student_info(student_id=student_id, email=email)
+            if resolved_batch:
+                resolved_batches.append(resolved_batch)
+            
+            # Gather from all enrollments
+            enroll_q = Enrollment.objects.all()
+            if email:
+                enroll_q = enroll_q.filter(user__email__iexact=email)
+            elif student_id:
+                enroll_q = enroll_q.filter(user_id=student_id)
+            for e in enroll_q:
+                if e.assigned_batch:
+                    resolved_batches.append(e.assigned_batch.name)
+                if e.batch_date:
+                    resolved_batches.append(e.batch_date)
+                
+        if resolved_batches:
+            q_filter = Q()
+            for b_name in set(resolved_batches):
+                q_filter |= Q(batch__icontains=b_name)
+            # Also support 'All Batches' or empty/null batch
+            q_filter |= Q(batch__iexact='All Batches') | Q(batch='') | Q(batch__isnull=True)
+            queryset = queryset.filter(q_filter)
+        elif batch:
             queryset = queryset.filter(batch__icontains=batch)
             
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        if not data.get('mentor') and data.get('mentor_email'):
+            trainer = Trainer.objects.filter(email__iexact=data.get('mentor_email')).first()
+            if trainer:
+                data['mentor'] = trainer.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, methods=['post'])
     def start(self, request, pk=None):
@@ -1695,12 +1735,15 @@ class OnlineClassViewSet(viewsets.ModelViewSet):
         except Exception as e:
             pass # Ignoring create error, joining as moderator often auto-creates in BBB
 
-        mentor_name = online_class.mentor.name if online_class.mentor else "Mentor"
-        join_url = bbb_utils.get_join_url(
-            meeting_id=online_class.meeting_id,
-            full_name=mentor_name,
-            password='mp' # moderator password
-        )
+        if online_class.meeting_link:
+            join_url = online_class.meeting_link
+        else:
+            mentor_name = online_class.mentor.name if online_class.mentor else "Mentor"
+            join_url = bbb_utils.get_join_url(
+                meeting_id=online_class.meeting_id,
+                full_name=mentor_name,
+                password='mp' # moderator password
+            )
         return Response({"join_url": join_url, "status": online_class.status})
 
     @action(detail=True, methods=['post'])
@@ -1711,11 +1754,14 @@ class OnlineClassViewSet(viewsets.ModelViewSet):
         if online_class.status != 'LIVE' and online_class.status != 'SCHEDULED':
              return Response({"error": "Class is not active"}, status=400)
              
-        join_url = bbb_utils.get_join_url(
-            meeting_id=online_class.meeting_id,
-            full_name=student_name,
-            password='ap' # attendee password
-        )
+        if online_class.meeting_link:
+            join_url = online_class.meeting_link
+        else:
+            join_url = bbb_utils.get_join_url(
+                meeting_id=online_class.meeting_id,
+                full_name=student_name,
+                password='ap' # attendee password
+            )
         return Response({"join_url": join_url})
 
     @action(detail=True, methods=['post'])

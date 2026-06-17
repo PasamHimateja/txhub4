@@ -148,158 +148,278 @@ const Users = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pb-10 mt-10">
 
         {/* HEADER SECTION */}
-        <div className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-6 print-hidden">
-          <div className="flex items-center gap-4 w-full sm:w-auto">
-            <div className="bg-indigo-600 p-4 rounded-2xl shadow-xl shadow-indigo-100 shrink-0">
-              <ShieldCheck className="text-white" size={28} />
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-tight">
-                TX <span className="text-indigo-600">HUB</span>
-              </h1>
-              <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.3em] mt-1">
-                Live Management Portal
-              </p>
-            </div>
-          </div>
+<div className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-6 print-hidden">
+  <div className="flex items-center gap-4 w-full sm:w-auto">
+    <div className="bg-indigo-600 p-4 rounded-2xl shadow-lg shrink-0">
+      <ShieldCheck className="text-white" size={28} />
+    </div>
 
-          <button
-            onClick={downloadReport}
-            className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#0F172A] text-white px-8 py-4 rounded-2xl font-bold shadow-2xl active:scale-95 text-xs uppercase tracking-widest transition-all hover:bg-slate-800"
-          >
-            <Download size={18} /> Generate PDF Report
-          </button>
-        </div>
+    <div>
+      <h1 className="text-3xl font-bold text-slate-800">
+        TX <span className="text-indigo-600">Hub</span>
+      </h1>
+
+      <p className="text-sm text-slate-500 mt-1">
+        Student Management Dashboard
+      </p>
+    </div>
+  </div>
+
+  <button
+    onClick={downloadReport}
+    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:bg-slate-800 transition-all"
+  >
+    <Download size={18} />
+    Download Report
+  </button>
+</div>
 
         {/* STATS CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-10 print-hidden">
-          {[
-            { label: 'Total Students', val: users.length, icon: <UsersIcon />, bg: 'bg-blue-50', text: 'text-blue-600' },
-            { label: 'Revenue Received', val: `₹${totalReceived.toLocaleString()}`, icon: <Wallet />, bg: 'bg-emerald-50', text: 'text-emerald-600' },
-            { label: 'Outstanding Balance', val: `₹${totalPending.toLocaleString()}`, icon: <Activity />, bg: 'bg-amber-50', text: 'text-amber-600' }
-          ].map((stat, i) => (
-            <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-blue-50 shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex items-center gap-5">
-              <div className={`${stat.bg} p-4 rounded-2xl ${stat.text} shrink-0`}>
-                {React.cloneElement(stat.icon, { size: 24 })}
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
-                <h3 className="text-2xl font-black text-slate-800 leading-none mt-1">{stat.val}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-10 print-hidden">
+  {[
+    {
+      label: "Total Students",
+      val: users.length,
+      icon: <UsersIcon />,
+      bg: "bg-blue-50",
+      text: "text-blue-600",
+    },
+    {
+      label: "Revenue",
+      val: `₹${totalReceived.toLocaleString()}`,
+      icon: <Wallet />,
+      bg: "bg-emerald-50",
+      text: "text-emerald-600",
+    },
+    {
+      label: "Outstanding Balance",
+      val: `₹${totalPending.toLocaleString()}`,
+      icon: <Activity />,
+      bg: "bg-amber-50",
+      text: "text-amber-600",
+    },
+  ].map((stat, i) => (
+    <div
+      key={i}
+      className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-5"
+    >
+      <div
+        className={`${stat.bg} p-4 rounded-2xl ${stat.text} shrink-0`}
+      >
+        {React.cloneElement(stat.icon, { size: 24 })}
+      </div>
+
+      <div>
+        <p className="text-sm font-medium text-slate-500">
+          {stat.label}
+        </p>
+
+        <h3 className="text-3xl font-bold text-slate-800 mt-1">
+          {stat.val}
+        </h3>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* DATA TABLE (DESKTOP) */}
         <div className="hidden lg:block bg-white rounded-[2.5rem] border border-blue-100 shadow-2xl shadow-blue-900/5 overflow-hidden print-area">
           <table className="w-full text-left">
-            <thead>
-              <tr className="bg-slate-50/50 border-b border-blue-50">
-                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Student Profile</th>
-                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Course / Specialization</th>
-                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Mentor&Batches</th>
-                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Payment Progress</th>
-                <th className="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Financials</th>
-              </tr>
-            </thead>
+<thead>
+  <tr className="bg-slate-50 border-b border-slate-100">
+    <th className="px-6 py-5 text-sm font-semibold text-slate-500">
+      Student
+    </th>
+
+    <th className="px-6 py-5 text-sm font-semibold text-slate-500">
+      Enrolled Course
+    </th>
+
+    <th className="px-6 py-5 text-sm font-semibold text-slate-500">
+      Mentor & Batch
+    </th>
+
+    <th className="px-6 py-5 text-sm font-semibold text-slate-500 text-center">
+      Payment Status
+    </th>
+
+    <th className="px-6 py-5 text-sm font-semibold text-slate-500 text-right">
+      Payments
+    </th>
+  </tr>
+</thead>
             <tbody className="divide-y divide-blue-50/50">
               {users.map((u) => {
                 const balance = u.totalFee - u.paidAmount;
                 const progress = u.totalFee > 0 ? (u.paidAmount / u.totalFee) * 100 : 0;
 
                 return (
-                  <tr key={u.id} className="hover:bg-indigo-50/5 transition-colors">
-                    <td className="px-6 py-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-base border border-indigo-100">
-                          {u.name.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-black text-slate-800 text-sm">{u.name}</p>
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">REF: {u.id}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-6">
-                      <div className="flex flex-wrap gap-2">
-                        {u.courses.map((course, i) => (
-                          <div
-                            key={i}
-                            className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase border border-blue-100"
-                          >
-                            <Cpu size={12} /> {course.title}
-                          </div>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-6 py-6">
-                      {(() => {
-                        const batchObj = batches.find(b => String(b.id) === String(u.assigned_batch));
-                        const mentorObj = mentors.find(m => String(m.id) === String(u.assigned_mentor));
-                        const hasAssignment = u.assigned_batch || u.assigned_mentor;
+               <tr key={u.id} className="hover:bg-slate-50 transition-colors">
+  {/* Student */}
+  <td className="px-6 py-5">
+    <div className="flex items-center gap-4">
+      <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-semibold text-base border border-indigo-100">
+        {u.name.charAt(0)}
+      </div>
 
-                        return (
-                          <div className="flex flex-col gap-1 text-xs text-slate-700">
-                            <div className="flex items-center gap-1">
-                              <span className="font-bold text-slate-400">Batch:</span>
-                              <span className={u.assigned_batch ? "font-black text-indigo-600 truncate max-w-[120px]" : "font-medium text-slate-400 italic"}>
-                                {batchObj?.name || 'Unassigned'}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <span className="font-bold text-slate-400">Mentor:</span>
-                              <span className={u.assigned_mentor ? "font-black text-emerald-600 truncate max-w-[120px]" : "font-medium text-slate-400 italic"}>
-                                {mentorObj?.name || 'Unassigned'}
-                              </span>
-                            </div>
-                            <button
-                              onClick={() => setActiveAssignmentUser(u)}
-                              className={`mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 px-3 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm ${
-                                hasAssignment 
-                                  ? 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-600'
-                                  : 'bg-indigo-50 border-indigo-100 hover:bg-indigo-100 text-indigo-600'
-                              }`}
-                            >
-                              {hasAssignment ? (
-                                <>
-                                  <Eye size={12} /> View & Manage
-                                </>
-                              ) : (
-                                <>
-                                  <Edit2 size={12} /> Assign Now
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        );
-                      })()}
-                    </td>
-                    <td className="px-6 py-6">
-                      <div className="flex justify-center">
-                        <div className="relative w-10 h-10">
-                          <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-slate-100" strokeWidth="4" />
-                            <circle
-                              cx="18" cy="18" r="16" fill="none"
-                              className={balance <= 0 ? "stroke-emerald-400" : "stroke-indigo-500"}
-                              strokeWidth="4"
-                              strokeDasharray={`${progress}, 100`}
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                          <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black">{Math.round(progress)}%</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-6 text-right">
-                      <div className="flex items-center justify-end font-black text-slate-800 text-sm">
-                        <IndianRupee size={12} />{u.paidAmount.toLocaleString()}
-                      </div>
-                      <div className={`text-[9px] font-black uppercase mt-1 ${balance > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
-                        {balance > 0 ? `Due: ₹${balance.toLocaleString()}` : 'Full Cleared'}
-                      </div>
-                    </td>
-                  </tr>
+      <div>
+        <p className="font-semibold text-slate-800 text-sm">
+          {u.name}
+        </p>
+
+        <p className="text-xs text-slate-500">
+          Student ID: {u.id}
+        </p>
+      </div>
+    </div>
+  </td>
+
+  {/* Course */}
+  <td className="px-6 py-5">
+    <div className="flex flex-wrap gap-2">
+      {u.courses.map((course, i) => (
+        <div
+          key={i}
+          className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium border border-blue-100"
+        >
+          <Cpu size={12} />
+          {course.title}
+        </div>
+      ))}
+    </div>
+  </td>
+
+  {/* Mentor & Batch */}
+  <td className="px-6 py-5">
+    {(() => {
+      const batchObj = batches.find(
+        (b) => String(b.id) === String(u.assigned_batch)
+      );
+
+      const mentorObj = mentors.find(
+        (m) => String(m.id) === String(u.assigned_mentor)
+      );
+
+      const hasAssignment =
+        u.assigned_batch || u.assigned_mentor;
+
+      return (
+        <div className="flex flex-col gap-2 text-sm">
+          <div>
+            <span className="text-slate-500">
+              Batch:
+            </span>{" "}
+            <span
+              className={
+                u.assigned_batch
+                  ? "font-semibold text-indigo-600"
+                  : "text-slate-400 italic"
+              }
+            >
+              {batchObj?.name || "Unassigned"}
+            </span>
+          </div>
+
+          <div>
+            <span className="text-slate-500">
+              Mentor:
+            </span>{" "}
+            <span
+              className={
+                u.assigned_mentor
+                  ? "font-semibold text-emerald-600"
+                  : "text-slate-400 italic"
+              }
+            >
+              {mentorObj?.name || "Unassigned"}
+            </span>
+          </div>
+
+          <button
+            onClick={() => setActiveAssignmentUser(u)}
+            className={`mt-2 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-medium transition-all ${
+              hasAssignment
+                ? "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                : "bg-indigo-50 hover:bg-indigo-100 text-indigo-600"
+            }`}
+          >
+            {hasAssignment ? (
+              <>
+                <Eye size={14} />
+                Manage Assignment
+              </>
+            ) : (
+              <>
+                <Edit2 size={14} />
+                Assign Mentor
+              </>
+            )}
+          </button>
+        </div>
+      );
+    })()}
+  </td>
+
+  {/* Payment Status */}
+  <td className="px-6 py-5">
+    <div className="flex justify-center">
+      <div className="relative w-11 h-11">
+        <svg
+          className="w-full h-full -rotate-90"
+          viewBox="0 0 36 36"
+        >
+          <circle
+            cx="18"
+            cy="18"
+            r="16"
+            fill="none"
+            className="stroke-slate-100"
+            strokeWidth="4"
+          />
+
+          <circle
+            cx="18"
+            cy="18"
+            r="16"
+            fill="none"
+            className={
+              balance <= 0
+                ? "stroke-emerald-400"
+                : "stroke-indigo-500"
+            }
+            strokeWidth="4"
+            strokeDasharray={`${progress}, 100`}
+            strokeLinecap="round"
+          />
+        </svg>
+
+        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold text-slate-700">
+          {Math.round(progress)}%
+        </span>
+      </div>
+    </div>
+  </td>
+
+  {/* Payments */}
+  <td className="px-6 py-5 text-right">
+    <div className="flex items-center justify-end font-semibold text-slate-800 text-sm">
+      <IndianRupee size={12} />
+      {u.paidAmount.toLocaleString()}
+    </div>
+
+    <div
+      className={`text-xs font-medium mt-1 ${
+        balance > 0
+          ? "text-amber-500"
+          : "text-emerald-500"
+      }`}
+    >
+      {balance > 0
+        ? `Due: ₹${balance.toLocaleString()}`
+        : "Paid in Full"}
+    </div>
+  </td>
+</tr>
                 );
               })}
             </tbody>

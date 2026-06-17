@@ -142,25 +142,16 @@ const discount = originalPriceBase - actualPrice;
         console.log("✅ Payment Success:", data);
         alert("Enrollment & Payment initiated successfully ✅");
 
-        // 🔥 Flush cart
-        if (response.ok) {
-          console.log("✅ Payment Success:", data);
-          alert("Enrollment & Payment initiated successfully ✅");
+        // ✅ delete all cart items from DB
+        await fetch(`http://127.0.0.1:8000/api/clearcart/?email=${user.email}`, {
+          method: "DELETE",
+        });
 
-          // ✅ delete all cart items from DB
-          await fetch(`http://127.0.0.1:8000/api/clearcart/?email=${user.email}`, {
-            method: "DELETE",
-          });
+        // ✅ clear frontend cart
+        clearCart();
 
-          // ✅ clear frontend cart
-          clearCart();
-
-          // ✅ redirect
-          window.location.href = "http://localhost:5174/admin/users";
-        }
-
-        // 🔥 Redirect to admin users list
-        window.location.href = "http://localhost:5174/admin/users";
+        // ✅ redirect
+        navigate("/student");
       } else {
         console.error("❌ Payment Failed:", data);
         alert(data.error || "Payment failed ❌");

@@ -1233,7 +1233,7 @@ export default function MentorDashboard() {
     const [classes, setClasses] = useState([]);
     const [tabView, setTabView] = useState('upcoming'); // 'upcoming' | 'history'
     const [scheduling, setScheduling] = useState(false);
-    const [form, setForm] = useState({ title: '', batch: '', start_time: '' });
+    const [form, setForm] = useState({ title: '', batch: '', start_time: '', meeting_link: '' });
     const [saving, setSaving] = useState(false);
     const [startingId, setStartingId] = useState(null);
     const [endingId, setEndingId] = useState(null);
@@ -1265,12 +1265,14 @@ export default function MentorDashboard() {
           title: form.title,
           batch: form.batch,
           start_time: new Date(form.start_time).toISOString(),
-          mentor: trainerData?.id,
+          mentor: trainerData?.id || null,
+          mentor_email: trainerData?.email || null,
           status: 'SCHEDULED',
+          meeting_link: form.meeting_link.trim() || null,
         });
         showToast('Class scheduled successfully!');
         setScheduling(false);
-        setForm({ title: '', batch: '', start_time: '' });
+        setForm({ title: '', batch: '', start_time: '', meeting_link: '' });
         fetchClasses();
       } catch (e) {
         showToast('Failed to schedule class', 'error');
@@ -1359,7 +1361,7 @@ export default function MentorDashboard() {
               <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><Calendar className="w-5 h-5 text-indigo-500" /> Schedule New Class</h3>
               <button onClick={() => setScheduling(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-4 h-4 text-slate-400" /></button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div>
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Class Title</label>
                 <input value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} placeholder="e.g. React Hooks Deep Dive" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all" />
@@ -1380,6 +1382,10 @@ export default function MentorDashboard() {
                   onChange={e => setForm(f => ({...f, start_time: e.target.value}))} 
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer" 
                 />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Meeting Link (Google Meet)</label>
+                <input value={form.meeting_link} onChange={e => setForm(f => ({...f, meeting_link: e.target.value}))} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all" />
               </div>
             </div>
             <button onClick={handleSchedule} disabled={saving} className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 flex items-center gap-2 disabled:opacity-60">

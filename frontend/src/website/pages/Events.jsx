@@ -210,19 +210,28 @@ const EventsPage = () => {
         )}
 
         {/* Host an event CTA */}
-        <div className="mt-24 bg-white border border-slate-100 rounded-[2.5rem] p-10 md:p-16 text-center shadow-2xl shadow-indigo-500/5 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-          <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <MonitorPlay size={32} className="text-indigo-600" />
-          </div>
-          <h2 className="text-3xl font-black text-slate-800 mb-4">Want to Host a Hackathon?</h2>
-          <p className="text-slate-500 font-medium mb-8 max-w-xl mx-auto">
-            Are you a company or community leader looking to run a coding challenge? Partner with us to host your hackathon and discover top tech talent.
-          </p>
-          <button className="px-8 py-4 bg-slate-900 text-white rounded-xl font-black text-sm hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-xl shadow-slate-900/20 active:scale-95">
-            Partner With Us
-          </button>
-        </div>
+   <div className="mt-16 bg-white border border-slate-100 rounded-3xl p-6 md:p-8 text-center shadow-lg shadow-indigo-500/5 relative overflow-hidden max-w-3xl mx-auto">
+  
+  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500" />
+
+  <div className="w-14 h-14 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+    <MonitorPlay size={24} className="text-indigo-600" />
+  </div>
+
+  <h2 className="text-2xl font-extrabold text-slate-800 mb-3">
+    Want to Host a Hackathon?
+  </h2>
+
+  <p className="text-slate-500 text-sm max-w-lg mx-auto mb-5 leading-relaxed">
+    Partner with TXHub to organize coding competitions, engage developers,
+    and discover top tech talent.
+  </p>
+
+  <button className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
+    Partner With Us
+  </button>
+
+</div>
       </div>
     </div>
   );
