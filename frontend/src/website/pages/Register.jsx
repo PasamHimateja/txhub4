@@ -124,7 +124,7 @@ const Register = () => {
     }`;
  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50 to-blue-100">
  
       <div className="w-full max-w-md px-6">
         <div className="bg-white/80 backdrop-blur-xl rounded-[2rem] p-8 shadow-2xl">
@@ -254,8 +254,8 @@ const Register = () => {
             <button
               disabled={loading}
               className="w-full py-4 rounded-xl text-white font-semibold
-              bg-gradient-to-r from-blue-600 to-indigo-600
-              hover:from-blue-700 hover:to-indigo-700
+              bg-gradient-to-r from-blue-600 to-blue-600
+              hover:from-blue-700 hover:to-blue-700
               transition-all flex justify-center items-center gap-2"
             >
               {loading ? "Creating..." : <>Create Account <ArrowRight size={18} /></>}

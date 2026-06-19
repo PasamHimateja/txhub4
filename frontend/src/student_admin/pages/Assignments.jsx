@@ -125,7 +125,7 @@ const Assignments = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-1">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.03)]">
-            <ClipboardList className="text-indigo-600 w-7 h-7" />
+            <ClipboardList className="text-blue-600 w-7 h-7" />
           </div>
           <div>
             <h1 className="text-3xl font-black text-slate-800 tracking-tight leading-none">
@@ -139,10 +139,10 @@ const Assignments = () => {
         <div className="hidden md:block">
           <svg width="160" height="150" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: "drop-shadow(0px 15px 30px rgba(124, 58, 237, 0.2))" }}>
             <defs>
-              {/* Clipboard body gradient - purple clay look */}
+              {/* Clipboard body gradient - blue clay look */}
               <linearGradient id="boardGrad" x1="30" y1="20" x2="110" y2="130" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#C084FC" />
-                <stop offset="100%" stopColor="#7C3AED" />
+                <stop offset="0%" stopColor="#6b9ded" />
+                <stop offset="100%" stopColor="#0975ab" />
               </linearGradient>
               {/* Inner paper sheet gradient */}
               <linearGradient id="paperGrad" x1="38" y1="35" x2="102" y2="115" gradientUnits="userSpaceOnUse">
@@ -208,7 +208,7 @@ const Assignments = () => {
       {/* Tab Controls Bar */}
       <div className="flex bg-white rounded-[20px] px-6 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] gap-8 max-w-[340px] w-full relative overflow-hidden">
         {[
-          { id: 'pending', label: 'Pending', icon: Hourglass, count: pendingCount, iconColor: 'text-purple-600', activeBg: 'bg-purple-50 text-purple-600' },
+          { id: 'pending', label: 'Pending', icon: Hourglass, count: pendingCount, iconColor: 'text-blue-600', activeBg: 'bg-blue-50 text-blue-600' },
           { id: 'submitted', label: 'Submitted', icon: CheckCircle, count: submittedCount, iconColor: 'text-emerald-500', activeBg: 'bg-emerald-50 text-emerald-600' }
         ].map(tab => {
           const isActive = activeTab === tab.id;
@@ -219,7 +219,7 @@ const Assignments = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2.5 py-5 font-bold text-sm transition-all duration-200 relative ${
                 isActive 
-                  ? 'text-purple-700' 
+                  ? 'text-blue-700' 
                   : 'text-slate-700 hover:text-slate-900'
               }`}
             >
@@ -227,13 +227,13 @@ const Assignments = () => {
               <span>{tab.label}</span>
               <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-black transition-all ${
                 isActive 
-                  ? 'bg-purple-100 text-purple-700' 
+                  ? 'bg-blue-100 text-blue-700' 
                   : 'bg-slate-100 text-slate-500'
               }`}>
                 {tab.count}
               </span>
               {isActive && (
-                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-purple-600 rounded-t-full" />
+                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-blue-600 rounded-t-full" />
               )}
             </button>
           );
@@ -246,14 +246,14 @@ const Assignments = () => {
           <h2 className="text-lg font-black text-slate-800">
             {activeTab === 'pending' ? 'Pending Tasks' : 'Submitted Tasks'}
           </h2>
-          <span className="bg-indigo-50 text-indigo-600 text-xs font-black px-2.5 py-0.5 rounded-full">
+          <span className="bg-blue-50 text-blue-600 text-xs font-black px-2.5 py-0.5 rounded-full">
             {filteredAssignments.length}
           </span>
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4 text-indigo-600">
-            <div className="w-8 h-8 border-4 border-indigo-500/20 border-t-indigo-600 rounded-full animate-spin" />
+          <div className="flex flex-col items-center justify-center py-20 gap-4 text-blue-600">
+            <div className="w-8 h-8 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin" />
             <p className="text-sm font-semibold text-slate-500">Loading assignments...</p>
           </div>
         ) : filteredAssignments.length === 0 ? (
@@ -273,17 +273,17 @@ const Assignments = () => {
             {filteredAssignments.map((assignment) => (
               <div 
                 key={assignment.id} 
-                className="bg-white rounded-[20px] border border-slate-100 border-l-4 border-l-indigo-600 hover:shadow-[0_8px_24px_rgb(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                className="bg-white rounded-[20px] border border-slate-100 border-l-4 border-l-blue-600 hover:shadow-[0_8px_24px_rgb(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
               >
                 <div className="flex flex-col md:flex-row items-start gap-4 flex-1">
                   {/* File Icon Container */}
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                     <FileText className="w-6 h-6" />
                   </div>
 
                   <div className="space-y-2.5 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100 uppercase tracking-wider">
+                      <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 uppercase tracking-wider">
                         {assignment.course}
                       </span>
                       {assignment.dueDate && (
@@ -301,7 +301,7 @@ const Assignments = () => {
                       <div className="pt-2 flex items-center gap-2">
                         <button
                           onClick={() => setPreviewFile({ url: assignment.fileLink, name: assignment.title })}
-                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-xl text-xs font-bold transition-colors border border-indigo-100/50"
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-xl text-xs font-bold transition-colors border border-blue-100/50"
                         >
                           <Eye size={13} /> View Document
                         </button>
@@ -318,7 +318,7 @@ const Assignments = () => {
 
                 <div className="flex items-center gap-3 shrink-0 self-start md:self-auto">
                   {assignment.link ? (
-                    <a href={assignment.link} target="_blank" rel="noopener noreferrer" className="px-5 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider flex items-center gap-2 shadow-md shadow-indigo-100 hover:-translate-y-0.5 active:translate-y-0">
+                    <a href={assignment.link} target="_blank" rel="noopener noreferrer" className="px-5 py-3.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider flex items-center gap-2 shadow-md shadow-blue-100 hover:-translate-y-0.5 active:translate-y-0">
                       <ExternalLink size={14} /> Open Task
                     </a>
                   ) : assignment.is_submitted ? (
@@ -340,7 +340,7 @@ const Assignments = () => {
                     <button
                       onClick={() => onUploadClick(assignment.id)}
                       disabled={submitting === assignment.id}
-                      className="px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider flex items-center gap-2 shadow-md shadow-indigo-100 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-75 disabled:cursor-not-allowed"
+                      className="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider flex items-center gap-2 shadow-md shadow-blue-100 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-75 disabled:cursor-not-allowed"
                     >
                       {submitting === assignment.id ? (
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -395,7 +395,7 @@ const Assignments = () => {
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center p-12 text-center max-w-md mx-auto">
-                    <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-4">
                       <FileText className="w-8 h-8" />
                     </div>
                     <h4 className="text-lg font-black text-slate-800">Preview Not Available</h4>
@@ -407,7 +407,7 @@ const Assignments = () => {
                         handleDownloadFile(previewFile.url, previewFile.name + '.' + extension);
                         setPreviewFile(null);
                       }}
-                      className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold rounded-xl text-sm transition-all shadow-md shadow-indigo-100 hover:-translate-y-0.5 active:translate-y-0"
+                      className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold rounded-xl text-sm transition-all shadow-md shadow-blue-100 hover:-translate-y-0.5 active:translate-y-0"
                     >
                       <Download size={15} /> Download Document
                     </button>

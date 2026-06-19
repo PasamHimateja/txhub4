@@ -28,7 +28,7 @@ const categories = [
   { name: "Software Development", icon: Code, color: "text-blue-500", bg: "bg-blue-50" },
   { name: "Testing", icon: Bug, color: "text-red-500", bg: "bg-red-50" },
   { name: "Data Science", icon: Database, color: "text-cyan-500", bg: "bg-cyan-50" },
-  { name: "AI/ML", icon: Brain, color: "text-purple-500", bg: "bg-purple-50" },
+  { name: "AI/ML", icon: Brain, color: "text-blue-500", bg: "bg-blue-50" },
   { name: "DevOps", icon: Server, color: "text-orange-500", bg: "bg-orange-50" },
   { name: "Soft Skills", icon: Users, color: "text-emerald-500", bg: "bg-emerald-50" },
 ];

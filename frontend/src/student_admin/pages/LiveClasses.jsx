@@ -77,7 +77,7 @@ const LiveClasses = () => {
       );
     }
     return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-50 text-indigo-600 border border-indigo-100">
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-100">
         Scheduled
       </span>
     );
@@ -88,7 +88,7 @@ const LiveClasses = () => {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-          <Video className="text-indigo-600" />
+          <Video className="text-blue-600" />
           Live Classes
         </h1>
         <button
@@ -126,7 +126,7 @@ const LiveClasses = () => {
 
         {loading ? (
           <div className="p-8 flex flex-col items-center gap-3 text-slate-400">
-            <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
             <p className="text-sm font-medium">Loading classes…</p>
           </div>
         ) : onlineClasses.length === 0 ? (
@@ -147,8 +147,8 @@ const LiveClasses = () => {
                   className={`p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors ${cls.status === 'LIVE' ? 'bg-red-50/40 hover:bg-red-50/70' : 'hover:bg-slate-50'}`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-2xl flex-shrink-0 ${cls.status === 'LIVE' ? 'bg-red-100' : 'bg-indigo-100'}`}>
-                      <Video className={`w-5 h-5 ${cls.status === 'LIVE' ? 'text-red-600' : 'text-indigo-600'}`} />
+                    <div className={`p-3 rounded-2xl flex-shrink-0 ${cls.status === 'LIVE' ? 'bg-red-100' : 'bg-blue-100'}`}>
+                      <Video className={`w-5 h-5 ${cls.status === 'LIVE' ? 'text-red-600' : 'text-blue-600'}`} />
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex items-center flex-wrap gap-2">

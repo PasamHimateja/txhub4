@@ -37,7 +37,7 @@ const Dashboard = () => {
     { name: 'Java Full Stack', key: 'Java Full Stack', icon: <Layers size={18} />, color: 'bg-orange-500' },
     { name: 'Python Dev', key: 'Python Development', icon: <Cpu size={18} />, color: 'bg-yellow-500' },
     { name: 'UI/UX Design', key: 'UI/UX Design', icon: <PenTool size={18} />, color: 'bg-pink-500' },
-    { name: 'AI/ML', key: 'AI/ML', icon: <Cpu size={18} />, color: 'bg-purple-600' },
+    { name: 'AI/ML', key: 'AI/ML', icon: <Cpu size={18} />, color: 'bg-blue-600' },
     { name: 'Testing', key: 'Testing', icon: <Settings size={18} />, color: 'bg-green-500' },
     { name: 'DevOps', key: 'Devops', icon: <Database size={18} />, color: 'bg-slate-600' },
     { name: 'Data Science', key: 'Data Science', icon: <Award size={18} />, color: 'bg-cyan-600' },

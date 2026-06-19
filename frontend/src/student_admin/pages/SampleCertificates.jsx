@@ -6,7 +6,7 @@ const SampleCertificates = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-          <Award className="text-indigo-600" />
+          <Award className="text-blue-600" />
           Sample Certificates
         </h1>
       </div>

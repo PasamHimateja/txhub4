@@ -404,8 +404,8 @@ const Batches = () => {
 
                   {/* Mentor badge */}
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
-                    <User size={13} className="text-indigo-400" />
-                    <span className={mentorName === 'Unassigned' ? 'text-slate-400 italic' : 'text-indigo-600 font-bold'}>
+                    <User size={13} className="text-blue-400" />
+                    <span className={mentorName === 'Unassigned' ? 'text-slate-400 italic' : 'text-blue-600 font-bold'}>
                       {mentorName}
                     </span>
                   </div>
@@ -433,7 +433,7 @@ const Batches = () => {
                         <span
                           key={s.id}
                           title={s.email}
-                          className="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded text-[9px] font-bold"
+                          className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[9px] font-bold"
                         >
                           {s.name}
                         </span>

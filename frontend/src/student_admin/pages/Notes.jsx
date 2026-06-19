@@ -138,7 +138,7 @@ const Notes = () => {
 
   // Colors list to alternate card accents
   const borderColors = [
-    'border-l-purple-500 shadow-purple-100/10',
+    'border-l-blue-500 shadow-blue-100/10',
     'border-l-orange-500 shadow-orange-100/10',
     'border-l-blue-500 shadow-blue-100/10',
     'border-l-emerald-500 shadow-emerald-100/10',
@@ -146,7 +146,7 @@ const Notes = () => {
   ];
 
   const badgeColors = [
-    'bg-purple-50 text-purple-600 border-purple-100',
+    'bg-blue-50 text-blue-600 border-blue-100',
     'bg-orange-50 text-orange-600 border-orange-100',
     'bg-blue-50 text-blue-600 border-blue-100',
     'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -159,7 +159,7 @@ const Notes = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-1">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.03)]">
-            <Notebook className="text-indigo-600 w-7 h-7" />
+            <Notebook className="text-blue-600 w-7 h-7" />
           </div>
           <div>
             <h1 className="text-3xl font-black text-slate-800 tracking-tight leading-none">
@@ -175,8 +175,8 @@ const Notes = () => {
             <defs>
               {/* Notebook cover gradient */}
               <linearGradient id="coverGrad" x1="40" y1="20" x2="115" y2="125" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#C084FC" />
-                <stop offset="100%" stopColor="#7C3AED" />
+                <stop offset="0%" stopColor="#848cfc" />
+                <stop offset="100%" stopColor="#3a67ed" />
               </linearGradient>
               {/* Inner highlight for 3D cover */}
               <linearGradient id="coverHighlight" x1="40" y1="20" x2="40" y2="125" gradientUnits="userSpaceOnUse">
@@ -256,17 +256,17 @@ const Notes = () => {
       {/* Tabs and Action Bar */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-3 gap-4">
         <div className="flex gap-8">
-          <button className="flex items-center gap-2 py-3 font-bold text-sm text-purple-700 relative">
+          <button className="flex items-center gap-2 py-3 font-bold text-sm text-blue-700 relative">
             <span>All Notes</span>
-            <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-purple-600 rounded-t-full" />
+            <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-blue-600 rounded-t-full" />
           </button>
         </div>
       </div>
 
       {/* Main Grid */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-4 text-indigo-600">
-          <div className="w-8 h-8 border-4 border-indigo-500/20 border-t-indigo-600 rounded-full animate-spin" />
+        <div className="flex flex-col items-center justify-center py-20 gap-4 text-blue-600">
+          <div className="w-8 h-8 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin" />
           <p className="text-sm font-semibold text-slate-500">Loading notes...</p>
         </div>
       ) : filteredNotes.length === 0 ? (
@@ -295,7 +295,7 @@ const Notes = () => {
               >
                 <div className="flex items-start gap-4">
                   {/* Icon Container */}
-                  <div className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center shrink-0 ${isPdf ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-indigo-50 text-indigo-600 border border-indigo-100'}`}>
+                  <div className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center shrink-0 ${isPdf ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>
                     <FileText className="w-6 h-6" />
                     {isPdf && <span className="text-[8px] font-black tracking-tighter -mt-1">PDF</span>}
                   </div>
@@ -325,7 +325,7 @@ const Notes = () => {
                           href={note.fileLink.startsWith('http') ? note.fileLink : `http://127.0.0.1:8000${note.fileLink}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 py-1.5 px-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg text-xs font-bold transition-all"
+                          className="inline-flex items-center gap-1 py-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-bold transition-all"
                         >
                           <Eye size={13} /> View
                         </a>

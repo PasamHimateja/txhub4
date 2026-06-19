@@ -84,7 +84,7 @@ const CountdownTimer = ({ id, dateStr, timeStr, onStatusChange }) => {
   return (
     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${status === "Live" ? "bg-rose-50 text-rose-600 animate-pulse border border-rose-100" :
       status === "Ended" ? "bg-slate-100 text-slate-500 border border-slate-200" :
-        "bg-indigo-50 text-indigo-600 border border-indigo-100"
+        "bg-blue-50 text-blue-600 border border-blue-100"
       }`}>
       {status === "Live" && <div className="w-1.5 h-1.5 bg-rose-600 rounded-full animate-ping" />}
       {status === "Upcoming" && <Clock size={10} />}
@@ -189,7 +189,7 @@ const MyCourses = () => {
               <BadgeCheck size={12} /> Student Dashboard
             </div>
             <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[0.9] group">
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 group-hover:from-indigo-600 group-hover:to-blue-600 transition-all duration-700">Learning</span>
+              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-600 group-hover:from-blue-600 group-hover:to-blue-600 transition-all duration-700">Learning</span>
               <br />
               Experience
             </h1>
@@ -205,7 +205,7 @@ const MyCourses = () => {
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Courses</p>
             </div>
             <div className="p-6 bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40 flex flex-col gap-1 items-start min-w-[160px]">
-              <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600 mb-2"><Calendar size={20} /></div>
+              <div className="p-2 bg-blue-50 rounded-xl text-blue-600 mb-2"><Calendar size={20} /></div>
               <p className="text-3xl font-black text-slate-900 leading-none">{liveClasses.length}</p>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Sessions</p>
             </div>
@@ -255,7 +255,7 @@ const MyCourses = () => {
               return (
                 <div key={enrollment.id} className="group relative">
                   {/* Card Glow Effect */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-blue-500/20 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
 
                   <div className="relative bg-white rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.05)] overflow-hidden transition-all duration-500 group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] group-hover:-translate-y-2">
                     <div className="p-8 lg:p-12">
@@ -294,7 +294,7 @@ const MyCourses = () => {
                           {/* Live Action Section */}
                           <div className="p-2 bg-slate-50/50 rounded-[2.5rem] border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
                             <div className="flex items-center gap-5 p-4 pl-6">
-                              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg ${courseLive ? 'bg-indigo-600 shadow-indigo-200' : 'bg-slate-300 shadow-slate-200'
+                              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg ${courseLive ? 'bg-blue-600 shadow-blue-200' : 'bg-slate-300 shadow-slate-200'
                                 }`}>
                                 <Video size={24} />
                               </div>
@@ -337,7 +337,7 @@ const MyCourses = () => {
                                         href={courseLive.link}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="flex items-center gap-3 px-10 py-4 bg-indigo-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-indigo-300 animate-in fade-in zoom-in duration-500"
+                                        className="flex items-center gap-3 px-10 py-4 bg-blue-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-blue-300 animate-in fade-in zoom-in duration-500"
                                       >
                                         <Unlock size={14} /> Join Now
                                       </a>

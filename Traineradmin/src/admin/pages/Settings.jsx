@@ -62,7 +62,7 @@
 //               {/* AVATAR UPLOAD SECTION */}
 //               <div className="flex flex-col sm:flex-row items-center gap-8 p-6 rounded-[2.5rem] bg-blue-50/30 border border-blue-100/50">
 //                 <div className="relative group">
-//                   <div className="w-28 h-28 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-blue-200">
+//                   <div className="w-28 h-28 rounded-[2rem] bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-blue-200">
 //                     {profile.name.charAt(0)}
 //                   </div>
 //                   <button className="absolute -bottom-2 -right-2 bg-white p-2.5 rounded-2xl shadow-xl border border-blue-50 text-blue-600 hover:scale-110 hover:bg-blue-600 hover:text-white transition-all">
@@ -234,7 +234,7 @@ const Settings = () => {
               {/* AVATAR */}
               <div className="flex flex-col sm:flex-row items-center gap-8 p-6 rounded-[2.5rem] bg-blue-50/30 border border-blue-100/50">
                 <div className="relative group">
-                  <div className="w-28 h-28 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-blue-200">
+                  <div className="w-28 h-28 rounded-[2rem] bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-blue-200">
                     {profile.name.charAt(0)}
                   </div>
                   <button className="absolute -bottom-2 -right-2 bg-white p-2.5 rounded-2xl shadow-xl border border-blue-50 text-blue-600 hover:scale-110 hover:bg-blue-600 hover:text-white transition-all">

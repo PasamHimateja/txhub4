@@ -128,7 +128,7 @@ const Users = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F7FE]">
-        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
         <p className="font-black text-slate-400 uppercase tracking-widest text-xs">Syncing Registry...</p>
       </div>
     );
@@ -150,13 +150,13 @@ const Users = () => {
         {/* HEADER SECTION */}
 <div className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-6 print-hidden">
   <div className="flex items-center gap-4 w-full sm:w-auto">
-    <div className="bg-indigo-600 p-4 rounded-2xl shadow-lg shrink-0">
+    <div className="bg-blue-600 p-4 rounded-2xl shadow-lg shrink-0">
       <ShieldCheck className="text-white" size={28} />
     </div>
 
     <div>
       <h1 className="text-3xl font-bold text-slate-800">
-        TX <span className="text-indigo-600">Hub</span>
+        TX <span className="text-blue-600">Hub</span>
       </h1>
 
       <p className="text-sm text-slate-500 mt-1">
@@ -258,7 +258,7 @@ const Users = () => {
   {/* Student */}
   <td className="px-6 py-5">
     <div className="flex items-center gap-4">
-      <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-semibold text-base border border-indigo-100">
+      <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-semibold text-base border border-blue-100">
         {u.name.charAt(0)}
       </div>
 
@@ -312,7 +312,7 @@ const Users = () => {
             <span
               className={
                 u.assigned_batch
-                  ? "font-semibold text-indigo-600"
+                  ? "font-semibold text-blue-600"
                   : "text-slate-400 italic"
               }
             >
@@ -340,7 +340,7 @@ const Users = () => {
             className={`mt-2 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-medium transition-all ${
               hasAssignment
                 ? "bg-slate-100 hover:bg-slate-200 text-slate-700"
-                : "bg-indigo-50 hover:bg-indigo-100 text-indigo-600"
+                : "bg-blue-50 hover:bg-blue-100 text-blue-600"
             }`}
           >
             {hasAssignment ? (
@@ -385,7 +385,7 @@ const Users = () => {
             className={
               balance <= 0
                 ? "stroke-emerald-400"
-                : "stroke-indigo-500"
+                : "stroke-blue-500"
             }
             strokeWidth="4"
             strokeDasharray={`${progress}, 100`}
@@ -435,7 +435,7 @@ const Users = () => {
               <div key={u.id} className="bg-white rounded-[2.5rem] p-6 shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-blue-50">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl border border-indigo-100">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xl border border-blue-100">
                       {u.name.charAt(0)}
                     </div>
                     <div>
@@ -446,7 +446,7 @@ const Users = () => {
                   <div className="relative w-11 h-11">
                     <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="16" fill="none" className="stroke-slate-100" strokeWidth="4" />
-                      <circle cx="18" cy="18" r="16" fill="none" className={balance <= 0 ? "stroke-emerald-400" : "stroke-indigo-500"} strokeWidth="4" strokeDasharray={`${progress}, 100`} strokeLinecap="round" />
+                      <circle cx="18" cy="18" r="16" fill="none" className={balance <= 0 ? "stroke-emerald-400" : "stroke-blue-500"} strokeWidth="4" strokeDasharray={`${progress}, 100`} strokeLinecap="round" />
                     </svg>
                     <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-slate-700">{Math.round(progress)}%</span>
                   </div>
@@ -456,7 +456,7 @@ const Users = () => {
                   <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-100/50">
                     <p className="text-[9px] font-black text-slate-400 uppercase mb-2">Specialization</p>
                     <div className="flex items-center gap-2 text-[11px] font-bold text-slate-700">
-                      <Cpu size={14} className="text-indigo-400 shrink-0" />
+                      <Cpu size={14} className="text-blue-400 shrink-0" />
                       <span className="truncate">{u.courses[0]?.title || "N/A"}</span>
                     </div>
                   </div>
@@ -471,7 +471,7 @@ const Users = () => {
                         <div className="flex flex-col gap-1.5 text-xs text-slate-700">
                           <div className="flex items-center gap-1">
                             <span className="font-bold text-slate-400">Batch:</span>
-                            <span className={u.assigned_batch ? "font-black text-indigo-600 truncate max-w-[120px]" : "font-medium text-slate-400 italic"}>
+                            <span className={u.assigned_batch ? "font-black text-blue-600 truncate max-w-[120px]" : "font-medium text-slate-400 italic"}>
                               {batchObj?.name || 'Unassigned'}
                             </span>
                           </div>
@@ -486,7 +486,7 @@ const Users = () => {
                             className={`mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 px-3 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm ${
                               hasAssignment 
                                 ? 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-600'
-                                : 'bg-indigo-50 border-indigo-100 hover:bg-indigo-100 text-indigo-600'
+                                : 'bg-blue-50 border-blue-100 hover:bg-blue-100 text-blue-600'
                             }`}
                           >
                             {hasAssignment ? (
@@ -528,7 +528,7 @@ const Users = () => {
           <div className="bg-[#F4F7FE] w-full max-w-3xl rounded-[2.5rem] shadow-2xl border border-blue-100 overflow-hidden transform scale-100 transition-all duration-300 flex flex-col max-h-[90vh]">
             
             {/* Modal Header */}
-            <div className="relative bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white shrink-0">
+            <div className="relative bg-gradient-to-r from-blue-600 to-blue-600 p-6 text-white shrink-0">
               <button
                 onClick={() => setActiveAssignmentUser(null)}
                 className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all active:scale-90"
@@ -540,7 +540,7 @@ const Users = () => {
                   {activeAssignmentUser.name.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-100">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-100">
                     Student Assignment Panel
                   </p>
                   <h3 className="text-xl font-black mt-0.5">
@@ -578,12 +578,12 @@ const Users = () => {
                     <div className="bg-white p-5 rounded-3xl border border-blue-50 shadow-sm flex flex-col gap-4">
                       <div>
                         <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                          <span className="w-1.5 h-3 bg-indigo-600 rounded-full"></span>
+                          <span className="w-1.5 h-3 bg-blue-600 rounded-full"></span>
                           Batch Assignment
                         </h4>
                         
                         <select
-                          className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none font-medium"
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-medium"
                           value={activeAssignmentUser.assigned_batch}
                           onChange={(e) => handleAssign(activeAssignmentUser.id, e.target.value, activeAssignmentUser.assigned_mentor)}
                         >
@@ -615,7 +615,7 @@ const Users = () => {
 
                           <div className="bg-slate-50/50 p-3 rounded-xl border border-slate-100">
                             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Assigned Mentor</span>
-                            <span className="text-xs font-bold text-indigo-600 block mt-1">
+                            <span className="text-xs font-bold text-blue-600 block mt-1">
                               {getMentorName(batchObj)}
                             </span>
                           </div>
@@ -657,7 +657,7 @@ const Users = () => {
                         </h4>
                         
                         <select
-                          className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none font-medium"
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-medium"
                           value={activeAssignmentUser.assigned_mentor}
                           onChange={(e) => handleAssign(activeAssignmentUser.id, activeAssignmentUser.assigned_batch, e.target.value)}
                         >

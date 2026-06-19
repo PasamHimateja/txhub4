@@ -36,14 +36,14 @@ const Sidebar = () => {
             />
           </Link>
           <div className="flex flex-col">
-            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-none">Student Portal</span>
+            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">Student Portal</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={toggleMenu}
-            className={`p-2 rounded-xl transition-all duration-300 ${isMenuOpen ? 'bg-indigo-600 text-white rotate-90 shadow-lg' : 'bg-slate-50 text-slate-600'}`}
+            className={`p-2 rounded-xl transition-all duration-300 ${isMenuOpen ? 'bg-blue-600 text-white rotate-90 shadow-lg' : 'bg-slate-50 text-slate-600'}`}
           >
             {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -63,12 +63,12 @@ const Sidebar = () => {
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`flex items-center justify-between p-4 rounded-3xl transition-all duration-300 active:scale-95 ${isActive
-                    ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200'
-                    : 'bg-slate-50/80 text-slate-600 hover:bg-indigo-50'
+                    ? 'bg-blue-600 text-white shadow-xl shadow-blue-200'
+                    : 'bg-slate-50/80 text-slate-600 hover:bg-blue-50'
                     }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`${isActive ? 'text-white' : 'text-indigo-500'}`}>{item.icon}</div>
+                    <div className={`${isActive ? 'text-white' : 'text-blue-500'}`}>{item.icon}</div>
                     <span className="font-bold text-sm tracking-tight">{item.name}</span>
                   </div>
                 </Link>
@@ -96,7 +96,7 @@ const Sidebar = () => {
               className="h-14 w-auto object-contain mix-blend-multiply brightness-110 contrast-110 self-start"
             />
           </Link>
-          <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] ml-1">Student Portal</span>
+          <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] ml-1">Student Portal</span>
         </div>
 
         <nav className="flex-1 space-y-2">
@@ -107,7 +107,7 @@ const Sidebar = () => {
                 key={item.name}
                 to={item.path}
                 className={`group relative flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 ${isActive
-                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 translate-x-1'
+                  ? 'bg-blue-600 text-white shadow-xl shadow-blue-100 translate-x-1'
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                   }`}
               >
@@ -124,7 +124,7 @@ const Sidebar = () => {
 
         <div className="mt-auto pt-6 space-y-4 border-t border-slate-50 text-left">
           <div className="group flex items-center gap-3 p-3 rounded-2xl bg-slate-50 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-black shadow-sm">
               {(user?.full_name || user?.name) ? (user?.full_name || user?.name).charAt(0).toUpperCase() : 'S'}
             </div>
             <div className="flex-1 overflow-hidden">

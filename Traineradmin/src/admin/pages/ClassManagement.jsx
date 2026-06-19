@@ -3,7 +3,60 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Users, Clock, Plus, Trash2, X, RefreshCw, Image as ImageIcon, AlertCircle } from 'lucide-react';
 
 const API = 'http://127.0.0.1:8000/api';
-const FALLBACK_IMG = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&h=300&fit=crop';
+
+const DEFAULT_COURSES = [
+  { id: 'react-full-stack-development', title: 'React Full Stack Development', category: 'Software Development', duration: '3 Months', description: 'Master frontend and backend with React, Node.js, and MongoDB.', slug: 'react-full-stack-development' },
+  { id: 'java-full-stack', title: 'Java Full Stack', category: 'Software Development', duration: '3 Months', description: 'Complete Java enterprise development with Spring Boot and Hibernate.', slug: 'java-full-stack' },
+  { id: 'python-development', title: 'Python Development', category: 'Software Development', duration: '3 Months', description: 'Python programming from basics to web frameworks and data handling.', slug: 'python-development' },
+  { id: 'uiux-design', title: 'UI/UX Design', category: 'UI/UX Design', duration: '3 Months', description: 'Design premium user interfaces and experiences using Figma.', slug: 'uiux-design' },
+  { id: 'aiml', title: 'AI/ML', category: 'AI/ML', duration: '3 Months', description: 'Introduction to artificial intelligence, machine learning, and deep learning.', slug: 'aiml' },
+  { id: 'software-testing', title: 'Testing', category: 'Testing', duration: '3 Months', description: 'Software quality assurance, manual testing, automation with Selenium.', slug: 'software-testing' },
+  { id: 'devops', title: 'Devops', category: 'DevOps', duration: '3 Months', description: 'Build and deploy software using Docker, Kubernetes, AWS, and CI/CD.', slug: 'devops' },
+  { id: 'data-science', title: 'Data Science', category: 'Data Science', duration: '3 Months', description: 'Statistical analysis, data visualization, and predictive modeling.', slug: 'data-science' },
+  { id: 'soft-skills', title: 'Soft Skills', category: 'Soft Skills', duration: '1 Month', description: 'Improve professional communication and interview presentation skills.', slug: 'soft-skills' }
+];
+
+const CATEGORY_IMAGES = {
+  'software development': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&h=300&fit=crop',
+  'testing': 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=600&h=300&fit=crop',
+  'ui/ux design': 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=600&h=300&fit=crop',
+  'ai/ml': 'https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=600&h=300&fit=crop',
+  'devops': 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?q=80&w=600&h=300&fit=crop',
+  'data science': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=300&fit=crop',
+  'soft skills': 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&h=300&fit=crop',
+  'default': 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&h=300&fit=crop'
+};
+
+const getCourseFallbackImage = (title, category) => {
+  const t = (title || '').toLowerCase();
+  const c = (category || '').toLowerCase();
+  
+  if (t.includes('react') || t.includes('mern') || t.includes('mongodb') || t.includes('frontend')) {
+    return 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('java')) {
+    return 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('python')) {
+    return 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('aws') || t.includes('devops') || t.includes('docker') || t.includes('cloud')) {
+    return 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('testing') || t.includes('selenium') || t.includes('automation') || t.includes('qa')) {
+    return 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('figma') || t.includes('ui') || t.includes('ux') || t.includes('design')) {
+    return 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('machine') || t.includes('ai') || t.includes('ml')) {
+    return 'https://images.unsplash.com/photo-1677442136019-21780efad99a?q=80&w=600&h=300&fit=crop';
+  }
+  if (t.includes('data science') || t.includes('analytics')) {
+    return 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&h=300&fit=crop';
+  }
+  return CATEGORY_IMAGES[c] || CATEGORY_IMAGES['default'];
+};
 
 // Map course title → enrollment count from enrichment data
 const mapCourseId = (title) => {
@@ -63,7 +116,19 @@ const ClassManagement = () => {
         counts[key] = (counts[key] || 0) + 1;
       }
       setEnrollCounts(counts);
-      setCourses(Array.isArray(courseData) ? courseData : []);
+
+      const dbCourses = Array.isArray(courseData) ? courseData : [];
+      const dbTitles = new Set(dbCourses.map(c => c.title.toLowerCase().trim()));
+
+      const merged = [
+        ...dbCourses,
+        ...DEFAULT_COURSES.filter(dc => !dbTitles.has(dc.title.toLowerCase().trim())).map(dc => ({
+          ...dc,
+          imageUrl: '',
+          slug: dc.slug || dc.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+        }))
+      ];
+      setCourses(merged);
     } catch (err) {
       console.error('Error fetching courses:', err);
       setError('Failed to load courses. Please try again.');
@@ -131,14 +196,14 @@ const ClassManagement = () => {
         <div className="flex gap-2">
           <button
             onClick={fetchCourses}
-            className="p-2.5 border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 rounded-xl transition-colors"
+            className="p-2.5 border border-slate-200 text-slate-500 hover:text-blue-600 hover:border-blue-200 rounded-xl transition-colors"
             title="Refresh"
           >
             <RefreshCw size={15} />
           </button>
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md active:scale-95"
           >
             <Plus size={16} /> New Course
           </button>
@@ -148,7 +213,7 @@ const ClassManagement = () => {
       {/* ── Loading ── */}
       {loading && (
         <div className="py-20 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
       )}
 
@@ -173,7 +238,8 @@ const ClassManagement = () => {
       {!loading && !error && courses.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
           {courses.map((course) => {
-            const imgSrc = course.imageUrl ? (course.imageUrl.startsWith("http") ? course.imageUrl : `http://127.0.0.1:8000${course.imageUrl}`) : FALLBACK_IMG;
+            const fallback = getCourseFallbackImage(course.title, course.category);
+            const imgSrc = course.imageUrl ? (course.imageUrl.startsWith("http") ? course.imageUrl : `http://127.0.0.1:8000${course.imageUrl}`) : fallback;
             const count = studentCount(course);
             return (
               <div
@@ -186,7 +252,7 @@ const ClassManagement = () => {
                     src={imgSrc}
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={e => { e.target.src = FALLBACK_IMG; }}
+                    onError={e => { e.target.src = fallback; }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
                   <div className="absolute bottom-4 left-4 text-white">
@@ -214,7 +280,7 @@ const ClassManagement = () => {
                   <div className="flex gap-3 mt-auto pt-1">
                     <button
                       onClick={() => navigate(`/admin/courses/${course.slug}/progress`)}
-                      className="flex-1 py-2.5 bg-indigo-50 hover:bg-indigo-100/80 text-indigo-600 rounded-xl text-xs font-black tracking-wide uppercase transition-colors active:scale-95 text-center"
+                      className="flex-1 py-2.5 bg-blue-50 hover:bg-blue-100/80 text-blue-600 rounded-xl text-xs font-black tracking-wide uppercase transition-colors active:scale-95 text-center"
                     >
                       View
                     </button>
@@ -263,7 +329,7 @@ const ClassManagement = () => {
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                   placeholder="e.g. React Full Stack Development"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   required
                 />
               </div>
@@ -277,7 +343,7 @@ const ClassManagement = () => {
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                   placeholder="Brief course description..."
                   rows={3}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
                 />
               </div>
 
@@ -291,7 +357,7 @@ const ClassManagement = () => {
                     value={form.duration}
                     onChange={e => setForm(f => ({ ...f, duration: e.target.value }))}
                     placeholder="e.g. 3 Months"
-                    className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
                 <div className="flex-1">
@@ -303,7 +369,7 @@ const ClassManagement = () => {
                     value={form.price}
                     onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
                     placeholder="e.g. 4999"
-                    className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
               </div>
@@ -318,7 +384,7 @@ const ClassManagement = () => {
                     value={form.imageUrl}
                     onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))}
                     placeholder="https://..."
-                    className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                    className="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                   <div className="w-12 h-12 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center bg-slate-50 shrink-0">
                     {form.imageUrl ? (
@@ -339,7 +405,7 @@ const ClassManagement = () => {
                   value={form.duration}
                   onChange={e => setForm(f => ({ ...f, duration: e.target.value }))}
                   placeholder="e.g. 12 Weeks"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
 
@@ -354,7 +420,7 @@ const ClassManagement = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-all disabled:opacity-60 shadow-md"
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all disabled:opacity-60 shadow-md"
                 >
                   {saving ? 'Saving…' : 'Save Course'}
                 </button>

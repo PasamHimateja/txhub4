@@ -36,11 +36,11 @@ const Sidebar = () => {
       {/* --- 1. PREMIUM MOBILE NAVIGATION (Pixel View) --- */}
       <nav className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] px-4 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center h-10 w-10 bg-indigo-100 text-indigo-600 font-bold rounded-xl text-lg">
+          <div className="flex items-center justify-center h-10 w-10 bg-blue-100 text-blue-600 font-bold rounded-xl text-lg">
             TX
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-none">Admin Pro</span>
+            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">Admin Pro</span>
           </div>
         </div>
 
@@ -51,7 +51,7 @@ const Sidebar = () => {
           </button> */}
           <button
             onClick={toggleMenu}
-            className={`p-2 rounded-xl transition-all duration-300 ${isMenuOpen ? 'bg-indigo-600 text-white rotate-90 shadow-lg' : 'bg-slate-50 text-slate-600'}`}
+            className={`p-2 rounded-xl transition-all duration-300 ${isMenuOpen ? 'bg-blue-600 text-white rotate-90 shadow-lg' : 'bg-slate-50 text-slate-600'}`}
           >
             {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -71,16 +71,16 @@ const Sidebar = () => {
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)} // Closes menu on click
                   className={`flex items-center justify-between p-4 rounded-3xl transition-all duration-300 active:scale-95 ${isActive
-                    ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200'
+                    ? 'bg-blue-600 text-white shadow-xl shadow-blue-200'
                     : 'bg-slate-50/80 text-slate-600'
                     }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`${isActive ? 'text-white' : 'text-indigo-500'}`}>{item.icon}</div>
+                    <div className={`${isActive ? 'text-white' : 'text-blue-500'}`}>{item.icon}</div>
                     <span className="font-bold text-sm tracking-tight">{item.name}</span>
                   </div>
                   {item.badge && (
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${isActive ? 'bg-white text-indigo-600' : 'bg-rose-500 text-white'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${isActive ? 'bg-white text-blue-600' : 'bg-rose-500 text-white'}`}>
                       {item.badge}
                     </span>
                   )}
@@ -96,7 +96,7 @@ const Sidebar = () => {
               className="flex items-center justify-between p-2 hover:bg-slate-50 rounded-2xl transition-all"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center font-black text-indigo-600 border border-white shadow-sm">A</div>
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center font-black text-blue-600 border border-white shadow-sm">A</div>
                 <div className="flex flex-col text-left">
                   <span className="font-black text-xs text-slate-800 uppercase tracking-widest"> Admin</span>
                   <span className="text-[9px] font-bold text-slate-400">Super User</span>
@@ -118,7 +118,7 @@ const Sidebar = () => {
       {/* --- 2. DESKTOP SIDEBAR --- */}
       <aside className="hidden lg:flex w-64 bg-white border-r border-slate-100 h-screen sticky top-0 p-6 shadow-[4px_0_24px_rgba(0,0,0,0.02)] flex-col">
         <div className="flex flex-col gap-2 px-2 mb-10">
-          <div className="flex items-center justify-center h-14 w-14 bg-indigo-100 text-indigo-600 font-bold rounded-xl text-xl self-start">
+          <div className="flex items-center justify-center h-14 w-14 bg-blue-100 text-blue-600 font-bold rounded-xl text-xl self-start">
             TX
           </div>
           <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] ml-1">Admin Pro</span>

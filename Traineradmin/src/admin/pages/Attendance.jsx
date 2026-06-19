@@ -105,7 +105,7 @@ export default function Attendance() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-slate-800 flex items-center gap-3">
-          <UserCheck className="w-7 h-7 text-indigo-600" /> Attendance Management
+          <UserCheck className="w-7 h-7 text-blue-600" /> Attendance Management
         </h1>
         <p className="text-slate-500 mt-1 text-sm">View and filter attendance across all mentors and batches</p>
       </div>
@@ -116,7 +116,7 @@ export default function Attendance() {
           <div className="flex-1 min-w-[160px]">
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1.5">Mentor</label>
             <select value={filterMentor} onChange={e => setFilterMentor(e.target.value)}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30">
+              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
               <option value="">All Mentors</option>
               {mentors.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
             </select>
@@ -124,7 +124,7 @@ export default function Attendance() {
           <div className="flex-1 min-w-[160px]">
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1.5">Batch</label>
             <select value={filterBatch} onChange={e => setFilterBatch(e.target.value)}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30">
+              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
               <option value="">All Batches</option>
               {batches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
@@ -132,11 +132,11 @@ export default function Attendance() {
           <div className="flex-1 min-w-[140px]">
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1.5">Date</label>
             <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30" />
+              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30" />
           </div>
           <div className="flex gap-2">
             <button type="submit"
-              className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors">
+              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors">
               <Filter className="w-4 h-4" /> Apply
             </button>
             <button type="button" onClick={clearFilters}
@@ -155,7 +155,7 @@ export default function Attendance() {
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
           <h3 className="font-bold text-slate-800 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-indigo-600" />
+            <Calendar className="w-5 h-5 text-blue-600" />
             Attendance Records
             <span className="text-xs font-normal text-slate-400 ml-1">({groupedList.length} sessions)</span>
           </h3>
@@ -163,8 +163,8 @@ export default function Attendance() {
 
         <div className="p-5">
           {loading && (
-            <div className="flex items-center justify-center py-16 gap-3 text-indigo-600">
-              <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+            <div className="flex items-center justify-center py-16 gap-3 text-blue-600">
+              <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
               Loading records...
             </div>
           )}
@@ -187,8 +187,8 @@ export default function Attendance() {
                   <div key={group.key} className="border border-slate-100 rounded-2xl overflow-hidden">
                     <div className="flex flex-wrap items-center justify-between p-4 bg-slate-50/80 gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-indigo-100 rounded-xl">
-                          <Calendar className="w-4 h-4 text-indigo-600" />
+                        <div className="p-2 bg-blue-100 rounded-xl">
+                          <Calendar className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
                           <p className="font-bold text-sm text-slate-800">{group.date}</p>
@@ -205,7 +205,7 @@ export default function Attendance() {
                           </span>
                         </div>
                         <button onClick={() => setExpandedGroup(prev => prev === group.key ? null : group.key)}
-                          className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-colors">
+                          className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-colors">
                           {isExpanded ? 'Hide' : 'View'}
                           <ChevronRight className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                         </button>

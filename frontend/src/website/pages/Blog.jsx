@@ -38,7 +38,7 @@ const blogPosts = [
     title: "Building Rapid, Scalable Apps with Python Full Stack",
     excerpt: "From Django's robustness to FastAPI's incredible speed, discover why Python is the ultimate backend language for modern full stack developers.",
     category: "Software Development",
-    categoryColor: "bg-indigo-100 text-indigo-600",
+    categoryColor: "bg-blue-100 text-blue-600",
     date: "June 8, 2026",
     readTime: "10 min read",
     image: pythonImg,
@@ -82,7 +82,7 @@ const blogPosts = [
     title: "Demystifying Machine Learning: From Theory to Application",
     excerpt: "Cut through the hype. Understand the core algorithms powering today's AI and how you can implement them in your own projects.",
     category: "AI/ML",
-    categoryColor: "bg-purple-100 text-purple-600",
+    categoryColor: "bg-blue-100 text-blue-600",
     date: "May 25, 2026",
     readTime: "11 min read",
     image: mlImg,
@@ -160,13 +160,13 @@ const BlogPage = () => {
             alt="Blog Background" 
             className="w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-indigo-900/90 to-blue-900/90 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-blue-900/90 to-blue-900/90 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-transparent opacity-10" />
         </div>
 
         {/* Background blobs */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -175,7 +175,7 @@ const BlogPage = () => {
           className="max-w-4xl mx-auto text-center relative z-10"
         >
           {/* Breadcrumb */}
-          <div className="flex items-center justify-center gap-2 text-indigo-200 text-sm mb-8 font-medium tracking-wide">
+          <div className="flex items-center justify-center gap-2 text-blue-200 text-sm mb-8 font-medium tracking-wide">
             <Link to="/" className="hover:text-white transition-colors">
               Home
             </Link>
@@ -183,15 +183,15 @@ const BlogPage = () => {
             <span className="text-white font-bold">Insights</span>
           </div>
 
-          <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-5 py-2 text-indigo-100 text-xs font-bold uppercase tracking-[0.2em] mb-8 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-5 py-2 text-blue-100 text-xs font-bold uppercase tracking-[0.2em] mb-8 shadow-lg">
             <TrendingUp size={14} className="text-blue-400" />
             Discover Tech Trends
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
-            Insights & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Perspectives</span>
+            Insights & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300">Perspectives</span>
           </h1>
-          <p className="text-indigo-200/80 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-blue-200/80 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
             Dive into our latest articles on software engineering, artificial intelligence, cloud infrastructure, and the future of tech.
           </p>
 
@@ -385,9 +385,9 @@ const BlogPage = () => {
           transition={{ duration: 0.6 }}
           className="mt-12 bg-slate-900 rounded-[2.5rem] p-8 text-center relative overflow-hidden shadow-2xl shadow-slate-900/30"
         >
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/20 to-indigo-900/20" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/20 to-blue-900/20" />
           <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2" />
-          <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 translate-x-1/2" />
           
           <div className="relative z-10">
             <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] mb-4">

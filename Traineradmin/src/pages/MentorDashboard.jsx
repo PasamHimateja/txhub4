@@ -305,7 +305,7 @@ export default function MentorDashboard() {
   // Use real API data for stats, fall back to local state
   const stats = [
     { label: 'Total Students', value: (overviewData?.total_students ?? students.length).toLocaleString(), icon: Users, color: 'text-blue-600', bg: 'bg-blue-100', trend: '+12%' },
-    { label: 'Active Courses', value: courses.length.toString(), icon: BookOpen, color: 'text-purple-600', bg: 'bg-purple-100', trend: '+2' },
+    { label: 'Active Courses', value: courses.length.toString(), icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-100', trend: '+2' },
     { label: 'Total Notes', value: (overviewData?.total_notes ?? notes.length).toString(), icon: FileText, color: 'text-green-600', bg: 'bg-green-100', trend: '+3' },
     { label: 'Assignments', value: (overviewData?.total_assignments ?? assignments.length).toString(), icon: ClipboardList, color: 'text-rose-600', bg: 'bg-rose-100', trend: `+${overviewData?.active_assignments ?? assignments.filter(a => a.status === 'Active').length}` },
   ];
@@ -322,8 +322,8 @@ export default function MentorDashboard() {
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
         {loading && (
-          <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-3 text-indigo-700 text-sm font-medium">
-            <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+          <div className="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-3 text-blue-700 text-sm font-medium">
+            <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
             Loading real data from server...
           </div>
         )}
@@ -347,7 +347,7 @@ export default function MentorDashboard() {
       "
     >
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-all duration-500" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-all duration-500" />
 
       <div className="relative z-10">
         {/* Header */}
@@ -395,7 +395,7 @@ export default function MentorDashboard() {
               if (idx === 2) setActiveTab("notes");
               if (idx === 3) setActiveTab("assignments");
             }}
-            className="flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-all group"
+            className="flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-all group"
           >
             View More
             <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -418,8 +418,8 @@ export default function MentorDashboard() {
 ">
 
   {/* Background Glow */}
-  <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-100 rounded-full blur-3xl opacity-30"></div>
-  <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100 rounded-full blur-3xl opacity-20"></div>
+  <div className="absolute top-0 right-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
+  <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-20"></div>
 
   <div className="relative z-10">
 
@@ -440,11 +440,11 @@ export default function MentorDashboard() {
         className="
           px-4 py-2
           rounded-xl
-          bg-indigo-50
-          text-indigo-600
+          bg-blue-50
+          text-blue-600
           text-sm
           font-semibold
-          hover:bg-indigo-100
+          hover:bg-blue-100
           transition-all
         "
       >
@@ -477,7 +477,7 @@ export default function MentorDashboard() {
               bg-slate-50
               border
               border-slate-100
-              hover:border-indigo-200
+              hover:border-blue-200
               hover:bg-white
               hover:shadow-lg
               hover:-translate-y-1
@@ -493,15 +493,15 @@ export default function MentorDashboard() {
                 w-12 h-12
                 rounded-2xl
                 bg-gradient-to-br
-                from-indigo-500
-                to-purple-600
+                from-blue-500
+                to-blue-600
                 text-white
                 flex
                 items-center
                 justify-center
                 font-bold
                 shadow-lg
-                shadow-indigo-200
+                shadow-blue-200
               ">
                 {(student.name || "?")
                   .charAt(0)
@@ -510,7 +510,7 @@ export default function MentorDashboard() {
 
               {/* Student Info */}
               <div>
-                <h4 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
+                <h4 className="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
                   {student.name}
                 </h4>
 
@@ -522,7 +522,7 @@ export default function MentorDashboard() {
 
                 {student.batch_date &&
                   student.batch_date !== "Not Specified" && (
-                    <p className="text-xs text-indigo-500 font-medium mt-1">
+                    <p className="text-xs text-blue-500 font-medium mt-1">
                       📅 {student.batch_date}
                     </p>
                   )}
@@ -561,9 +561,9 @@ export default function MentorDashboard() {
     overflow-hidden
     rounded-[32px]
     bg-gradient-to-br
-    from-indigo-600
-    via-indigo-700
-    to-purple-700
+    from-blue-600
+    via-blue-700
+    to-blue-700
     p-7
     text-white
     shadow-[0_25px_60px_rgba(79,70,229,0.35)]
@@ -571,7 +571,7 @@ export default function MentorDashboard() {
 >
   {/* Glow Effects */}
   <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-  <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-300/20 rounded-full blur-3xl"></div>
+  <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-300/20 rounded-full blur-3xl"></div>
 
   <div className="relative z-10">
     {/* Header */}
@@ -579,7 +579,7 @@ export default function MentorDashboard() {
       <h3 className="text-xl font-black">
         Quick Actions
       </h3>
-      <p className="text-indigo-100 text-sm mt-1">
+      <p className="text-blue-100 text-sm mt-1">
         Manage your daily mentoring tasks
       </p>
     </div>
@@ -640,7 +640,7 @@ export default function MentorDashboard() {
               <p className="font-semibold text-sm">
                 {a.label}
               </p>
-              <p className="text-xs text-indigo-100">
+              <p className="text-xs text-blue-100">
                 Open action
               </p>
             </div>
@@ -654,7 +654,7 @@ export default function MentorDashboard() {
     {/* Footer */}
     <div className="mt-6 pt-5 border-t border-white/10">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-indigo-100">
+        <span className="text-xs text-blue-100">
           Productivity Tools
         </span>
 
@@ -690,7 +690,7 @@ export default function MentorDashboard() {
             <div className="relative">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input type="text" placeholder="Search students..." value={studentSearch} onChange={(e) => setStudentSearch(e.target.value)}
-                className="pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" />
+                className="pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
             <button onClick={() => { const blob = new Blob([`Name,Email,Course,Batch Date,Progress,Status\n` + filtered.map(s => `${s.name},${s.email},${s.course || s.courseSpecialization || ''},${s.batch_date || ''},${s.progress}%,${s.status}`).join('\n')], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'students.csv'; a.click(); URL.revokeObjectURL(url); showToast('Student list exported as CSV!'); }}
               className="p-2 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors text-slate-600" title="Export CSV"><Download className="w-4 h-4" /></button>
@@ -713,7 +713,7 @@ export default function MentorDashboard() {
                 <tr>
                   <td colSpan={6} className="px-6 py-16 text-center">
                     <div className="flex flex-col items-center gap-3 text-slate-400">
-                      <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                      <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
                       <p className="text-sm font-semibold">Loading students...</p>
                     </div>
                   </td>
@@ -732,7 +732,7 @@ export default function MentorDashboard() {
                 <tr key={student.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white flex items-center justify-center font-bold text-xs shadow-md">{(student.name || '?').charAt(0).toUpperCase()}</div>
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-blue-500 text-white flex items-center justify-center font-bold text-xs shadow-md">{(student.name || '?').charAt(0).toUpperCase()}</div>
                       <div>
                         <div className="font-semibold text-sm text-slate-800">{student.name}</div>
                         <div className="text-xs text-slate-400">{student.email}</div>
@@ -742,7 +742,7 @@ export default function MentorDashboard() {
                   <td className="px-6 py-4 text-sm text-slate-600 font-medium">{student.course || student.courseSpecialization || 'N/A'}</td>
                   <td className="px-6 py-4">
                     {student.batch_date && student.batch_date !== 'Not Specified' ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-indigo-50 text-indigo-600 text-[11px] font-bold rounded-lg">
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 text-[11px] font-bold rounded-lg">
                         📅 {student.batch_date}
                       </span>
                     ) : (
@@ -758,7 +758,7 @@ export default function MentorDashboard() {
                       }`}>{student.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => setShowStudentDetail(student)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="View Details"><Eye className="w-4 h-4" /></button>
+                    <button onClick={() => setShowStudentDetail(student)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View Details"><Eye className="w-4 h-4" /></button>
                   </td>
                 </tr>
               ))}
@@ -776,7 +776,7 @@ export default function MentorDashboard() {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
       <div className="flex justify-between items-center mb-6">
         <h3 className="font-bold text-lg text-slate-800">My Courses</h3>
-        <button onClick={() => setShowNewCourse(true)} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 active:scale-95">
+        <button onClick={() => setShowNewCourse(true)} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 active:scale-95">
           <Plus className="w-4 h-4" /> New Course
         </button>
       </div>
@@ -797,10 +797,10 @@ export default function MentorDashboard() {
                 <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {course.progress}%</span>
               </div>
               <div className="h-1.5 bg-slate-100 rounded-full mb-4 overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style={{ width: `${course.progress}%` }} />
+                <div className="h-full bg-gradient-to-r from-blue-500 to-blue-500 rounded-full" style={{ width: `${course.progress}%` }} />
               </div>
               <div className="flex gap-2">
-                <button onClick={() => setShowCourseDetail(course)} className="flex-1 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition-colors active:scale-95">Manage</button>
+                <button onClick={() => setShowCourseDetail(course)} className="flex-1 py-2 bg-blue-50 text-blue-600 rounded-xl text-sm font-semibold hover:bg-blue-100 transition-colors active:scale-95">Manage</button>
                 <button onClick={() => { setCourses(prev => prev.filter(c => c.id !== course.id)); showToast(`"${course.title}" removed`); }}
                   className="px-3 py-2 border border-slate-200 text-rose-500 rounded-xl hover:bg-rose-50 transition-colors" title="Delete Course"><Trash2 className="w-4 h-4" /></button>
               </div>
@@ -827,7 +827,7 @@ export default function MentorDashboard() {
       if (['DOC', 'DOCX'].includes(ext)) return { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-100' };
       if (['PPT', 'PPTX'].includes(ext)) return { bg: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-100' };
       if (['XLS', 'XLSX'].includes(ext)) return { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-100' };
-      if (['ZIP', 'RAR'].includes(ext)) return { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-100' };
+      if (['ZIP', 'RAR'].includes(ext)) return { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-100' };
       return { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-100' };
     };
 
@@ -894,11 +894,11 @@ export default function MentorDashboard() {
                 const ext = (note.title || '').split('.').pop().toUpperCase();
                 const s = typeStyle(ext);
                 return (
-                  <div key={note.id} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:shadow-md transition-all group">
+                  <div key={note.id} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-md transition-all group">
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm border ${s.bg} ${s.text} ${s.border}`}>{ext || 'FILE'}</div>
                       <div>
-                        <h4 className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm">{note.title}</h4>
+                        <h4 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{note.title}</h4>
                         <p className="text-xs text-slate-400 mt-0.5">
                           {note.course}{note.batch_month ? ` · ${note.batch_month}` : ' · All Batches'} · {new Date(note.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
@@ -924,7 +924,7 @@ export default function MentorDashboard() {
           <div>
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">Course *</label>
             <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}
-              className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none">
+              className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
               <option value="">-- Select Course --</option>
               {ALL_COURSES_LIST.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -933,7 +933,7 @@ export default function MentorDashboard() {
           <div>
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">Batch (Optional)</label>
             <select value={selectedBatch} onChange={(e) => setSelectedBatch(e.target.value)}
-              className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none">
+              className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
               <option value="">All Batches</option>
               {batches.map(b => (
                 <option key={b.id} value={b.name}>{b.name}</option>
@@ -950,7 +950,7 @@ export default function MentorDashboard() {
               onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
               onDragLeave={() => setDragOver(false)}
               onDrop={(e) => { e.preventDefault(); setDragOver(false); stageFiles(e.dataTransfer.files); }}
-              className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${dragOver ? 'border-indigo-400 bg-indigo-50 scale-[1.01]' : 'border-slate-300 hover:bg-indigo-50/50 hover:border-indigo-300'
+              className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${dragOver ? 'border-blue-400 bg-blue-50 scale-[1.01]' : 'border-slate-300 hover:bg-blue-50/50 hover:border-blue-300'
                 }`}
             >
               <Upload className="w-7 h-7 text-slate-400 mx-auto mb-2" />
@@ -963,7 +963,7 @@ export default function MentorDashboard() {
           {stagedFiles.length > 0 && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                <label className="text-xs font-bold text-blue-600 uppercase tracking-wider">
                   Step 2 — Confirm & Send ({stagedFiles.length} file{stagedFiles.length !== 1 ? 's' : ''})
                 </label>
                 <button onClick={() => setStagedFiles([])} className="text-xs text-rose-400 hover:text-rose-600 hover:underline">Clear all</button>
@@ -994,7 +994,7 @@ export default function MentorDashboard() {
           {/* Send button */}
           <button onClick={handleSend} disabled={sending || stagedFiles.length === 0}
             className={`w-full py-3 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 ${stagedFiles.length === 0 ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
-                : 'bg-indigo-600 text-white shadow-indigo-200 hover:bg-indigo-700'
+                : 'bg-blue-600 text-white shadow-blue-200 hover:bg-blue-700'
               }`}>
             {sending
               ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Sending...</>
@@ -1047,7 +1047,7 @@ export default function MentorDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 gap-4">
           <div>
             <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3">
-              <Calendar className="w-7 h-7 text-indigo-600" />
+              <Calendar className="w-7 h-7 text-blue-600" />
               Attendance Hub
             </h2>
             <p className="text-sm text-slate-500 font-medium mt-1">{today}</p>
@@ -1081,7 +1081,7 @@ export default function MentorDashboard() {
               } catch (e) {
                 showToast('Network error while saving attendance', 'error');
               }
-            }} className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 active:scale-95">
+            }} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 active:scale-95">
               Save Records
             </button>
           </div>
@@ -1094,33 +1094,33 @@ export default function MentorDashboard() {
 
             {/* Minimalist Check-in (Search) */}
             <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-              <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Search className="w-5 h-5 text-indigo-500" /> Quick Check-in</h3>
+              <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Search className="w-5 h-5 text-blue-500" /> Quick Check-in</h3>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input type="text" placeholder="Search by name or course..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all" />
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all" />
               </div>
             </div>
 
             {/* Flashcard Focus Mode */}
             {currentFocusStudent && (
               <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500 opacity-20 blur-3xl rounded-full"></div>
-                <h3 className="font-bold text-indigo-300 mb-6 flex items-center gap-2"><Star className="w-5 h-5" /> Focus Mode</h3>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 opacity-20 blur-3xl rounded-full"></div>
+                <h3 className="font-bold text-blue-300 mb-6 flex items-center gap-2"><Star className="w-5 h-5" /> Focus Mode</h3>
 
                 <AnimatePresence mode="wait">
                   <motion.div key={currentFocusStudent.id} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -50, opacity: 0 }} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center shadow-inner relative z-10">
-                    <div className="w-16 h-16 rounded-full bg-indigo-500/30 border-2 border-indigo-400/50 mx-auto flex items-center justify-center text-2xl font-black shadow-lg mb-4 text-white">
+                    <div className="w-16 h-16 rounded-full bg-blue-500/30 border-2 border-blue-400/50 mx-auto flex items-center justify-center text-2xl font-black shadow-lg mb-4 text-white">
                       {currentFocusStudent.name.charAt(0)}
                     </div>
                     <h4 className="font-bold text-xl mb-1">{currentFocusStudent.name}</h4>
-                    <p className="text-sm text-indigo-200 mb-6">{currentFocusStudent.course}</p>
+                    <p className="text-sm text-blue-200 mb-6">{currentFocusStudent.course}</p>
 
                     <div className="flex gap-3">
                       <button onClick={handleFocusAbsent} className="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-rose-500/20 hover:border-rose-500/50 hover:text-rose-400 transition-all font-bold text-sm text-slate-300 active:scale-95">
                         Absent
                       </button>
-                      <button onClick={handleFocusPresent} className="flex-1 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 transition-all font-bold text-sm shadow-lg shadow-indigo-500/30 text-white active:scale-95">
+                      <button onClick={handleFocusPresent} className="flex-1 py-3 rounded-xl bg-blue-500 hover:bg-blue-400 transition-all font-bold text-sm shadow-lg shadow-blue-500/30 text-white active:scale-95">
                         Present
                       </button>
                     </div>
@@ -1132,14 +1132,14 @@ export default function MentorDashboard() {
 
             {/* Calendar Heatmap (Mocked visual) */}
             <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-              <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-indigo-500" /> Weekly Trends</h3>
+              <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-blue-500" /> Weekly Trends</h3>
               <div className="flex justify-between items-end h-32 gap-2 pb-2">
                 {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => {
                   const height = [40, 60, 80, 50, 90, 20, 10][i];
                   return (
                     <div key={i} className="flex flex-col items-center gap-2 flex-1">
-                      <div className="w-full bg-slate-100 rounded-t-lg relative flex-1 group cursor-pointer hover:bg-indigo-50 transition-colors">
-                        <div className="absolute bottom-0 w-full bg-indigo-500 rounded-t-lg transition-all group-hover:bg-indigo-400" style={{ height: `${height}%` }}></div>
+                      <div className="w-full bg-slate-100 rounded-t-lg relative flex-1 group cursor-pointer hover:bg-blue-50 transition-colors">
+                        <div className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all group-hover:bg-blue-400" style={{ height: `${height}%` }}></div>
                       </div>
                       <span className="text-xs font-bold text-slate-400">{day}</span>
                     </div>
@@ -1153,7 +1153,7 @@ export default function MentorDashboard() {
           {/* RIGHT PANEL: Traditional Data Table */}
           <div className="xl:col-span-2 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden flex flex-col h-[750px]">
             <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
-              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><ClipboardList className="w-5 h-5 text-indigo-500" /> Detailed Roster</h3>
+              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><ClipboardList className="w-5 h-5 text-blue-500" /> Detailed Roster</h3>
               <div className="flex gap-2">
                 <button onClick={() => { const all = {}; students.forEach(s => all[s.id] = true); setAttendance(all); showToast('All Present!'); }} className="px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-bold hover:bg-green-100 transition-colors">Mark All Present</button>
                 <button onClick={() => { const all = {}; students.forEach(s => all[s.id] = false); setAttendance(all); showToast('Reset'); }} className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors">Reset</button>
@@ -1179,7 +1179,7 @@ export default function MentorDashboard() {
                       <motion.tr layout key={student.id} className={`group transition-colors hover:bg-slate-50/50 ${isPresent ? 'bg-green-50/20' : ''}`}>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-sm transition-colors ${isPresent ? 'bg-green-500' : 'bg-slate-300 group-hover:bg-indigo-400'
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-sm transition-colors ${isPresent ? 'bg-green-500' : 'bg-slate-300 group-hover:bg-blue-400'
                               }`}>
                               {student.name.charAt(0)}
                             </div>
@@ -1206,7 +1206,7 @@ export default function MentorDashboard() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><MoreVertical className="w-5 h-5" /></button>
+                          <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><MoreVertical className="w-5 h-5" /></button>
                         </td>
                       </motion.tr>
                     );
@@ -1228,7 +1228,7 @@ export default function MentorDashboard() {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-lg text-slate-800">Assignments <span className="text-sm font-normal text-slate-400">({assignments.filter(a => !selectedBatchId || a.batch_month === batches.find(b => b.id === selectedBatchId)?.name).length})</span></h3>
-        <button onClick={() => setShowNewAssignment(true)} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 active:scale-95">
+        <button onClick={() => setShowNewAssignment(true)} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 active:scale-95">
           <Plus className="w-4 h-4" /> New Assignment
         </button>
       </div>
@@ -1250,7 +1250,7 @@ export default function MentorDashboard() {
             <p className="text-xs text-slate-500 mb-2">{a.course} {a.batch_month && `· ${a.batch_month}`} · Due: {a.dueDate}</p>
             {a.fileLink && (
               <div className="flex items-center gap-3 mb-3">
-                <a href={a.fileLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-semibold transition-colors border border-indigo-100">
+                <a href={a.fileLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-semibold transition-colors border border-blue-100">
                   <Eye className="w-3 h-3 flex-shrink-0" /> View Document
                 </a>
                 <a href={a.fileLink} download target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg text-xs font-semibold transition-colors border border-slate-200">
@@ -1266,7 +1266,7 @@ export default function MentorDashboard() {
                 <div className="text-xs text-slate-400 mb-1">Assigned Students</div>
                 <div className="text-sm font-bold text-slate-600">{a.assigned_students_count || 0}</div>
               </div>
-              <button onClick={() => setShowAssignmentSubmissions(a)} className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center gap-1">
+              <button onClick={() => setShowAssignmentSubmissions(a)} className="px-3 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors flex items-center gap-1">
                 <Eye className="w-3 h-3" /> View Submissions
               </button>
             </div>
@@ -1300,14 +1300,14 @@ export default function MentorDashboard() {
         <div>
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Course Title *</label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Full Stack JavaScript"
-            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none" />
+            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" />
         </div>
         <div>
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Expected Students</label>
           <input type="number" value={studentCount} onChange={(e) => setStudentCount(e.target.value)} placeholder="e.g. 50"
-            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none" />
+            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" />
         </div>
-        <button type="submit" className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-colors active:scale-95">
+        <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors active:scale-95">
           Create Course
         </button>
       </form>
@@ -1343,10 +1343,10 @@ export default function MentorDashboard() {
             </div>
             {sub.fileLink ? (
               <div className="flex items-center gap-2">
-                <a href={sub.fileLink} target="_blank" rel="noopener noreferrer" className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-semibold hover:bg-indigo-100 transition-colors flex items-center gap-2">
+                <a href={sub.fileLink} target="_blank" rel="noopener noreferrer" className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors flex items-center gap-2">
                   <Eye className="w-4 h-4" /> View
                 </a>
-                <a href={sub.fileLink} download target="_blank" rel="noopener noreferrer" className="px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-sm shadow-indigo-200">
+                <a href={sub.fileLink} download target="_blank" rel="noopener noreferrer" className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm shadow-blue-200">
                   <Download className="w-4 h-4" /> Download
                 </a>
               </div>
@@ -1413,13 +1413,13 @@ export default function MentorDashboard() {
         <div>
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Assignment Title *</label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Build a REST API"
-            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none" />
+            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Course *</label>
             <select value={course} onChange={(e) => setCourse(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none">
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
               <option value="">-- Select Course --</option>
               {ALL_COURSES_LIST.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -1427,7 +1427,7 @@ export default function MentorDashboard() {
           <div>
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Batch</label>
             <select value={batch} onChange={(e) => setBatch(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none">
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
               <option value="">All Batches</option>
               {batches.map(b => (
                 <option key={b.id} value={b.name}>{b.name}</option>
@@ -1439,15 +1439,15 @@ export default function MentorDashboard() {
           <div>
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Due Date *</label>
             <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none" />
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" />
           </div>
           <div>
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Assignment File</label>
             <input type="file" onChange={(e) => setFile(e.target.files[0])} accept=".pdf,.doc,.docx"
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none" />
+              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" />
           </div>
         </div>
-        <button type="submit" className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-colors active:scale-95">
+        <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors active:scale-95">
           Create Assignment
         </button>
       </form>
@@ -1475,14 +1475,14 @@ export default function MentorDashboard() {
               {batches.map(b => (
                 <div key={b.id} onClick={() => { setSelectedBatchId(b.id); setBatchActiveTab('notes'); }}
                   className="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500" />
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-blue-500" />
                   <div className="flex justify-between items-start mb-4 mt-2">
-                    <h4 className="font-bold text-slate-800 text-lg group-hover:text-indigo-600 transition-colors">{b.name}</h4>
+                    <h4 className="font-bold text-slate-800 text-lg group-hover:text-blue-600 transition-colors">{b.name}</h4>
                   </div>
                   <div className="text-sm text-slate-500 space-y-2">
-                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-indigo-400" /> {b.course}</p>
-                    <p className="flex items-center gap-2"><Calendar size={16} className="text-indigo-400" /> Start: {b.startDate || 'TBD'}</p>
-                    <p className="flex items-center gap-2"><Users size={16} className="text-indigo-400" /> {b.students ? b.students.length : 0} Students</p>
+                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-blue-400" /> {b.course}</p>
+                    <p className="flex items-center gap-2"><Calendar size={16} className="text-blue-400" /> Start: {b.startDate || 'TBD'}</p>
+                    <p className="flex items-center gap-2"><Users size={16} className="text-blue-400" /> {b.students ? b.students.length : 0} Students</p>
                   </div>
                 </div>
               ))}
@@ -1512,9 +1512,9 @@ export default function MentorDashboard() {
             const isActive = batchActiveTab === tab.id;
             return (
               <button key={tab.id} onClick={() => setBatchActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-t-2xl text-sm font-bold transition-all whitespace-nowrap border-b-2 ${isActive ? 'border-indigo-600 text-indigo-600 bg-indigo-50/50' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                className={`flex items-center gap-2 px-5 py-3 rounded-t-2xl text-sm font-bold transition-all whitespace-nowrap border-b-2 ${isActive ? 'border-blue-600 text-blue-600 bg-blue-50/50' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                   }`}>
-                <tab.icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
+                <tab.icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
                 {tab.label}
               </button>
             );
@@ -1621,7 +1621,7 @@ export default function MentorDashboard() {
     const StatusBadge = ({ status }) => {
       const map = {
         LIVE:      { bg: 'bg-red-100 text-red-700 border border-red-200', dot: 'bg-red-500', label: 'LIVE' },
-        SCHEDULED: { bg: 'bg-indigo-100 text-indigo-700 border border-indigo-200', dot: 'bg-indigo-400', label: 'Scheduled' },
+        SCHEDULED: { bg: 'bg-blue-100 text-blue-700 border border-blue-200', dot: 'bg-blue-400', label: 'Scheduled' },
         ENDED:     { bg: 'bg-slate-100 text-slate-500 border border-slate-200', dot: 'bg-slate-400', label: 'Ended' },
       };
       const s = map[status] || map.ENDED;
@@ -1636,13 +1636,13 @@ export default function MentorDashboard() {
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
         {/* Header */}
-        <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-600 via-blue-600 to-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-blue-200 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <p className="text-indigo-200 text-sm font-semibold mb-1 flex items-center gap-2"><Radio className="w-4 h-4 animate-pulse" /> Live Teaching</p>
+              <p className="text-blue-200 text-sm font-semibold mb-1 flex items-center gap-2"><Radio className="w-4 h-4 animate-pulse" /> Live Teaching</p>
               <h2 className="text-2xl font-black">Online Classes</h2>
-              <p className="text-indigo-200 text-sm mt-1">{upcoming.filter(c => c.status === 'LIVE').length} live · {upcoming.filter(c => c.status === 'SCHEDULED').length} scheduled</p>
+              <p className="text-blue-200 text-sm mt-1">{upcoming.filter(c => c.status === 'LIVE').length} live · {upcoming.filter(c => c.status === 'SCHEDULED').length} scheduled</p>
             </div>
             <button onClick={() => setScheduling(true)} className="flex items-center gap-2 px-5 py-3 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white font-bold rounded-2xl transition-all active:scale-95 shadow-lg">
               <Plus className="w-4 h-4" /> Schedule Class
@@ -1654,7 +1654,7 @@ export default function MentorDashboard() {
         <div className="flex gap-2">
           {[{ id: 'upcoming', label: 'Upcoming & Live', icon: Video }, { id: 'history', label: 'Class History', icon: History }].map(t => (
             <button key={t.id} onClick={() => setTabView(t.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${ tabView === t.id ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'}`}>
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${ tabView === t.id ? 'bg-blue-600 text-white shadow-md shadow-blue-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'}`}>
               <t.icon className="w-4 h-4" /> {t.label}
             </button>
           ))}
@@ -1662,19 +1662,19 @@ export default function MentorDashboard() {
 
         {/* Schedule Class Form */}
         {scheduling && (
-          <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-indigo-100">
+          <div className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-blue-100">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><Calendar className="w-5 h-5 text-indigo-500" /> Schedule New Class</h3>
+              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><Calendar className="w-5 h-5 text-blue-500" /> Schedule New Class</h3>
               <button onClick={() => setScheduling(false)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"><X className="w-4 h-4 text-slate-400" /></button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div>
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Class Title</label>
-                <input value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} placeholder="e.g. React Hooks Deep Dive" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all" />
+                <input value={form.title} onChange={e => setForm(f => ({...f, title: e.target.value}))} placeholder="e.g. React Hooks Deep Dive" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all" />
               </div>
               <div>
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Batch</label>
-                <select value={form.batch} onChange={e => setForm(f => ({...f, batch: e.target.value}))} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                <select value={form.batch} onChange={e => setForm(f => ({...f, batch: e.target.value}))} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all">
                   <option value="">Select batch…</option>
                   {batches.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
                 </select>
@@ -1686,15 +1686,15 @@ export default function MentorDashboard() {
                   value={form.start_time} 
                   min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
                   onChange={e => setForm(f => ({...f, start_time: e.target.value}))} 
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer" 
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer" 
                 />
               </div>
               <div>
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5">Meeting Link (Google Meet)</label>
-                <input value={form.meeting_link} onChange={e => setForm(f => ({...f, meeting_link: e.target.value}))} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all" />
+                <input value={form.meeting_link} onChange={e => setForm(f => ({...f, meeting_link: e.target.value}))} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all" />
               </div>
             </div>
-            <button onClick={handleSchedule} disabled={saving} className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 flex items-center gap-2 disabled:opacity-60">
+            <button onClick={handleSchedule} disabled={saving} className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95 flex items-center gap-2 disabled:opacity-60">
               {saving ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Saving…</> : <><Check className="w-4 h-4" /> Confirm Schedule</>}
             </button>
           </div>
@@ -1706,14 +1706,14 @@ export default function MentorDashboard() {
             <div className="text-center py-16 text-slate-400">
               <Video className="w-12 h-12 mx-auto mb-3 opacity-30" />
               <p className="font-semibold">{tabView === 'upcoming' ? 'No upcoming or live classes' : 'No class history yet'}</p>
-              {tabView === 'upcoming' && <button onClick={() => setScheduling(true)} className="mt-3 text-indigo-600 text-sm font-bold hover:underline">Schedule your first class →</button>}
+              {tabView === 'upcoming' && <button onClick={() => setScheduling(true)} className="mt-3 text-blue-600 text-sm font-bold hover:underline">Schedule your first class →</button>}
             </div>
           ) : (tabView === 'upcoming' ? upcoming : history).map(cls => (
             <div key={cls.id} className={`bg-white rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border transition-all ${ cls.status === 'LIVE' ? 'border-red-200 shadow-red-50 ring-1 ring-red-100' : 'border-slate-100 hover:shadow-md'}`}>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-2xl ${ cls.status === 'LIVE' ? 'bg-red-100' : cls.status === 'ENDED' ? 'bg-slate-100' : 'bg-indigo-100'}`}>
-                    <Video className={`w-5 h-5 ${ cls.status === 'LIVE' ? 'text-red-600' : cls.status === 'ENDED' ? 'text-slate-400' : 'text-indigo-600'}`} />
+                  <div className={`p-3 rounded-2xl ${ cls.status === 'LIVE' ? 'bg-red-100' : cls.status === 'ENDED' ? 'bg-slate-100' : 'bg-blue-100'}`}>
+                    <Video className={`w-5 h-5 ${ cls.status === 'LIVE' ? 'text-red-600' : cls.status === 'ENDED' ? 'text-slate-400' : 'text-blue-600'}`} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
@@ -1737,7 +1737,7 @@ export default function MentorDashboard() {
                   )}
                   {cls.status === 'LIVE' && (
                     <>
-                      <button onClick={() => handleStart(cls)} disabled={startingId === cls.id} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-md disabled:opacity-60">
+                      <button onClick={() => handleStart(cls)} disabled={startingId === cls.id} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-md disabled:opacity-60">
                         <Video className="w-4 h-4" /> Rejoin
                       </button>
                       <button onClick={() => handleEnd(cls)} disabled={endingId === cls.id} className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow-md shadow-rose-200 disabled:opacity-60">
@@ -1857,7 +1857,7 @@ export default function MentorDashboard() {
           {[{ id: 'create', label: 'Mark Attendance', icon: UserCheck }, { id: 'history', label: 'View History', icon: History }].map(v => (
             <button key={v.id} onClick={() => setAttView(v.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold transition-all ${
-                attView === v.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
+                attView === v.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
               }`}>
               <v.icon className="w-4 h-4" />{v.label}
             </button>
@@ -1867,7 +1867,7 @@ export default function MentorDashboard() {
         {attView === 'create' && (
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
             <div className="p-6 border-b border-slate-100 bg-slate-50/50">
-              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><UserCheck className="w-5 h-5 text-indigo-600" /> Mark Attendance</h3>
+              <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><UserCheck className="w-5 h-5 text-blue-600" /> Mark Attendance</h3>
               <p className="text-sm text-slate-500 mt-1">Select a batch and date, then mark Present / Absent for each student.</p>
             </div>
             <div className="p-6 space-y-5">
@@ -1876,7 +1876,7 @@ export default function MentorDashboard() {
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Select Batch</label>
                   <select value={attBatchId} onChange={e => setAttBatchId(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400">
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400">
                     <option value="">-- Choose Batch --</option>
                     {batches.map(b => <option key={b.id} value={b.id}>{b.name} {b.course ? `(${b.course})` : ''}</option>)}
                   </select>
@@ -1884,7 +1884,7 @@ export default function MentorDashboard() {
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Attendance Date</label>
                   <input type="date" value={attDate} onChange={e => setAttDate(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400" />
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400" />
                 </div>
               </div>
 
@@ -1896,8 +1896,8 @@ export default function MentorDashboard() {
                 </div>
               )}
               {attBatchId && loadingStudents && (
-                <div className="flex items-center justify-center py-12 gap-3 text-indigo-600">
-                  <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <div className="flex items-center justify-center py-12 gap-3 text-blue-600">
+                  <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                   Loading students...
                 </div>
               )}
@@ -1952,14 +1952,14 @@ export default function MentorDashboard() {
                   </div>
 
                   {/* Summary + Save */}
-                  <div className="mt-6 p-4 bg-indigo-50 rounded-2xl flex items-center justify-between">
+                  <div className="mt-6 p-4 bg-blue-50 rounded-2xl flex items-center justify-between">
                     <div className="flex gap-4 text-sm">
                       <span className="font-bold text-green-700">{Object.values(attMap).filter(v => v === 'Present').length} Present</span>
                       <span className="font-bold text-red-600">{Object.values(attMap).filter(v => v === 'Absent').length} Absent</span>
                       <span className="text-slate-500">/ {batchStudents.length} Total</span>
                     </div>
                     <button onClick={handleSave} disabled={savingAtt}
-                      className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 disabled:opacity-60">
+                      className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95 disabled:opacity-60">
                       {savingAtt ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Check className="w-4 h-4" />}
                       Save Records
                     </button>
@@ -1974,7 +1974,7 @@ export default function MentorDashboard() {
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
             <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
               <div>
-                <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><History className="w-5 h-5 text-indigo-600" /> Attendance History</h3>
+                <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2"><History className="w-5 h-5 text-blue-600" /> Attendance History</h3>
                 <p className="text-sm text-slate-500 mt-1">Grouped by date and batch</p>
               </div>
               <button onClick={fetchHistory} className="p-2 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-500 transition-colors" title="Refresh">
@@ -1983,8 +1983,8 @@ export default function MentorDashboard() {
             </div>
             <div className="p-6">
               {loadingHistory && (
-                <div className="flex items-center justify-center py-12 gap-3 text-indigo-600">
-                  <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <div className="flex items-center justify-center py-12 gap-3 text-blue-600">
+                  <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                   Loading history...
                 </div>
               )}
@@ -2006,8 +2006,8 @@ export default function MentorDashboard() {
                       <div key={key} className="border border-slate-100 rounded-2xl overflow-hidden">
                         <div className="flex items-center justify-between p-4 bg-slate-50/80 hover:bg-slate-100/80 transition-colors">
                           <div className="flex items-center gap-4">
-                            <div className="p-2 bg-indigo-100 rounded-xl">
-                              <Calendar className="w-4 h-4 text-indigo-600" />
+                            <div className="p-2 bg-blue-100 rounded-xl">
+                              <Calendar className="w-4 h-4 text-blue-600" />
                             </div>
                             <div>
                               <p className="font-bold text-sm text-slate-800">{group.date}</p>
@@ -2021,7 +2021,7 @@ export default function MentorDashboard() {
                               <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-lg">{total} Total</span>
                             </div>
                             <button onClick={() => toggleDetail(key)}
-                              className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-colors">
+                              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-colors">
                               {isExpanded ? 'Hide' : 'View'}
                               <ChevronRight className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                             </button>
@@ -2077,7 +2077,7 @@ export default function MentorDashboard() {
 
   {/* Left Section */}
   <div className="flex items-center gap-4">
-    <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-xl shadow-indigo-200">
+    <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-600 via-blue-600 to-blue-500 flex items-center justify-center shadow-xl shadow-blue-200">
       <GraduationCap className="w-8 h-8 text-white" />
     </div>
 
@@ -2091,13 +2091,13 @@ export default function MentorDashboard() {
           Welcome back,
         </span>
 
-        <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm font-bold">
+        <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-bold">
           {trainerData?.name || "Trainer"}
         </span>
 
         <span className="text-slate-300">•</span>
 
-        <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-semibold">
+        <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold">
           {trainerData?.assigned_course || "All Courses"}
         </span>
       </div>
@@ -2110,7 +2110,7 @@ export default function MentorDashboard() {
     {/* Notification */}
     <button
       onClick={() => showToast("You have 3 new notifications", "info")}
-      className="relative p-3 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-300"
+      className="relative p-3 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300"
     >
       <Bell className="w-5 h-5 text-slate-600" />
 
@@ -2122,7 +2122,7 @@ export default function MentorDashboard() {
     {/* Create Resource */}
     <button
       onClick={() => setShowResourceModal(true)}
-      className="group flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:-translate-y-0.5 transition-all duration-300"
+      className="group flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 transition-all duration-300"
     >
       <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
       Create Resource
@@ -2153,7 +2153,7 @@ export default function MentorDashboard() {
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all whitespace-nowrap ${isActive ? 'bg-slate-800 text-white shadow-lg shadow-slate-300/50' : 'bg-white text-slate-500 hover:bg-slate-100 border border-slate-200'
                 }`}>
-              <tab.icon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+              <tab.icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
               {tab.label}
             </button>
           );
@@ -2178,8 +2178,8 @@ export default function MentorDashboard() {
       <div className="relative overflow-hidden rounded-[32px] bg-white/80 backdrop-blur-xl border border-slate-200 shadow-[0_20px_60px_rgba(15,23,42,0.08)] p-6 lg:p-8">
 
         {/* Decorative Background */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-100 rounded-full blur-3xl opacity-40 pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100 rounded-full blur-3xl opacity-40 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-40 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-40 pointer-events-none"></div>
 
         <div className="relative z-10">
           {activeTab === "overview" && <OverviewTab />}
@@ -2206,7 +2206,7 @@ export default function MentorDashboard() {
         {showStudentDetail && (
           <Modal isOpen onClose={() => setShowStudentDetail(null)} title="Student Details">
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white flex items-center justify-center font-black text-2xl shadow-xl mb-4">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-500 to-blue-500 text-white flex items-center justify-center font-black text-2xl shadow-xl mb-4">
                 {showStudentDetail.name.charAt(0)}
               </div>
               <h2 className="text-xl font-black text-slate-800">{showStudentDetail.name}</h2>
@@ -2225,13 +2225,13 @@ export default function MentorDashboard() {
                     <p className="text-xs text-slate-400 font-bold uppercase">{item.label}</p>
                     <p className={`text-sm font-bold mt-1 ${item.label === 'Status' && item.value === 'Active' ? 'text-green-600' :
                         item.label === 'Status' && item.value === 'At Risk' ? 'text-amber-600' :
-                          item.label === 'Batch Date' ? 'text-indigo-600' : 'text-slate-700'
+                          item.label === 'Batch Date' ? 'text-blue-600' : 'text-slate-700'
                       }`}>{item.value}</p>
                   </div>
                 ))}
               </div>
               <button onClick={() => { showToast(`Emailed ${showStudentDetail.name}`); setShowStudentDetail(null); }}
-                className="mt-6 w-full py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors active:scale-95">Send Message</button>
+                className="mt-6 w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors active:scale-95">Send Message</button>
             </div>
           </Modal>
         )}
@@ -2249,9 +2249,9 @@ export default function MentorDashboard() {
                 ))}
               </div>
               <div className="flex gap-3">
-                <button onClick={() => { setActiveTab('notes'); setShowCourseDetail(null); }} className="flex-1 py-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-100 transition-colors">Upload Notes</button>
+                <button onClick={() => { setActiveTab('notes'); setShowCourseDetail(null); }} className="flex-1 py-3 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-100 transition-colors">Upload Notes</button>
                 <button onClick={() => { setActiveTab('assignments'); setShowCourseDetail(null); setTimeout(() => setShowNewAssignment(true), 300); }}
-                  className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors">Add Assignment</button>
+                  className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors">Add Assignment</button>
               </div>
             </div>
           </Modal>
@@ -2265,8 +2265,8 @@ export default function MentorDashboard() {
                 { label: 'Create New Assignment', icon: ClipboardList, action: () => { setShowResourceModal(false); setActiveTab('assignments'); setTimeout(() => setShowNewAssignment(true), 300); } },
               ].map((item, i) => (
                 <button key={i} onClick={item.action}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all text-left active:scale-[0.98]">
-                  <div className="p-2 rounded-xl bg-indigo-100"><item.icon className="w-5 h-5 text-indigo-600" /></div>
+                  className="w-full flex items-center gap-4 p-4 rounded-2xl border border-slate-200 hover:border-blue-200 hover:bg-blue-50 transition-all text-left active:scale-[0.98]">
+                  <div className="p-2 rounded-xl bg-blue-100"><item.icon className="w-5 h-5 text-blue-600" /></div>
                   <span className="font-semibold text-slate-700">{item.label}</span>
                 </button>
               ))}

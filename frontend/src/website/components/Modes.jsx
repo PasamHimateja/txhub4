@@ -20,7 +20,7 @@
 //       title: "Hybrid Learning",
 //       desc: "The perfect mix of online theoretical flexibility and offline practical mastery.",
 //       icon: <MonitorSmartphone size={38} />,
-//       gradient: "from-blue-400 to-indigo-500",
+//       gradient: "from-blue-400 to-blue-500",
 //     },
 //   ];
 
@@ -143,7 +143,7 @@ const Modes = () => {
       title: "Hybrid Learning",
       desc: "The perfect mix of online theoretical flexibility and offline practical mastery.",
       icon: <MonitorSmartphone size={38} />,
-      gradient: "from-blue-400 to-indigo-500",
+      gradient: "from-blue-400 to-blue-500",
     },
   ];
 

@@ -34,18 +34,18 @@ const contactInfo = [
     label: "Call Us",
     value: "+91 98765 43210",
     sub: "Mon–Sat, 9 AM to 6 PM IST",
-    bg: "bg-indigo-50",
-    iconColor: "text-indigo-500",
-    border: "border-indigo-100",
+    bg: "bg-blue-50",
+    iconColor: "text-blue-500",
+    border: "border-blue-100",
   },
   {
     icon: MapPin,
     label: "Visit Us",
     value: "Hyderabad, Telangana",
     sub: "India — 500081",
-    bg: "bg-purple-50",
-    iconColor: "text-purple-500",
-    border: "border-purple-100",
+    bg: "bg-blue-50",
+    iconColor: "text-blue-500",
+    border: "border-blue-100",
   },
   {
     icon: Clock,
@@ -159,7 +159,7 @@ const ContactPage = () => {
             alt="Contact Us Background" 
             className="w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-indigo-900/90 to-purple-900/90 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-blue-900/90 to-blue-900/90 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-transparent opacity-10" />
         </div>
 
@@ -172,7 +172,7 @@ const ContactPage = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center relative z-10"
         >
-          <div className="flex items-center justify-center gap-2 text-indigo-200 text-sm mb-6 font-medium">
+          <div className="flex items-center justify-center gap-2 text-blue-200 text-sm mb-6 font-medium">
             <Link to="/" className="hover:text-white transition-colors">
               Home
             </Link>
@@ -191,7 +191,7 @@ const ContactPage = () => {
               Help
             </span>
           </h1>
-          <p className="text-indigo-100 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-blue-100 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
             Have a question about a course, need support, or just want to say
             hi? Our team is always ready to assist you.
           </p>
@@ -205,7 +205,7 @@ const ContactPage = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="max-w-4xl mx-auto px-6 -mt-20 relative z-10 mb-16"
       >
-        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-2xl shadow-indigo-900/10">
+        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-2xl shadow-blue-900/10">
           <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.25em] mb-2 text-center">
             Send a Message
           </p>
@@ -239,7 +239,7 @@ const ContactPage = () => {
                     message: "",
                   });
                 }}
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-black text-sm hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5 transition-all"
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl font-black text-sm hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5 transition-all"
               >
                 Send Another Message
               </button>
@@ -356,7 +356,7 @@ const ContactPage = () => {
               <button
   type="submit"
   disabled={loading}
-  className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-black text-sm shadow-xl shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 active:scale-95 mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
+  className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl font-black text-sm shadow-xl shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 active:scale-95 mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
 >
   <Send size={18} />
 

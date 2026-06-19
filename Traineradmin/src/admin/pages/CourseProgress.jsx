@@ -43,9 +43,9 @@ const getStatusConfig = (status) => {
     case 'In Progress':
       return {
         label: 'In Progress',
-        dot: 'bg-indigo-500',
-        badge: 'bg-indigo-50 text-indigo-700 border border-indigo-100',
-        bar: 'from-indigo-400 to-indigo-600',
+        dot: 'bg-blue-500',
+        badge: 'bg-blue-50 text-blue-700 border border-blue-100',
+        bar: 'from-blue-400 to-blue-600',
       };
     default:
       return {
@@ -172,22 +172,22 @@ const CourseProgress = () => {
       <div className="bg-white border-b border-slate-100 py-3.5 px-8 sticky top-0 z-50 flex items-center justify-between">
         <button
           onClick={() => navigate('/admin/courses')}
-          className="flex items-center gap-2 text-slate-700 hover:text-indigo-600 font-bold transition-all text-sm"
+          className="flex items-center gap-2 text-slate-700 hover:text-blue-600 font-bold transition-all text-sm"
         >
           <ArrowLeft size={16} /> Back to Courses
         </button>
         <div className="flex items-center gap-4">
-          <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-full">
+          <span className="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">
             Student Progress Dashboard
           </span>
           <button
             onClick={fetchData}
-            className="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-600 hover:text-indigo-600 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-600 hover:text-blue-600 transition-colors"
             title="Refresh"
           >
             <RefreshCw size={15} />
           </button>
-          <button className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-600 hover:text-indigo-600 transition-colors">
+          <button className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-600 hover:text-blue-600 transition-colors">
             <Bell size={16} />
             <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-rose-500" />
           </button>
@@ -196,14 +196,14 @@ const CourseProgress = () => {
 
       {/* ── HERO BANNER ── */}
       <div className="max-w-7xl mx-auto px-8 mt-6">
-        <div className="relative rounded-[2rem] overflow-hidden bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-white p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="relative rounded-[2rem] overflow-hidden bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 text-white p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
           <div
             className="absolute inset-y-0 right-0 w-1/2 bg-cover bg-center opacity-25 mix-blend-overlay hidden md:block"
             style={{ backgroundImage: `url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800')` }}
           />
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 text-left">
             {/* Course icon */}
-            <div className="w-28 h-28 rounded-2xl bg-indigo-900/60 border border-white/10 p-1 flex flex-col items-center justify-center shadow-2xl shrink-0 overflow-hidden">
+            <div className="w-28 h-28 rounded-2xl bg-blue-900/60 border border-white/10 p-1 flex flex-col items-center justify-center shadow-2xl shrink-0 overflow-hidden">
               <img
                 src={courseImageUrl || getCourseImage(courseTitle)}
                 alt="Course logo"
@@ -211,7 +211,7 @@ const CourseProgress = () => {
               />
             </div>
             <div className="space-y-2">
-              <span className="inline-block px-3 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-[10px] font-black uppercase tracking-wider">
+              <span className="inline-block px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 text-[10px] font-black uppercase tracking-wider">
                 Student Progress Dashboard
               </span>
               <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white leading-none">
@@ -222,7 +222,7 @@ const CourseProgress = () => {
               </p>
               <div className="flex flex-wrap items-center gap-5 pt-1 text-slate-300 text-xs font-semibold">
                 <span className="flex items-center gap-1.5">
-                  <Users size={13} className="text-indigo-400" />
+                  <Users size={13} className="text-blue-400" />
                   {totalEnrolled} Enrolled
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -230,7 +230,7 @@ const CourseProgress = () => {
                   {completedCount} Completed
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Activity size={13} className="text-indigo-400" />
+                  <Activity size={13} className="text-blue-400" />
                   {inProgressCount} In Progress
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -272,9 +272,9 @@ const CourseProgress = () => {
       {/* ── KPI STAT CARDS ── */}
       <div className="max-w-7xl mx-auto px-8 mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {[
-          { label: 'Total Enrolled', value: totalEnrolled, icon: <Users size={15} />, color: 'purple' },
+          { label: 'Total Enrolled', value: totalEnrolled, icon: <Users size={15} />, color: 'blue' },
           { label: 'Completed', value: completedCount, icon: <Award size={15} />, color: 'emerald' },
-          { label: 'In Progress', value: inProgressCount, icon: <TrendingUp size={15} />, color: 'indigo' },
+          { label: 'In Progress', value: inProgressCount, icon: <TrendingUp size={15} />, color: 'blue' },
           { label: 'Not Started', value: notStartedCount, icon: <Clock size={15} />, color: 'amber' },
           { label: 'Assignments', value: totalAssignments, icon: <BookOpen size={15} />, color: 'fuchsia' },
         ].map(({ label, value, icon, color }) => (
@@ -299,7 +299,7 @@ const CourseProgress = () => {
             placeholder="Search by name or email…"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 shadow-sm"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm"
           />
         </div>
 
@@ -328,7 +328,7 @@ const CourseProgress = () => {
             {uniqueBatches.map((b, i) => <option key={i} value={b}>{b}</option>)}
           </select>
 
-          <button className="p-2.5 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors shadow-sm">
+          <button className="p-2.5 bg-blue-50 border border-blue-100 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors shadow-sm">
             <SlidersHorizontal size={15} />
           </button>
           <button className="p-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
@@ -344,7 +344,7 @@ const CourseProgress = () => {
           {/* Loading */}
           {loading && (
             <div className="py-24 text-center text-slate-400">
-              <div className="w-9 h-9 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <div className="w-9 h-9 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
               <p className="text-xs font-bold uppercase tracking-widest">Loading student progress…</p>
             </div>
           )}
@@ -357,7 +357,7 @@ const CourseProgress = () => {
               <p className="text-xs text-slate-400 max-w-sm">{error}</p>
               <button
                 onClick={fetchData}
-                className="mt-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black tracking-wide transition-colors"
+                className="mt-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black tracking-wide transition-colors"
               >
                 Retry
               </button>
@@ -376,7 +376,7 @@ const CourseProgress = () => {
               {students.length > 0 && (
                 <button
                   onClick={() => { setSearchQuery(''); setSelectedStatus('All'); setSelectedBatch('All'); }}
-                  className="mt-1 px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-black hover:bg-indigo-100 transition-colors"
+                  className="mt-1 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-black hover:bg-blue-100 transition-colors"
                 >
                   Clear Filters
                 </button>
@@ -397,7 +397,7 @@ const CourseProgress = () => {
                     {/* Header: Avatar, Name, Status */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-black shadow-sm shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-sm font-black shadow-sm shrink-0">
                           {(s.name || '?').charAt(0).toUpperCase()}
                         </div>
                         <div className="overflow-hidden">
@@ -444,7 +444,7 @@ const CourseProgress = () => {
                         </p>
                         <div className="flex items-center gap-1">
                           <span className={`text-xs font-bold ${
-                             (s.days_completed ?? 0) >= 90 ? 'text-emerald-600' : 'text-indigo-600'
+                             (s.days_completed ?? 0) >= 90 ? 'text-emerald-600' : 'text-blue-600'
                            }`}>
                              {s.days_completed ?? 0}
                            </span>
@@ -498,7 +498,7 @@ const CourseProgress = () => {
             </span>
             <div className="flex items-center gap-1.5">
               <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-400 disabled:opacity-40">‹</button>
-              <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-indigo-600 text-white font-black">1</button>
+              <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white font-black">1</button>
               <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-400 disabled:opacity-40">›</button>
             </div>
           </div>

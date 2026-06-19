@@ -877,7 +877,7 @@ const CourseDetails = () => {
             </div>
 
             {activeLiveSessions.length > 0 && (
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 rounded-[2.5rem] shadow-xl mt-10 relative overflow-hidden text-white">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-600 p-8 rounded-[2.5rem] shadow-xl mt-10 relative overflow-hidden text-white">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                   <Video size={100} />
                 </div>

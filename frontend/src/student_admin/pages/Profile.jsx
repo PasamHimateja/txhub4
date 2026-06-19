@@ -9,13 +9,13 @@ const Profile = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-          <User className="text-indigo-600" />
+          <User className="text-blue-600" />
           My Profile
         </h1>
       </div>
       <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
         <div className="flex items-center gap-6">
-          <div className="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-3xl">
+          <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-3xl">
             {(user?.full_name || user?.name) ? (user?.full_name || user?.name).charAt(0).toUpperCase() : 'S'}
           </div>
           <div>

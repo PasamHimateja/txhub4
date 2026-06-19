@@ -187,17 +187,17 @@ const RegistrationPortal = () => {
         {/* HEADER */}
         <header className="flex flex-col md:flex-row justify-between items-center bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="bg-indigo-600 p-3 rounded-2xl shadow-indigo-200 shadow-lg">
+            <div className="bg-blue-600 p-3 rounded-2xl shadow-blue-200 shadow-lg">
               <ShieldCheck className="text-white" size={38} />
             </div>
             <div>
-              <h1 className="text-2xl font-black tracking-tight text-slate-800">Tx<span className="text-indigo-600">Hub</span></h1>
+              <h1 className="text-2xl font-black tracking-tight text-slate-800">Tx<span className="text-blue-600">Hub</span></h1>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admin Control Panel</p>
             </div>
           </div>
           <div className="flex gap-8 mt-4 md:mt-0">
             <div className="text-center">
-              <p className="text-xl font-black text-indigo-600">{users.length}</p>
+              <p className="text-xl font-black text-blue-600">{users.length}</p>
               <p className="text-[9px] font-bold text-slate-400 uppercase">Total Students</p>
             </div>
             <div className="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
@@ -223,14 +223,14 @@ const RegistrationPortal = () => {
               <div className="space-y-4">
                 <div className="relative">
                   <label htmlFor="name" className="cursor-pointer select-none text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Full Name <span className="text-red-500">*</span></label>
-                  <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter full name" className={`caret-indigo-600 w-full bg-slate-50 border ${errors.name ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all text-sm font-medium`} />
+                  <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter full name" className={`caret-blue-600 w-full bg-slate-50 border ${errors.name ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all text-sm font-medium`} />
                   {errors.name && <p className="text-red-500 text-[10px] mt-1 ml-2 font-bold">{errors.name}</p>}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="relative">
                     <label htmlFor="email" className="cursor-pointer select-none text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Email <span className="text-red-500">*</span></label>
-                    <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="email@domain.com" className={`caret-indigo-600 w-full bg-slate-50 border ${errors.email ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm`} />
+                    <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="email@domain.com" className={`caret-blue-600 w-full bg-slate-50 border ${errors.email ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none focus:ring-2 focus:ring-blue-500/20 text-sm`} />
                     {errors.email && <p className="text-red-500 text-[10px] mt-1 ml-2 font-bold">{errors.email}</p>}
                   </div>
                   
@@ -238,7 +238,7 @@ const RegistrationPortal = () => {
                     <label htmlFor="phone" className="cursor-pointer select-none text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Phone <span className="text-red-500">*</span></label>
                     <div className="relative">
                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={14} />
-                       <input id="phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="9876543210" className={`caret-indigo-600 w-full bg-slate-50 border ${errors.phone ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 pl-10 outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm`} />
+                       <input id="phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="9876543210" className={`caret-blue-600 w-full bg-slate-50 border ${errors.phone ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 pl-10 outline-none focus:ring-2 focus:ring-blue-500/20 text-sm`} />
                     </div>
                     {errors.phone && <p className="text-red-500 text-[10px] mt-1 ml-2 font-bold">{errors.phone}</p>}
                   </div>
@@ -254,12 +254,12 @@ const RegistrationPortal = () => {
                         value={formData.password} 
                         onChange={handleChange} 
                        
-                        className={`caret-indigo-600 w-full bg-slate-50 border ${errors.password ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 pr-12 outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm`} 
+                        className={`caret-blue-600 w-full bg-slate-50 border ${errors.password ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 pr-12 outline-none focus:ring-2 focus:ring-blue-500/20 text-sm`} 
                       />
                       <button 
                         type="button" 
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors"
                       >
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -269,36 +269,36 @@ const RegistrationPortal = () => {
               </div>
 
               {/* Academic Details */}
-              <div className="p-6 bg-indigo-50/30 rounded-[2rem] border border-indigo-50 space-y-4">
+              <div className="p-6 bg-blue-50/30 rounded-[2rem] border border-blue-50 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="relative">
-                    <label htmlFor="collegeName" className="cursor-pointer select-none text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">College Name <span className="text-red-500">*</span></label>
-                    <input id="collegeName" type="text" name="collegeName" value={formData.collegeName} onChange={handleChange} placeholder="CollegeName" className={`caret-indigo-600 w-full bg-white border ${errors.collegeName ? 'border-red-400' : 'border-indigo-100'} rounded-xl p-3 outline-none text-sm`} />
+                    <label htmlFor="collegeName" className="cursor-pointer select-none text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">College Name <span className="text-red-500">*</span></label>
+                    <input id="collegeName" type="text" name="collegeName" value={formData.collegeName} onChange={handleChange} placeholder="CollegeName" className={`caret-blue-600 w-full bg-white border ${errors.collegeName ? 'border-red-400' : 'border-blue-100'} rounded-xl p-3 outline-none text-sm`} />
                     {errors.collegeName && <p className="text-red-500 text-[9px] mt-1 ml-1 font-bold">{errors.collegeName}</p>}
                   </div>
                   <div className="relative">
-                    <label htmlFor="branch" className="cursor-pointer select-none text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">Branch <span className="text-red-500">*</span></label>
-                    <input id="branch" type="text" name="branch" value={formData.branch} onChange={handleChange} placeholder="e.g. CSE" className={`caret-indigo-600 w-full bg-white border ${errors.branch ? 'border-red-400' : 'border-indigo-100'} rounded-xl p-3 outline-none text-sm`} />
+                    <label htmlFor="branch" className="cursor-pointer select-none text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">Branch <span className="text-red-500">*</span></label>
+                    <input id="branch" type="text" name="branch" value={formData.branch} onChange={handleChange} placeholder="e.g. CSE" className={`caret-blue-600 w-full bg-white border ${errors.branch ? 'border-red-400' : 'border-blue-100'} rounded-xl p-3 outline-none text-sm`} />
                     {errors.branch && <p className="text-red-500 text-[9px] mt-1 ml-1 font-bold">{errors.branch}</p>}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 items-start">
                   <div className="relative">
-                    <label htmlFor="degreeType" className="cursor-pointer select-none text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">Degree <span className="text-red-500">*</span></label>
-                    <input id="degreeType" type="text" name="degreeType" value={formData.degreeType} onChange={handleChange} placeholder="e.g. B.Tech" className={`caret-indigo-600 w-full bg-white border ${errors.degreeType ? 'border-red-400' : 'border-indigo-100'} rounded-xl p-3 outline-none text-xs font-bold`} />
+                    <label htmlFor="degreeType" className="cursor-pointer select-none text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">Degree <span className="text-red-500">*</span></label>
+                    <input id="degreeType" type="text" name="degreeType" value={formData.degreeType} onChange={handleChange} placeholder="e.g. B.Tech" className={`caret-blue-600 w-full bg-white border ${errors.degreeType ? 'border-red-400' : 'border-blue-100'} rounded-xl p-3 outline-none text-xs font-bold`} />
                     {errors.degreeType && <p className="text-red-500 text-[9px] mt-1 ml-1 font-bold">{errors.degreeType}</p>}
                   </div>
 
                   <div className="relative">
-                    <label htmlFor="cgpa" className="cursor-pointer select-none text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">CGPA <span className="text-red-500">*</span></label>
-                    <input id="cgpa" type="text" name="cgpa" value={formData.cgpa} onChange={handleChange} placeholder="0.0" className={`caret-indigo-600 w-full bg-white border ${errors.cgpa ? 'border-red-400' : 'border-indigo-100'} rounded-xl p-3 outline-none text-xs font-bold text-center`} />
+                    <label htmlFor="cgpa" className="cursor-pointer select-none text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">CGPA <span className="text-red-500">*</span></label>
+                    <input id="cgpa" type="text" name="cgpa" value={formData.cgpa} onChange={handleChange} placeholder="0.0" className={`caret-blue-600 w-full bg-white border ${errors.cgpa ? 'border-red-400' : 'border-blue-100'} rounded-xl p-3 outline-none text-xs font-bold text-center`} />
                     {errors.cgpa && <p className="text-red-500 text-[9px] mt-1 ml-1 font-bold leading-tight">{errors.cgpa}</p>}
                   </div>
 
                   <div className="relative">
-                    <label htmlFor="passOutYear" className="cursor-pointer select-none text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">Pass Out <span className="text-red-500">*</span></label>
-                    <input id="passOutYear" type="text" name="passOutYear" value={formData.passOutYear} onChange={handleChange} placeholder="e.g. 2026" className={`caret-indigo-600 w-full bg-white border ${errors.passOutYear ? 'border-red-400' : 'border-indigo-100'} rounded-xl p-3 outline-none text-xs font-bold`} />
+                    <label htmlFor="passOutYear" className="cursor-pointer select-none text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">Pass Out <span className="text-red-500">*</span></label>
+                    <input id="passOutYear" type="text" name="passOutYear" value={formData.passOutYear} onChange={handleChange} placeholder="e.g. 2026" className={`caret-blue-600 w-full bg-white border ${errors.passOutYear ? 'border-red-400' : 'border-blue-100'} rounded-xl p-3 outline-none text-xs font-bold`} />
                     {errors.passOutYear && <p className="text-red-500 text-[9px] mt-1 ml-1 font-bold">{errors.passOutYear}</p>}
                   </div>
                 </div>
@@ -309,7 +309,7 @@ const RegistrationPortal = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="relative">
                     <label htmlFor="enrollmentType" className="cursor-pointer select-none text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Enrollment For <span className="text-red-500">*</span></label>
-                    <select id="enrollmentType" name="enrollmentType" value={formData.enrollmentType} onChange={handleChange} className={`caret-indigo-600 w-full bg-slate-50 border ${errors.enrollmentType ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none text-sm font-black text-indigo-600 appearance-none`}>
+                    <select id="enrollmentType" name="enrollmentType" value={formData.enrollmentType} onChange={handleChange} className={`caret-blue-600 w-full bg-slate-50 border ${errors.enrollmentType ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none text-sm font-black text-blue-600 appearance-none`}>
                       <option value="Training">Training</option>
                       <option value="Internship">Internship</option>
                       <option value="Training+Internship">Training+Internship</option>
@@ -319,7 +319,7 @@ const RegistrationPortal = () => {
                   
                   <div className="relative">
                     <label htmlFor="mode" className="cursor-pointer select-none text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Mode <span className="text-red-500">*</span></label>
-                    <select id="mode" name="mode" value={formData.mode} onChange={handleChange} className={`caret-indigo-600 w-full bg-slate-50 border ${errors.mode ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none text-sm font-black text-indigo-600 appearance-none`}>
+                    <select id="mode" name="mode" value={formData.mode} onChange={handleChange} className={`caret-blue-600 w-full bg-slate-50 border ${errors.mode ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none text-sm font-black text-blue-600 appearance-none`}>
                       <option value="Online">Online</option>
                       <option value="Offline">Offline</option>
                       <option value="Hybrid">Hybrid</option>
@@ -330,7 +330,7 @@ const RegistrationPortal = () => {
 
                 <div className="relative">
                   <label htmlFor="courseSpecialization" className="cursor-pointer select-none text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Course Specialization <span className="text-red-500">*</span></label>
-                  <input id="courseSpecialization" type="text" name="courseSpecialization" value={formData.courseSpecialization} onChange={handleChange} placeholder="e.g. Java Full Stack" className={`caret-indigo-600 w-full bg-slate-50 border ${errors.courseSpecialization ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none text-sm font-black text-indigo-600`} />
+                  <input id="courseSpecialization" type="text" name="courseSpecialization" value={formData.courseSpecialization} onChange={handleChange} placeholder="e.g. Java Full Stack" className={`caret-blue-600 w-full bg-slate-50 border ${errors.courseSpecialization ? 'border-red-400' : 'border-slate-100'} rounded-2xl p-4 outline-none text-sm font-black text-blue-600`} />
                   {errors.courseSpecialization && <p className="text-red-500 text-[10px] mt-1 ml-2 font-bold">{errors.courseSpecialization}</p>}
                 </div>
               </div>
@@ -340,11 +340,11 @@ const RegistrationPortal = () => {
                   <label htmlFor="couponCode" className="cursor-pointer select-none text-[10px] font-bold text-emerald-500 uppercase mb-1 block ml-1">Coupon Code</label>
                   <div className="relative">
                     <Gift size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400" />
-                    <input id="couponCode" type="text" name="couponCode" value={formData.couponCode} onChange={handleChange} placeholder="SAVE10" className={`caret-indigo-600 w-full bg-emerald-50/50 border border-emerald-100 rounded-2xl p-4 pl-10 outline-none text-sm font-bold text-emerald-700 placeholder:text-emerald-300`} />
+                    <input id="couponCode" type="text" name="couponCode" value={formData.couponCode} onChange={handleChange} placeholder="SAVE10" className={`caret-blue-600 w-full bg-emerald-50/50 border border-emerald-100 rounded-2xl p-4 pl-10 outline-none text-sm font-bold text-emerald-700 placeholder:text-emerald-300`} />
                   </div>
               </div>
 
-              <button type="submit" className="w-full bg-indigo-600 text-white font-black py-5 rounded-[2rem] hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 mt-4">
+              <button type="submit" className="w-full bg-blue-600 text-white font-black py-5 rounded-[2rem] hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 mt-4">
                 <UserPlus size={20} /> Complete Registration
               </button>
             </form>
@@ -355,7 +355,7 @@ const RegistrationPortal = () => {
             <div className="p-6 lg:p-8 border-b border-slate-50 flex justify-between items-center">
               <h3 className="font-black text-xl text-slate-800">Registry</h3>
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
-                <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live Updates</span>
               </div>
             </div>
@@ -368,7 +368,7 @@ const RegistrationPortal = () => {
                 users.map((user, idx) => (
                   <div key={idx} className="bg-slate-50 border border-slate-100 rounded-3xl p-5 space-y-4 shadow-sm">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg">
                         {user.name?.charAt(0)}
                       </div>
                       <div>
@@ -378,14 +378,14 @@ const RegistrationPortal = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-[10px] font-bold text-slate-500 uppercase">
                       <div className="bg-white p-2 rounded-xl border border-slate-100">
-                        <span className="block text-indigo-400 mb-1">Academics</span>{user.branch}
+                        <span className="block text-blue-400 mb-1">Academics</span>{user.branch}
                       </div>
                       <div className="bg-white p-2 rounded-xl border border-slate-100">
                         <span className="block text-emerald-400 mb-1">Course</span>{user.courseSpecialization || 'N/A'}
                       </div>
                     </div>
                     <div className="flex justify-start gap-3 items-center pt-2">
-                      <span className="text-[9px] font-black uppercase text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">{user.mode}</span>
+                      <span className="text-[9px] font-black uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{user.mode}</span>
                       <span className="text-[9px] font-black uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{user.enrollmentType}</span>
                     </div>
                   </div>
@@ -409,10 +409,10 @@ const RegistrationPortal = () => {
                     <tr><td colSpan="4" className="p-20 text-center text-slate-300 italic font-medium">No registrations recorded.</td></tr>
                   ) : (
                     users.map((user, idx) => (
-                      <tr key={idx} className="hover:bg-indigo-50/20 transition-colors group">
+                      <tr key={idx} className="hover:bg-blue-50/20 transition-colors group">
                         <td className="p-6">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-lg shadow-indigo-100 group-hover:scale-110 transition-transform">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-lg shadow-blue-100 group-hover:scale-110 transition-transform">
                               {user.name?.charAt(0)}
                             </div>
                             <div>
@@ -423,7 +423,7 @@ const RegistrationPortal = () => {
                         </td>
                         <td className="p-6">
                           <div className="text-xs font-bold text-slate-700">{user.branch || 'N/A'}</div>
-                          <div className="text-[9px] font-black text-indigo-400 uppercase tracking-tighter">{user.collegeName || 'N/A'}</div>
+                          <div className="text-[9px] font-black text-blue-400 uppercase tracking-tighter">{user.collegeName || 'N/A'}</div>
                         </td>
                         <td className="p-6">
                            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100">
@@ -547,17 +547,17 @@ export default RegistrationPortal;
        
 //         <header className="flex flex-col md:flex-row justify-between items-center bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white shadow-sm">
 //           <div className="flex items-center gap-4">
-//             <div className="bg-indigo-600 p-3 rounded-2xl shadow-indigo-200 shadow-lg">
+//             <div className="bg-blue-600 p-3 rounded-2xl shadow-blue-200 shadow-lg">
 //               <ShieldCheck className="text-white" size={38} />
 //             </div>
 //             <div>
-//               <h1 className="text-2xl font-black tracking-tight text-slate-800">Edu<span className="text-indigo-600">Flow</span></h1>
+//               <h1 className="text-2xl font-black tracking-tight text-slate-800">Edu<span className="text-blue-600">Flow</span></h1>
 //               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admin Control Panel</p>
 //             </div>
 //           </div>
 //           <div className="flex gap-8 mt-4 md:mt-0">
 //             <div className="text-center">
-//               <p className="text-xl font-black text-indigo-600">{users.length}</p>
+//               <p className="text-xl font-black text-blue-600">{users.length}</p>
 //               <p className="text-[9px] font-bold text-slate-400 uppercase">Total Students</p>
 //             </div>
 //             <div className="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
@@ -581,56 +581,56 @@ export default RegistrationPortal;
 //               <div className="space-y-4">
 //                 <div className="relative">
 //                   <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Full Name</label>
-//                   <input name="name" value={formData.name} onChange={handleChange} placeholder="Enter full name" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all text-sm font-medium" />
+//                   <input name="name" value={formData.name} onChange={handleChange} placeholder="Enter full name" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all text-sm font-medium" />
 //                 </div>
  
 //                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 //                   <div className="relative">
 //                     <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Email</label>
-//                     <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="email@domain.com" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm" />
+//                     <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="email@domain.com" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-blue-500/20 text-sm" />
 //                   </div>
                  
 //                   <div className="relative">
 //                     <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Phone</label>
 //                     <div className="relative">
 //                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={14} />
-//                        <input name="phone" value={formData.phone} onChange={handleChange} placeholder="9876543210" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 pl-10 outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm" />
+//                        <input name="phone" value={formData.phone} onChange={handleChange} placeholder="9876543210" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 pl-10 outline-none focus:ring-2 focus:ring-blue-500/20 text-sm" />
 //                     </div>
 //                   </div>
 //                 </div>
  
 //                 <div className="relative">
 //                     <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Password</label>
-//                     <input name="password" type="password" value={formData.password} onChange={handleChange} placeholder="••••••••" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm" />
+//                     <input name="password" type="password" value={formData.password} onChange={handleChange} placeholder="••••••••" className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-blue-500/20 text-sm" />
 //                 </div>
 //               </div>
  
-//               <div className="p-6 bg-indigo-50/30 rounded-[2rem] border border-indigo-50 space-y-4">
+//               <div className="p-6 bg-blue-50/30 rounded-[2rem] border border-blue-50 space-y-4">
 //                 <div className="grid grid-cols-2 gap-4">
 //                   <div className="relative">
-//                     <label className="text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">College Name</label>
-//                     <input name="collegeName" value={formData.collegeName} onChange={handleChange} placeholder="University" className="w-full bg-white border border-indigo-100 rounded-xl p-3 outline-none text-sm" />
+//                     <label className="text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">College Name</label>
+//                     <input name="collegeName" value={formData.collegeName} onChange={handleChange} placeholder="University" className="w-full bg-white border border-blue-100 rounded-xl p-3 outline-none text-sm" />
 //                   </div>
 //                   <div className="relative">
-//                     <label className="text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">Branch</label>
-//                     <input name="branch" value={formData.branch} onChange={handleChange} placeholder="e.g. CSE" className="w-full bg-white border border-indigo-100 rounded-xl p-3 outline-none text-sm" />
+//                     <label className="text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">Branch</label>
+//                     <input name="branch" value={formData.branch} onChange={handleChange} placeholder="e.g. CSE" className="w-full bg-white border border-blue-100 rounded-xl p-3 outline-none text-sm" />
 //                   </div>
 //                 </div>
  
 //                 <div className="grid grid-cols-3 gap-3">
 //                   <div className="relative">
-//                     <label className="text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">Degree</label>
-//                     <select name="degreeType" value={formData.degreeType} onChange={handleChange} className="w-full bg-white border border-indigo-100 rounded-xl p-3 outline-none text-xs font-bold appearance-none">
+//                     <label className="text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">Degree</label>
+//                     <select name="degreeType" value={formData.degreeType} onChange={handleChange} className="w-full bg-white border border-blue-100 rounded-xl p-3 outline-none text-xs font-bold appearance-none">
 //                       <option>B.Tech</option><option>B.E</option><option>M.Tech</option><option>BCA</option>
 //                     </select>
 //                   </div>
 //                   <div className="relative">
-//                     <label className="text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">CGPA</label>
-//                     <input name="cgpa" value={formData.cgpa} onChange={handleChange} placeholder="0.0" className="w-full bg-white border border-indigo-100 rounded-xl p-3 outline-none text-xs font-bold text-center" />
+//                     <label className="text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">CGPA</label>
+//                     <input name="cgpa" value={formData.cgpa} onChange={handleChange} placeholder="0.0" className="w-full bg-white border border-blue-100 rounded-xl p-3 outline-none text-xs font-bold text-center" />
 //                   </div>
 //                   <div className="relative">
-//                     <label className="text-[10px] font-bold text-indigo-400 uppercase mb-1 block ml-1">Pass Out</label>
-//                     <select name="passOutYear" value={formData.passOutYear} onChange={handleChange} className="w-full bg-white border border-indigo-100 rounded-xl p-3 outline-none text-xs font-bold appearance-none">
+//                     <label className="text-[10px] font-bold text-blue-400 uppercase mb-1 block ml-1">Pass Out</label>
+//                     <select name="passOutYear" value={formData.passOutYear} onChange={handleChange} className="w-full bg-white border border-blue-100 rounded-xl p-3 outline-none text-xs font-bold appearance-none">
 //                       <option>2024</option><option>2025</option><option>2026</option><option>2027</option>
 //                     </select>
 //                   </div>
@@ -640,7 +640,7 @@ export default RegistrationPortal;
 //               <div className="grid grid-cols-2 gap-4">
 //                 <div className="relative">
 //                   <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Enrollment For</label>
-//                   <select name="enrollmentType" value={formData.enrollmentType} onChange={handleChange} className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none text-sm font-black text-indigo-600 appearance-none">
+//                   <select name="enrollmentType" value={formData.enrollmentType} onChange={handleChange} className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none text-sm font-black text-blue-600 appearance-none">
 //                     <option>Course</option>
 //                     <option>Internship</option>
 //                     <option>Course+Internship</option>
@@ -649,7 +649,7 @@ export default RegistrationPortal;
 //                 </div>
 //                 <div className="relative">
 //                   <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block ml-1">Mode</label>
-//                   <select name="mode" value={formData.mode} onChange={handleChange} className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none text-sm font-black text-indigo-600 appearance-none">
+//                   <select name="mode" value={formData.mode} onChange={handleChange} className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 outline-none text-sm font-black text-blue-600 appearance-none">
 //                     <option value="Online">Online</option>
 //                     <option value="Offline">Offline</option>
 //                     <option value="Hybrid">Hybrid</option>
@@ -666,7 +666,7 @@ export default RegistrationPortal;
 //                   </div>
 //               </div>
  
-//               <button type="submit" className="w-full bg-indigo-600 text-white font-black py-5 rounded-[2rem] hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 mt-4">
+//               <button type="submit" className="w-full bg-blue-600 text-white font-black py-5 rounded-[2rem] hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 mt-4">
 //                 <UserPlus size={20} /> Complete Registration
 //               </button>
 //             </form>
@@ -677,7 +677,7 @@ export default RegistrationPortal;
 //             <div className="p-6 lg:p-8 border-b border-slate-50 flex justify-between items-center">
 //               <h3 className="font-black text-xl text-slate-800">Registry</h3>
 //               <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
-//                 <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+//                 <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
 //                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live Updates</span>
 //               </div>
 //             </div>
@@ -696,7 +696,7 @@ export default RegistrationPortal;
 //                   >
 //                     {/* Header: Avatar and Name */}
 //                     <div className="flex items-center gap-4">
-//                       <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg">
+//                       <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg">
 //                         {user.name?.charAt(0)}
 //                       </div>
 //                       <div>
@@ -712,18 +712,18 @@ export default RegistrationPortal;
 //                     {/* Info Grid: Academics & CGPA */}
 //                     <div className="grid grid-cols-2 gap-2 text-[10px] font-bold text-slate-500 uppercase">
 //                       <div className="bg-white p-2 rounded-xl border border-slate-100">
-//                         <span className="block text-indigo-400 mb-1">Academics</span>
+//                         <span className="block text-blue-400 mb-1">Academics</span>
 //                         {user.branch}
 //                       </div>
 //                       <div className="bg-white p-2 rounded-xl border border-slate-100 text-center">
-//                         <span className="block text-indigo-400 mb-1">Score</span>
+//                         <span className="block text-blue-400 mb-1">Score</span>
 //                         ⭐ {user.cgpa}
 //                       </div>
 //                     </div>
  
 //                     {/* Footer: Badges */}
 //                     <div className="flex justify-between items-center pt-2">
-//                       <span className="text-[9px] font-black uppercase text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+//                       <span className="text-[9px] font-black uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
 //                         {user.mode}
 //                       </span>
 //                       <span className="text-[9px] font-black uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
@@ -756,10 +756,10 @@ export default RegistrationPortal;
 //                     </tr>
 //                   ) : (
 //                     users.map((user, idx) => (
-//                       <tr key={idx} className="hover:bg-indigo-50/20 transition-colors group">
+//                       <tr key={idx} className="hover:bg-blue-50/20 transition-colors group">
 //                         <td className="p-6">
 //                           <div className="flex items-center gap-4">
-//                             <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-lg shadow-indigo-100 group-hover:scale-110 transition-transform">
+//                             <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-lg shadow-blue-100 group-hover:scale-110 transition-transform">
 //                               {user.name?.charAt(0)}
 //                             </div>
 //                             <div>
@@ -770,10 +770,10 @@ export default RegistrationPortal;
 //                         </td>
 //                         <td className="p-6">
 //                           <div className="text-xs font-bold text-slate-700">{user.branch}</div>
-//                           <div className="text-[9px] font-black text-indigo-400 uppercase tracking-tighter">{user.collegeName}</div>
+//                           <div className="text-[9px] font-black text-blue-400 uppercase tracking-tighter">{user.collegeName}</div>
 //                         </td>
 //                         <td className="p-6 text-[10px] font-bold text-slate-600">
-//                           <Globe size={14} className="inline mr-1 text-indigo-400" /> {user.mode}
+//                           <Globe size={14} className="inline mr-1 text-blue-400" /> {user.mode}
 //                         </td>
 //                         <td className="p-6">
 //                           <span className={`px-3 py-1 rounded-lg text-[9px] font-black border uppercase ${user.enrollmentType === 'Internship' ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>

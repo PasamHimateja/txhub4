@@ -26,7 +26,7 @@ const upcomingEvents = [
     price: "Free",
     spotsLeft: 85,
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    gradient: "from-blue-600 to-indigo-600",
+    gradient: "from-blue-600 to-blue-600",
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ const upcomingEvents = [
     price: "₹500",
     spotsLeft: 50,
     image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    gradient: "from-purple-600 to-pink-600",
+    gradient: "from-blue-600 to-pink-600",
   },
   {
     id: 4,
@@ -87,16 +87,16 @@ const EventsPage = () => {
             alt="Tech Event Hackathon" 
             className="w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-indigo-900/90 to-purple-900/90 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-blue-900/90 to-blue-900/90 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-transparent opacity-10" />
         </div>
 
         {/* Decorative Blurs */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="flex items-center justify-center gap-2 text-indigo-200 text-sm mb-6 font-medium">
+          <div className="flex items-center justify-center gap-2 text-blue-200 text-sm mb-6 font-medium">
             <Link to="/" className="hover:text-white transition-colors">
               Home
             </Link>
@@ -112,7 +112,7 @@ const EventsPage = () => {
           <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
             Student <span className="text-[#8ab4f8]">Hackathons</span>
           </h1>
-          <p className="text-indigo-100 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-blue-100 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
             Join our intense, expert-led hackathons to solve real-world problems, build amazing projects, and win exciting prizes while connecting with industry leaders.
           </p>
         </div>
@@ -128,8 +128,8 @@ const EventsPage = () => {
               onClick={() => setFilter(type)}
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
                 filter === type
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
-                  : "bg-white text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200"
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                  : "bg-white text-slate-500 hover:bg-blue-50 hover:text-blue-600 border border-slate-200"
               }`}
             >
               {type}
@@ -142,7 +142,7 @@ const EventsPage = () => {
           {filteredEvents.map((event) => (
             <div
               key={event.id}
-              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/40 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-200/30 transition-all duration-500 flex flex-col"
+              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/40 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-200/30 transition-all duration-500 flex flex-col"
             >
               {/* Image Section */}
               <div className="relative h-48 overflow-hidden">
@@ -164,14 +164,14 @@ const EventsPage = () => {
 
               {/* Content */}
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-xl font-black text-slate-800 leading-snug mb-4 group-hover:text-indigo-600 transition-colors">
+                <h3 className="text-xl font-black text-slate-800 leading-snug mb-4 group-hover:text-blue-600 transition-colors">
                   {event.title}
                 </h3>
 
                 <div className="space-y-3 mb-6 flex-1">
                   <div className="flex items-center gap-3 text-slate-500 text-sm font-medium">
                     <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
-                      <Calendar size={16} className="text-indigo-500" />
+                      <Calendar size={16} className="text-blue-500" />
                     </div>
                     {event.date}
                   </div>
@@ -210,12 +210,12 @@ const EventsPage = () => {
         )}
 
         {/* Host an event CTA */}
-   <div className="mt-16 bg-white border border-slate-100 rounded-3xl p-6 md:p-8 text-center shadow-lg shadow-indigo-500/5 relative overflow-hidden max-w-3xl mx-auto">
+   <div className="mt-16 bg-white border border-slate-100 rounded-3xl p-6 md:p-8 text-center shadow-lg shadow-blue-500/5 relative overflow-hidden max-w-3xl mx-auto">
   
-  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500" />
+  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-500" />
 
-  <div className="w-14 h-14 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-    <MonitorPlay size={24} className="text-indigo-600" />
+  <div className="w-14 h-14 bg-gradient-to-br from-blue-50 to-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+    <MonitorPlay size={24} className="text-blue-600" />
   </div>
 
   <h2 className="text-2xl font-extrabold text-slate-800 mb-3">
@@ -227,7 +227,7 @@ const EventsPage = () => {
     and discover top tech talent.
   </p>
 
-  <button className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
+  <button className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
     Partner With Us
   </button>
 

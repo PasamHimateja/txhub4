@@ -290,11 +290,11 @@ const CourseDetails = () => {
       <div className="bg-white border-b border-slate-100 py-4 px-6 sticky top-0 z-50 flex items-center justify-between">
         <button
           onClick={() => navigate('/admin/courses')}
-          className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-bold transition-colors text-sm"
+          className="flex items-center gap-2 text-slate-600 hover:text-blue-600 font-bold transition-colors text-sm"
         >
           <ArrowLeft size={16} /> Back to Courses
         </button>
-        <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full uppercase tracking-wider">
+        <span className="text-[10px] font-black text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full uppercase tracking-wider">
           Admin Course Control
         </span>
       </div>
@@ -306,7 +306,7 @@ const CourseDetails = () => {
         
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-6">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-600/80 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600/80 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest">
               <Sparkles size={11} /> {data.category}
             </span>
             <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight max-w-3xl">
@@ -322,13 +322,13 @@ const CourseDetails = () => {
                 <span className="text-slate-400 font-normal">({data.reviewsCount} reviews)</span>
               </div>
               <div className="flex items-center gap-1.5 font-bold">
-                <Users size={16} className="text-indigo-400" /> {stats.students} Students Enrolled
+                <Users size={16} className="text-blue-400" /> {stats.students} Students Enrolled
               </div>
               <div className="flex items-center gap-1.5 font-bold">
-                <Clock size={16} className="text-indigo-400" /> {data.duration}
+                <Clock size={16} className="text-blue-400" /> {data.duration}
               </div>
               <div className="flex items-center gap-1.5 font-bold">
-                <BarChart size={16} className="text-indigo-400" /> {data.level}
+                <BarChart size={16} className="text-blue-400" /> {data.level}
               </div>
             </div>
             
@@ -364,13 +364,13 @@ const CourseDetails = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-3 rounded-xl text-xs md:text-sm font-black transition-all flex items-center gap-2 ${
                   activeTab === tab.id
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-100'
                     : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
                 }`}
               >
                 {tab.label}
                 {tab.premium && (
-                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider ${activeTab === tab.id ? 'bg-white text-indigo-600' : 'bg-indigo-100 text-indigo-700'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider ${activeTab === tab.id ? 'bg-white text-blue-600' : 'bg-blue-100 text-blue-700'}`}>
                     Control
                   </span>
                 )}
@@ -401,7 +401,7 @@ const CourseDetails = () => {
                   <div className="grid grid-cols-2 gap-4">
                     {data.highlights.map((high, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-xs md:text-sm font-bold text-slate-600">
-                        <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0"></span>
+                        <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
                         {high}
                       </div>
                     ))}
@@ -409,23 +409,23 @@ const CourseDetails = () => {
                 </div>
 
                 {/* STATISTICS PANEL */}
-                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-3xl border border-indigo-100 p-6">
-                  <h4 className="text-xs font-black uppercase tracking-widest text-indigo-700 mb-4">Course Operational Statistics</h4>
+                <div className="bg-gradient-to-br from-blue-50 to-white rounded-3xl border border-blue-100 p-6">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-blue-700 mb-4">Course Operational Statistics</h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div className="p-3">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.students}</p>
+                      <p className="text-2xl md:text-3xl font-black text-blue-900 leading-none">{stats.students}</p>
                       <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Students</p>
                     </div>
-                    <div className="p-3 border-l md:border-x border-indigo-100">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.batches}</p>
+                    <div className="p-3 border-l md:border-x border-blue-100">
+                      <p className="text-2xl md:text-3xl font-black text-blue-900 leading-none">{stats.batches}</p>
                       <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Active Batches</p>
                     </div>
-                    <div className="p-3 border-t md:border-t-0 md:border-r border-indigo-100">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.mentorAssignments}</p>
+                    <div className="p-3 border-t md:border-t-0 md:border-r border-blue-100">
+                      <p className="text-2xl md:text-3xl font-black text-blue-900 leading-none">{stats.mentorAssignments}</p>
                       <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Mentors Assigned</p>
                     </div>
-                    <div className="p-3 border-t md:border-t-0 border-l border-indigo-100">
-                      <p className="text-2xl md:text-3xl font-black text-indigo-900 leading-none">{stats.progress}%</p>
+                    <div className="p-3 border-t md:border-t-0 border-l border-blue-100">
+                      <p className="text-2xl md:text-3xl font-black text-blue-900 leading-none">{stats.progress}%</p>
                       <p className="text-[10px] font-black uppercase text-slate-400 mt-2">Avg Progress</p>
                     </div>
                   </div>
@@ -480,7 +480,7 @@ const CourseDetails = () => {
                             {module.lessons.map((lesson, lIdx) => (
                               <div key={lIdx} className="py-3 flex items-center justify-between text-xs md:text-sm font-bold text-slate-600">
                                 <div className="flex items-center gap-3">
-                                  <Play size={14} className="text-indigo-500 fill-indigo-100" />
+                                  <Play size={14} className="text-blue-500 fill-blue-100" />
                                   <span>{lesson}</span>
                                 </div>
                                 <span className="text-[10px] text-slate-400 font-semibold uppercase">Video</span>
@@ -499,12 +499,12 @@ const CourseDetails = () => {
             {activeTab === 'instructor' && (
               <div className="space-y-6 animate-in fade-in duration-300">
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                  <div className="w-24 h-24 rounded-3xl overflow-hidden border-2 border-indigo-100 shrink-0 shadow-lg">
+                  <div className="w-24 h-24 rounded-3xl overflow-hidden border-2 border-blue-100 shrink-0 shadow-lg">
                     <img src={data.mentor.avatar} alt={data.mentor.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="text-center md:text-left space-y-2">
                     <h3 className="text-2xl font-black text-slate-800">{data.mentor.name}</h3>
-                    <p className="text-indigo-600 font-extrabold text-sm">{data.mentor.role}</p>
+                    <p className="text-blue-600 font-extrabold text-sm">{data.mentor.role}</p>
                     <p className="text-slate-600 text-xs md:text-sm font-semibold leading-relaxed">
                       {data.mentor.bio}
                     </p>
@@ -561,7 +561,7 @@ const CourseDetails = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-md active:scale-95 flex items-center justify-center gap-2 hover:bg-indigo-700"
+                    className="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-md active:scale-95 flex items-center justify-center gap-2 hover:bg-blue-700"
                   >
                     <Send size={14} /> Send Broadcast to Feed
                   </button>
@@ -572,7 +572,7 @@ const CourseDetails = () => {
                   {broadcastFeed.map(b => (
                     <div key={b.id} className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow group">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2.5 rounded-xl ${b.type === 'live' ? 'bg-indigo-50 text-indigo-600' : b.type === 'recorded' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+                        <div className={`p-2.5 rounded-xl ${b.type === 'live' ? 'bg-blue-50 text-blue-600' : b.type === 'recorded' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
                           {b.type === 'live' && <Video size={16} />}
                           {b.type === 'recorded' && <Play size={16} />}
                           {b.type === 'resource' && <LinkIcon size={16} />}
@@ -602,7 +602,7 @@ const CourseDetails = () => {
         {/* RIGHT COLUMN: STICKY ENROLLMENT SIDEBAR */}
         <div className="lg:col-span-4 lg:sticky lg:top-20 space-y-6">
           <div className="bg-white rounded-[2.5rem] border border-slate-100 p-6 md:p-8 shadow-[0_24px_50px_-16px_rgba(0,0,0,0.06)] relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-blue-500" />
             
             <div className="space-y-6">
               <div className="flex items-baseline gap-2">
@@ -613,7 +613,7 @@ const CourseDetails = () => {
               
               <button
                 onClick={() => alert('Demo Enrollment initiated. Access granted.')}
-                className="w-full py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-indigo-100 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-blue-100 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <Sparkles size={16} fill="white" /> Enroll in Course
               </button>
@@ -622,11 +622,11 @@ const CourseDetails = () => {
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">This Course Includes:</p>
                 
                 {[
-                  { icon: <Clock size={16} className="text-indigo-500" />, label: `${data.duration} Duration` },
-                  { icon: <BookIcon size={16} className="text-indigo-500" />, label: `${data.lessonsCount} Modules/Lectures` },
-                  { icon: <Award size={16} className="text-indigo-500" />, label: data.certificate },
-                  { icon: <Globe size={16} className="text-indigo-500" />, label: `Language: ${data.language}` },
-                  { icon: <Shield size={16} className="text-indigo-500" />, label: 'Fully Secure Verifiable Enrollment' }
+                  { icon: <Clock size={16} className="text-blue-500" />, label: `${data.duration} Duration` },
+                  { icon: <BookIcon size={16} className="text-blue-500" />, label: `${data.lessonsCount} Modules/Lectures` },
+                  { icon: <Award size={16} className="text-blue-500" />, label: data.certificate },
+                  { icon: <Globe size={16} className="text-blue-500" />, label: `Language: ${data.language}` },
+                  { icon: <Shield size={16} className="text-blue-500" />, label: 'Fully Secure Verifiable Enrollment' }
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 font-bold text-slate-600">
                     {item.icon}

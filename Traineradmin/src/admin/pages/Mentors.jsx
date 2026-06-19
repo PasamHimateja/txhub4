@@ -226,7 +226,7 @@ const Mentors = () => {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setSelectedMentorForStudents(mentor)}
-                          className="p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors active:scale-95 inline-flex items-center"
+                          className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors active:scale-95 inline-flex items-center"
                           title="View Assigned Students"
                         >
                           <Eye size={16} />
@@ -253,14 +253,14 @@ const Mentors = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
           <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden transform scale-100 transition-all duration-300">
             {/* Modal Header */}
-            <div className="relative bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white">
+            <div className="relative bg-gradient-to-r from-blue-600 to-blue-600 p-6 text-white">
               <button
                 onClick={() => setSelectedMentorForStudents(null)}
                 className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all active:scale-90"
               >
                 <X size={16} />
               </button>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-100">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-100">
                 Mentor's Roster
               </p>
               <h3 className="text-xl font-black mt-1">

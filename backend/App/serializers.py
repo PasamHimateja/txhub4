@@ -47,6 +47,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):
     assigned_batch_name = serializers.ReadOnlyField(source='assigned_batch.name')
     assigned_mentor_name = serializers.ReadOnlyField(source='assigned_mentor.name')
     imageUrl = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
 
     class Meta:
         model = Enrollment
@@ -57,6 +58,35 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             'payment_status',
             'total_fee',
         ]
+
+    def get_progress(self, obj):
+        if not obj.user:
+            return 0
+        title = obj.title or (obj.items[0].get('title') if isinstance(obj.items, list) and len(obj.items) > 0 else '')
+        if not title:
+            return 0
+        try:
+            from App.views import normalize_course
+            normalized_title = normalize_course(title)
+            if not normalized_title:
+                return 0
+            from App.models import Assignment, AssignmentSubmission, Student
+            all_assignments = Assignment.objects.all()
+            course_assignments = [a for a in all_assignments if normalize_course(a.course) == normalized_title]
+            total_assignments = len(course_assignments)
+            if total_assignments == 0:
+                return 0
+            student = Student.objects.filter(email__iexact=obj.user.email).first()
+            if not student:
+                return 0
+            course_assignment_ids = {a.id for a in course_assignments}
+            completed_count = AssignmentSubmission.objects.filter(
+                student=student,
+                assignment_id__in=course_assignment_ids
+            ).values_list('assignment_id', flat=True).distinct().count()
+            return min(int((completed_count / total_assignments) * 100), 100)
+        except Exception:
+            return 0
 
     def get_imageUrl(self, obj):
         def make_absolute(url):
