@@ -214,23 +214,55 @@ def trainer_login(request):
     if not email or not password:
         return Response({"error": "Email and password are required"}, status=400)
  
-    # Check AdminUser first
-    admin = AdminUser.objects.filter(email=email).first()
-    if admin:
-        if password == admin.password or check_password(password, admin.password):
+    # Fetch accounts from all tables
+    admin = AdminUser.objects.filter(email__iexact=email).first()
+    trainer = Trainer.objects.filter(email__iexact=email).first()
+    student = Student.objects.filter(email__iexact=email).first()
+    user_reg = UserRegister.objects.filter(email__iexact=email).first()
+
+    # Special handling for default admin fallback
+    is_default_admin = (email == 'admin@admin.org')
+
+    if not admin and not trainer and not student and not user_reg and not is_default_admin:
+        return Response({"error": "Account not found."}, status=404)
+
+    # 1. Authenticate Trainer/Mentor
+    if trainer:
+        if not trainer.check_password(password):
+            return Response({"error": "Incorrect password."}, status=401)
+        if not trainer.is_active:
+            return Response({"error": "Your account is inactive. Contact administrator."}, status=403)
+
+        try:
+            refresh = RefreshToken()
+            refresh['trainer_id'] = trainer.id
+            refresh['email'] = trainer.email
+            refresh['name'] = trainer.name
+            refresh['role'] = 'trainer'
+            refresh['assigned_course'] = trainer.assigned_course
+     
             return Response({
-                "message": "Admin Login successful",
-                "type": "admin",
+                "message": "Trainer Login successful",
+                "type": "trainer",
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
                 "data": {
-                    "email": admin.email,
-                    "name": admin.name,
-                    "isAdmin": True
+                    "id": trainer.id,
+                    "name": trainer.name,
+                    "email": trainer.email,
+                    "assigned_course": trainer.assigned_course,
                 }
             }, status=200)
-        else:
-            return Response({"error": "Invalid email or password"}, status=401)
-    elif email == 'admin@admin.org':
-        if password == 'admin123':
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response({"error": "Login failed due to a server error. Please try again."}, status=500)
+
+    # 2. Authenticate Admin User
+    if admin or is_default_admin:
+        if is_default_admin:
+            if password != 'admin123':
+                return Response({"error": "Incorrect password."}, status=401)
             return Response({
                 "message": "Admin Login successful",
                 "type": "admin",
@@ -241,45 +273,46 @@ def trainer_login(request):
                 }
             }, status=200)
         else:
-            return Response({"error": "Invalid email or password"}, status=401)
+            if password != admin.password and not check_password(password, admin.password):
+                return Response({"error": "Incorrect password."}, status=401)
+            return Response({
+                "message": "Admin Login successful",
+                "type": "admin",
+                "data": {
+                    "email": admin.email,
+                    "name": admin.name,
+                    "isAdmin": True
+                }
+            }, status=200)
 
-    trainer = Trainer.objects.filter(email__iexact=email).first()
-    if not trainer:
-        return Response({"error": "Invalid email or password"}, status=401)
- 
-    if not trainer.check_password(password):
-        return Response({"error": "Invalid email or password"}, status=401)
- 
-    if not trainer.is_active:
-        return Response({"error": "Account is deactivated. Please contact admin."}, status=403)
- 
-    try:
-        # Build JWT manually (Trainer is not a Django auth user)
-        refresh = RefreshToken()
-        refresh['trainer_id'] = trainer.id
-        refresh['email'] = trainer.email
-        refresh['name'] = trainer.name
-        refresh['role'] = 'trainer'
-        refresh['assigned_course'] = trainer.assigned_course
- 
+    # 3. Authenticate Student
+    if student:
+        if password != student.password and not check_password(password, student.password):
+            return Response({"error": "Incorrect password."}, status=401)
         return Response({
-            "message": "Trainer Login successful",
-            "type": "trainer",
-            "access": str(refresh.access_token),
-            "refresh": str(refresh),
+            "message": "Student Login successful",
+            "type": "student",
             "data": {
-                "id": trainer.id,
-                "name": trainer.name,
-                "email": trainer.email,
-                "assigned_course": trainer.assigned_course,
+                "id": student.id,
+                "name": student.name,
+                "email": student.email,
             }
         }, status=200)
- 
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print("JWT generation error:", e)
-        return Response({"error": "Login failed due to a server error. Please try again."}, status=500)
+
+    if user_reg:
+        if password != user_reg.password and not check_password(password, user_reg.password):
+            return Response({"error": "Incorrect password."}, status=401)
+        return Response({
+            "message": "Student Login successful",
+            "type": "student",
+            "data": {
+                "id": user_reg.id,
+                "name": user_reg.full_name,
+                "email": user_reg.email,
+            }
+        }, status=200)
+
+    return Response({"error": "You are not authorized to access the Mentor Portal."}, status=403)
  
 @api_view(['GET'])
 def trainer_profile(request):

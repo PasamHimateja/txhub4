@@ -20,11 +20,13 @@ const LoginPage = () => {
       const response = await api.post('/trainer/login/', { email, password });
       if (response.data.type === 'admin') {
         localStorage.setItem('user', JSON.stringify({ ...response.data.data, isAdmin: true, email }));
-        navigate('/admin');
+        window.location.href = '/admin';
+      } else if (response.data.type === 'student') {
+        window.location.href = 'http://localhost:5173/student';
       } else if (response.data.access) {
         localStorage.setItem('trainer_access_token', response.data.access);
         localStorage.setItem('trainer_data', JSON.stringify(response.data.data));
-        navigate('/dashboard');
+        window.location.href = '/dashboard';
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid email or password');
